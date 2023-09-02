@@ -26,6 +26,16 @@ Test the latest version via git:
 gem 'kirei', git: 'git@github.com:dbl-works/kirei', branch: :main
 ```
 
+## Usage
+
+### Initial Set Up
+
+Scaffold a new project:
+
+```shell
+bundle exec kirei new "MyApp"
+```
+
 ## Contributions
 
 We welcome contributions from the community. Before starting work on a major feature, please get in touch with us either via email or by opening an issue on GitHub. "Major feature" means anything that changes user-facing features or significant changes to the codebase itself.

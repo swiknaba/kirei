@@ -3,7 +3,7 @@
 
 puts "Booting Kirei..." # rubocop:disable all
 
-require_relative "boot"
+require "boot"
 
 module Kirei
   extend T::Sig
