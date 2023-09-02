@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 module Kirei
-  class Router < Sinatra::Base
+  class Base < Sinatra::Base
+    extend T::Sig
   end
 end

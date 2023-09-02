@@ -14,7 +14,7 @@ module Cli
               # typed: true
               # frozen_string_literal: true
 
-              class #{app_name} < Kirei::Router
+              class #{app_name} < Kirei::Base
               end
             RUBY
           end
