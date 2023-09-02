@@ -14,3 +14,4 @@
 .DS_STORE
 Gemfile.lock
 .byebug_history
+.irb_history
