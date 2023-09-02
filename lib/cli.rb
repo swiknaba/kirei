@@ -3,7 +3,7 @@
 
 require_relative "kirei"
 
-Dir[File.join(__dir__, "lib/cli/**/*.rb")].each { require(_1) }
+Dir[File.join(__dir__, "cli/**/*.rb")].each { require(_1) }
 
 module Cli
 end
