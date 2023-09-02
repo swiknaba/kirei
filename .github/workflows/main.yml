@@ -1,0 +1,32 @@
+name: Ruby
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby:
+          - '3.2.2'
+          - head
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - name: Lint with RuboCop
+      run: bundle exec rubocop --parallel --ignore-unrecognized-cops
+    - name: Type check with Sorbet
+      run: bundle exec spoom tc
+    - name: Run tests with RSpec
+      run: bundle exec rspec

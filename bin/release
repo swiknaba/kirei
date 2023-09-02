@@ -1,0 +1,137 @@
+#!/bin/bash
+
+if ! command -v git &> /dev/null
+then
+    echo "git is not installed. Please run 'brew install git'. More info: https://formulae.brew.sh/formula/git"
+    exit
+fi
+
+if ! command -v gh &> /dev/null
+then
+    echo "GitHub command-line tool is not installed. Please run 'brew install gh'. More info: https://formulae.brew.sh/formula/gh"
+    exit
+fi
+
+if ! grep -q ":rubygems_kirei:" ~/.gem/credentials
+then
+  echo "RubyGem credentials are not set. Please configure ~/.gem/credentials."
+  exit
+fi
+
+if [[ `git status --porcelain` ]]; then
+  echo "You have uncommitted changes."
+  exit
+fi
+
+MAIN_BRANCH="main"
+git fetch --tags > /dev/null 2>&1
+LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+echo "The latest tag is $LATEST_TAG."
+
+PS3='What kind of release do you want to create? '
+options=("major" "minor" "patch" "Quit")
+
+select opt in "${options[@]}"
+do
+    case $opt in
+        "major")
+            RELEASE_TYPE="major"
+            break;;
+        "minor")
+            RELEASE_TYPE="minor"
+            break;;
+        "patch")
+            RELEASE_TYPE="patch"
+            break;;
+        "Quit")
+            break;;
+        *) echo "Invalid option: $REPLY";;
+    esac
+done
+
+if [ -z "$RELEASE_TYPE" ]
+then
+  echo "No release type selected, exiting."
+  exit
+fi
+
+LATEST_TAG=${LATEST_TAG#v} # remove the v prefix
+
+case $RELEASE_TYPE in
+  "major")
+    # split the tag into an array
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
+    # increment the major version
+    ((array[0]++))
+    # set minor and patch to 0
+    array[1]=0
+    array[2]=0
+    # join the array back into a string
+    LATEST_TAG="v${array[0]}.${array[1]}.${array[2]}"
+    ;;
+  "minor")
+    # split the tag into an array
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
+    # increment the minor version
+    ((array[1]++))
+    # set patch to 0
+    array[2]=0
+    # join the array back into a string
+    LATEST_TAG="v${array[0]}.${array[1]}.${array[2]}"
+    ;;
+  "patch")
+    # split the tag into an array
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
+    # increment the patch version
+    ((array[2]++))
+    # join the array back into a string
+    LATEST_TAG="v${array[0]}.${array[1]}.${array[2]}"
+    ;;
+esac
+
+LATEST_VERSION=${LATEST_TAG#v} # tag without the v prefix
+
+echo "This release will be $LATEST_TAG."
+
+gem_version=$(grep VERSION lib/kirei/version.rb | awk -F\' '{print $2}')
+# verify that LATEST_VERSION matches gem_version
+if [ "$LATEST_VERSION" != "$gem_version" ]; then
+  echo "The gem version ($gem_version) does not match the latest tag ($LATEST_VERSION)."
+  echo "Please update the gem version in lib/kirei/version.rb., else no release will be build & pushed to RubyGems."
+  exit
+fi
+
+git checkout "$MAIN_BRANCH"
+git pull > /dev/null 2>&1
+
+if [[ `git branch --show-current` != "$MAIN_BRANCH" ]]; then
+  echo "Failed to switch to $MAIN_BRANCH branch."
+  exit 1;
+fi
+
+git tag "$LATEST_TAG"
+
+read -p "Everything is prepared to release '$LATEST_TAG' to RubyGems. Are you sure you want to trigger the release? [y/N] " -n 1 -r
+echo # enforce a new line since read does not end in a new line char
+
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+  echo "Releasing..."
+  git push --tags
+  release_url=$(gh release create "$LATEST_TAG" --generate-notes)
+  gem build
+  gem push kirei-"$LATEST_VERSION".gem --key=rubygems_kirei
+  FINAL_MESSAGE="🎉 Released $LATEST_VERSION to RubyGems 🎉 \n$release_url"
+else
+  echo "Aborting."
+  FINAL_MESSAGE="❌ Aborted release $LATEST_VERSION ❌"
+fi
+
+git checkout "$MAIN_BRANCH"
+
+echo $FINAL_MESSAGE
+
+echo
+
+git log --oneline -n 7

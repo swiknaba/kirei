@@ -1,0 +1,20 @@
+inherit_gem:
+  rubocop-dbl:
+    - config/dbl.yml
+
+AllCops:
+  TargetRubyVersion: 3
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120

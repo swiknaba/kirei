@@ -1,0 +1,15 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+
+# ouput/tools for local development
+.rspec_status
+.ruby-version
+.DS_STORE
+Gemfile.lock
