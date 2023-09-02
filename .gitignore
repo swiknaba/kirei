@@ -13,3 +13,4 @@
 .ruby-version
 .DS_STORE
 Gemfile.lock
+.byebug_history
