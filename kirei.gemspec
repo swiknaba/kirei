@@ -1,4 +1,6 @@
-require_relative "lib/kirei/version"
+lib = File.expand_path("lib", __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "kirei/version"
 
 Gem::Specification.new do |spec|
   spec.name = "kirei"
@@ -24,6 +26,8 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
 
   spec.files = Dir[
+    "kirei.gemspec",
+    ".irbrc",
     "lib/**/*",
     "sorbet/rbi/dsl/**/*.rbi",
     "sorbet/rbi/shims/**/*.rbi",
@@ -40,8 +44,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", "~> 6.0"
   spec.add_dependency "oj", "~> 3.0"
   spec.add_dependency "rake", "~> 13.0"
-  spec.add_dependency "sorbet-runtime"
-  spec.add_dependency "tzinfo-data" # for containerized environments, e.g. on AWS ECS
+  spec.add_dependency "sorbet-runtime", "~> 0.5"
+  spec.add_dependency "tzinfo-data", "~> 1.0" # for containerized environments, e.g. on AWS ECS
 
   # Web server & routing
   spec.add_dependency "puma", "~> 6.0"
