@@ -9,7 +9,8 @@ module Cli
       def self.call(args)
         case args[0]
         when "new"
-          app_name = args[1]&.classify || "MyApp"
+          app_name = args[1] || "MyApp"
+          app_name = app_name.gsub(/[-\s]/, "_").classify
           NewApp::Execute.call(app_name: app_name)
         else
           puts "Unknown command" # rubocop:disable all
