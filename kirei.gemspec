@@ -32,8 +32,8 @@ Gem::Specification.new do |spec|
     "CHANGELOG.md",
   ]
 
-  spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{\Aexe/}) { File.basename(_1) }
+  spec.bindir = "bin"
+  spec.executables = [File.basename("bin/kirei")]
   spec.require_paths = ["lib"]
 
   # Utilities
