@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Kirei
-  class Base < Sinatra::Base
+  class Base
     extend T::Sig
   end
 end
