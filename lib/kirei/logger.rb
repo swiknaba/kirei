@@ -7,7 +7,7 @@ module Kirei
   #
   # Example Usage:
   #
-  #    LogHandler.call(
+  #    Kirei::Logger.call(
   #      level: :info,
   #      label: "Request started",
   #      meta: {
@@ -19,16 +19,16 @@ module Kirei
   #
   #    Kirei.config.log_transformer = Proc.new { _1 }
   #
-  # By default, "meta" is flattend and sensitive values are masked using see `Kirei.config.sensitive_keys`.
-  # You can also build on top the provided log transformer:
+  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei.config.sensitive_keys`.
+  # You can also build on top of the provided log transformer:
   #
   #   Kirei.config.log_transformer = Proc.new do |meta|
   #      flattened_meta = Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta)
-  #      # do something with the flattened meta
+  #      # Do something with the flattened meta
   #      flattened_meta.map { _1.to_json }
   #   end
   #
-  # NOTE: the log transformer must return an array of strings to allow emitting multiple lines per log event.
+  # NOTE: The log transformer must return an array of strings to allow emitting multiple lines per log event.
   #
   class Logger
     extend T::Sig
