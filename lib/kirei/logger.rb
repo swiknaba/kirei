@@ -84,7 +84,7 @@ module Kirei
       ).void
     end
     def call(level:, label:, meta: {})
-      meta[:"service.instance.id"] = Thread.current[:request_id]
+      meta[:"service.instance.id"] ||= Thread.current[:request_id]
 
       # The Ruby logger only accepts one string as the only argument
       @queue << { level: level, label: label, meta: meta }
@@ -98,10 +98,10 @@ module Kirei
           level = log_data.fetch(:level)
           label = log_data.fetch(:label)
           meta = T.let(log_data.fetch(:meta), T::Hash[Symbol, T.untyped])
-          meta[:"service.version"] = Kirei.version
-          meta[:timestamp] = Time.current.utc.iso8601
-          meta[:level] = level.to_s.upcase
-          meta[:label] = label
+          meta[:"service.version"] ||= Kirei.version
+          meta[:timestamp] ||= Time.current.utc.iso8601
+          meta[:level] ||= level.to_s.upcase
+          meta[:label] ||= label
 
           log_transformer = Kirei.config.log_transformer
 
