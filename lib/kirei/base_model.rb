@@ -2,6 +2,9 @@
 # frozen_string_literal: true
 
 module Kirei
+  #
+  # Add `extend Kirei::BaseModel` to your models.
+  #
   module BaseModel
     extend T::Sig
 
