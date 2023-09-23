@@ -19,5 +19,7 @@ module Kirei
     prop :log_transformer, T.nilable(T.proc.params(msg: T::Hash[Symbol, T.untyped]).returns(T::Array[String]))
     # dup to allow the user to extend the existing list of sensitive keys
     prop :sensitive_keys, T::Array[Regexp], factory: -> { SENSITIVE_KEYS.dup }
+    prop :app_name, String, default: "kirei"
+    prop :db_url, T.nilable(String)
   end
 end
