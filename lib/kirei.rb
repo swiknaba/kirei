@@ -71,4 +71,6 @@ end
 
 Kirei.configure(&:itself)
 
+require "codegen"
+
 puts "Kirei (#{Kirei::VERSION}) booted!" # rubocop:disable all
