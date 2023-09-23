@@ -1,5 +1,7 @@
 # typed: false
 
+# APP_ROOT is set before loading the gem in an application
+APP_ROOT = File.expand_path("..", __dir__)
 require "kirei"
 
 RSpec.configure do |config|
