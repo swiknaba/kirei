@@ -10,6 +10,7 @@ module Cli
         def self.call(app_name:)
           BaseDirectories.call
           Files::App.call(app_name)
+          Files::Irbrc.call
 
           puts "Kirei app '#{app_name}' scaffolded successfully!" # rubocop:disable all
         end
