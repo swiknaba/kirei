@@ -8,6 +8,11 @@ require "boot"
 module Kirei
   extend T::Sig
 
+  GEM_ROOT = T.let(
+    Gem::Specification.find_by_name("kirei").gem_dir,
+    String,
+  )
+
   class << self
     extend T::Sig
 
@@ -30,29 +35,37 @@ module Kirei
     def config
       T.must(configuration)
     end
-  end
 
-  ROOT_DIR = T.let(
-    Gem::Specification.find_by_name("kirei").gem_dir,
-    String,
-  )
+    sig { returns(Pathname) }
+    def root
+      Pathname.new(::APP_ROOT)
+    end
 
-  sig { returns(Pathname) }
-  def self.root
-    Pathname.new(ROOT_DIR)
-  end
+    sig { returns(String) }
+    def version
+      @version = T.let(@version, T.nilable(String))
+      @version ||= ENV.fetch("APP_VERSION", nil)
+      @version ||= ENV.fetch("GIT_SHA", nil)
+      @version ||= `git rev-parse --short HEAD`.to_s.chomp.freeze # localhost
+    end
 
-  sig { returns(String) }
-  def self.version
-    @version = T.let(@version, T.nilable(String))
-    @version ||= ENV.fetch("APP_VERSION", nil)
-    @version ||= ENV.fetch("GIT_SHA", nil)
-    @version ||= `git rev-parse --short HEAD`.to_s.chomp.freeze # localhost
-  end
+    sig { returns(String) }
+    def env
+      ENV.fetch("RACK_ENV", "development")
+    end
 
-  sig { returns(String) }
-  def self.env
-    ENV.fetch("RACK_ENV", "development")
+    sig { returns(String) }
+    def default_db_name
+      @default_db_name ||= T.let("#{config.app_name}_#{env}".freeze, T.nilable(String))
+    end
+
+    sig { returns(String) }
+    def default_db_url
+      @default_db_url ||= T.let(
+        ENV.fetch("DATABASE_URL", "postgresql://localhost:5432/#{default_db_name}"),
+        T.nilable(String),
+      )
+    end
   end
 end
 
