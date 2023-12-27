@@ -20,8 +20,7 @@ require "sinatra"
 require "sinatra/namespace" # from sinatra-contrib
 require "pg"
 require "sequel"
-require "rom"
-require "rom-sql"
+# "sequel_pg" should be auto-required by "sequel"
 
 Oj.default_options = {
   mode: :compat, # required to dump hashes with symbol-keys

@@ -54,8 +54,7 @@ Gem::Specification.new do |spec|
 
   # Database (Postgres)
   spec.add_dependency "pg", "~> 1.0"
-  spec.add_dependency "rom", "~> 5.0"
-  spec.add_dependency "rom-sql", "~> 3.0"
+  spec.add_dependency "sequel", "~> 5.0"
   spec.add_dependency "sequel_pg", "~> 1.0"
 
   # For more information and examples about making a new gem, check out our

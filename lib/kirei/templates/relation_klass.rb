@@ -9,10 +9,12 @@ module Templates
     sig do
       params(
         klass_name: String,
+        klass: T::Class[T.anything],
         table_name: T.nilable(String),
         ).returns(String)
     end
-    def self.erb(klass_name, table_name = nil)
+    def self.erb(klass_name, klass, table_name = nil)
+      table_name ||= klass_name.safe_constantize&.table_name # allows to defined a custom class-method `table_name`
       table_name ||= klass_name.pluralize.underscore
       <<~ERB
         module Relations
@@ -36,14 +38,29 @@ module Templates
             sig do
               params(
                 args: T::Hash[T.any(String, Symbol), T.untyped],
+              ).returns(ROM::Relation)
+            end
+            def self.where(args)
+              return if args.blank?
+
+              repo.where(args)
+            end
+
+            sig do
+              params(
+                args: T::Hash[T.any(String, Symbol), T.untyped],
               ).returns(T.nilable(Models::#{klass_name}))
             end
             def self.find_by(args)
-              return if id.blank?
-
-              repo.where(args).one
+              where(args)&.one
             end
           end
+        end
+
+        class #{klass}
+          extend T::Sig
+          extend Kirei::BaseModel
+          include Relations::#{klass_name}Relation
         end
       ERB
     end

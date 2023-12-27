@@ -1,10 +1,21 @@
 # Kirei
 
-Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [ROM](https://github.com/rom-rb/rom) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Sinatra](https://github.com/sinatra/sinatra) for routing. It strives to have zero magic and to be as explicit as possible.
+Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [Sequel](https://github.com/jeremyevans/sequel) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Sinatra](https://github.com/sinatra/sinatra) for routing. It strives to have zero magic and to be as explicit as possible.
 
 Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and build-in high-performance logging and metric-tracking toolkits. It is opiniated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
 
 > Kirei (きれい) is a Japanese adjective that primarily means "beautiful" or "pretty." It can also be used to describe something that is "clean" or "neat."
+
+## Why another Ruby framework?
+
+TL;DR:
+
+* **zero magic**
+* **strict typing**
+* ultra low memory footprint
+* high performance
+* simple to understand
+* very few low level dependencies
 
 ## Versioning
 

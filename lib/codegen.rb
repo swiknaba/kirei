@@ -13,8 +13,9 @@ Dir[
   require(model_file)
 
   full_klass_name = T.must(model_file[%r{.*/app/(.*)\.rb}, 1]).classify
+  klass = full_klass_name.constantize # rubocop:disable Sorbet/ConstantsFromStrings
   klass_name = T.let(File.basename(model_file, ".rb").camelize, String)
-  table_name = full_klass_name.constantize.table_name # rubocop:disable Sorbet/ConstantsFromStrings
+  table_name = klass.table_name
 
-  eval(Templates::RelationKlass.erb(klass_name, table_name)) # rubocop:disable Security/Eval
+  eval(Templates::RelationKlass.erb(klass_name, klass, table_name)) # rubocop:disable Security/Eval
 end

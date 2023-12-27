@@ -66,6 +66,14 @@ module Kirei
         T.nilable(String),
       )
     end
+
+    sig { returns(Sequel::Database) }
+    def raw_db_connection
+      @raw_db_connection ||= T.let(
+        Sequel.connect(default_db_url), # calling "Sequel.connect" creates a new connection
+        T.nilable(Sequel::Database),
+      )
+    end
   end
 end
 
