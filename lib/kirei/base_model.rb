@@ -33,7 +33,7 @@ module Kirei
     def resolve(query, strict = nil)
       query.map do |row|
         row = T.cast(row, T::Hash[Symbol, T.untyped])
-        row.deep_stringify_keys!
+        row.stringify_keys! # sequel returns symbolized keys
         from_hash(row, strict)
       end
     end

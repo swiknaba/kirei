@@ -38,7 +38,7 @@ module Kirei
 
     sig { returns(Pathname) }
     def root
-      defined?(::APP_ROOT)  ? Pathname.new(::APP_ROOT) : Pathname.new(Dir.pwd)
+      defined?(::APP_ROOT) ? Pathname.new(::APP_ROOT) : Pathname.new(Dir.pwd)
     end
 
     sig { returns(String) }
@@ -69,10 +69,17 @@ module Kirei
 
     sig { returns(Sequel::Database) }
     def raw_db_connection
-      @raw_db_connection ||= T.let(
-        Sequel.connect(default_db_url), # calling "Sequel.connect" creates a new connection
-        T.nilable(Sequel::Database),
-      )
+      @raw_db_connection = T.let(@raw_db_connection, T.nilable(Sequel::Database))
+      return @raw_db_connection unless @raw_db_connection.nil?
+
+      # calling "Sequel.connect" creates a new connection
+      @raw_db_connection = Sequel.connect(default_db_url)
+
+      config.db_extensions.each do |ext|
+        @raw_db_connection.extension(ext)
+      end
+
+      @raw_db_connection
     end
   end
 end
