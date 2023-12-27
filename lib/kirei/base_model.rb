@@ -37,5 +37,15 @@ module Kirei
         from_hash(row, strict)
       end
     end
+
+    sig do
+      params(
+        query: Sequel::Dataset,
+        strict: T.untyped,
+      ).returns(T.nilable(T.attached_class))
+    end
+    def resolve_first(query, strict = nil)
+      resolve(query.limit(1), strict).first
+    end
   end
 end
