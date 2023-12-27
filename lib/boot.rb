@@ -25,7 +25,7 @@ require "rom-sql"
 
 Oj.default_options = {
   mode: :compat, # required to dump hashes with symbol-keys
-  symbol_keys: true,
+  symbol_keys: false, # T::Struct.new works only with string-keys
 }
 
 # Third: load all application code
