@@ -47,6 +47,27 @@ Scaffold a new project:
 bundle exec kirei new "MyApp"
 ```
 
+### Quick Start
+
+```ruby
+class User < T::Struct
+  extend T::Sig
+  extend Kirei::BaseModel
+
+  const :id, Integer
+  const :name, String
+end
+
+query = User.db.where(name: 'John')
+query = query.limit(10) # query is a Sequel::Dataset, chain as you like
+
+users = User.resolve(query) # T::Array[User]
+first_user = User.resolve_first(query) # T.nilable(User)
+
+# you can also cast the raw result manually
+first_user = User.from_hash(query.first.stringify_keys)
+```
+
 ## Contributions
 
 We welcome contributions from the community. Before starting work on a major feature, please get in touch with us either via email or by opening an issue on GitHub. "Major feature" means anything that changes user-facing features or significant changes to the codebase itself.
