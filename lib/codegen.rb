@@ -17,5 +17,5 @@ Dir[
   klass_name = T.let(File.basename(model_file, ".rb").camelize, String)
   table_name = klass.table_name
 
-  eval(Templates::RelationKlass.erb(klass_name, klass, table_name)) # rubocop:disable Security/Eval
+  # eval(Templates::RelationKlass.erb(klass_name, klass, table_name)) # rubocop:disable Security/Eval
 end
