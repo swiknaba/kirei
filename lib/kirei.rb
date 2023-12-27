@@ -38,7 +38,7 @@ module Kirei
 
     sig { returns(Pathname) }
     def root
-      Pathname.new(::APP_ROOT)
+      defined?(::APP_ROOT)  ? Pathname.new(::APP_ROOT) : Pathname.new(Dir.pwd)
     end
 
     sig { returns(String) }
@@ -78,7 +78,5 @@ module Kirei
 end
 
 Kirei.configure(&:itself)
-
-require "codegen"
 
 puts "Kirei (#{Kirei::VERSION}) booted!" # rubocop:disable all
