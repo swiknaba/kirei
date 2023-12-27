@@ -7,6 +7,12 @@ module Kirei
   #
   module BaseModel
     extend T::Sig
+    include T::Sig
+
+    # the attached class is the class that extends this module
+    # e.g. "User"
+    extend T::Generic
+    has_attached_class!
 
     sig { returns(String) }
     def table_name
@@ -22,11 +28,13 @@ module Kirei
       params(
         query: Sequel::Dataset,
         strict: T.untyped,
-      ).returns(T::Array[BaseModel])
+      ).returns(T::Array[T.attached_class])
     end
     def resolve(query, strict = nil)
-      query.all.map do |row|
-        from_hash(row.to_hash, strict)
+      query.map do |row|
+        row = T.cast(row, T::Hash[Symbol, T.untyped])
+        row.deep_stringify_keys!
+        from_hash(row, strict)
       end
     end
   end
