@@ -49,15 +49,31 @@ bundle exec kirei new "MyApp"
 
 ### Quick Start
 
+All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
+
 ```ruby
 class User < T::Struct
   extend T::Sig
   extend Kirei::BaseModel
 
-  const :id, Integer
+  const :id, T.any(String, Integer)
   const :name, String
 end
 
+user = User.find_by({ name: 'John' })
+```
+
+Updating a record returns a new instance. The original instance is not mutated:
+
+```ruby
+updated_user = user.update({ name: 'Johnny' })
+user.name         # => 'John'
+updated_user.name # => 'Johnny'
+```
+
+To build more complex queries, Sequel can be used directly:
+
+```ruby
 query = User.db.where(name: 'John')
 query = query.limit(10) # query is a Sequel::Dataset, chain as you like
 
