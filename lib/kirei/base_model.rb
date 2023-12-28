@@ -28,7 +28,7 @@ module Kirei
         ).returns(T.self_type)
       end
       def update(hash)
-        query = self.class.db.where({ id: id }).limit(1).update(hash)
+        query = self.class.db.where({ id: id }).update(hash)
         self.class.find_by({ id: id })
       end
     end
