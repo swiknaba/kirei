@@ -1,4 +1,5 @@
-# typed: false
+# typed: strict
+# frozen_string_literal: true
 
 module Kirei
   module BaseModel
@@ -68,7 +69,7 @@ module Kirei
 
       sig { override.returns(Sequel::Dataset) }
       def db
-        Kirei.raw_db_connection[table_name.to_sym]
+        AppBase.raw_db_connection[table_name.to_sym]
       end
 
       sig do
@@ -101,7 +102,7 @@ module Kirei
         ).returns(T::Array[T.attached_class])
       end
       def resolve(query, strict = nil)
-        strict_loading = strict.nil? ? Kirei.config.db_strict_type_resolving : strict
+        strict_loading = strict.nil? ? AppBase.config.db_strict_type_resolving : strict
 
         query.map do |row|
           row = T.cast(row, T::Hash[Symbol, T.untyped])

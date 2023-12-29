@@ -30,15 +30,14 @@ module Kirei
   #
   # NOTE: The log transformer must return an array of strings to allow emitting multiple lines per log event.
   #
-  class Logger
-    extend T::Sig
-
+  class Logger < Kirei::Base
     FILTERED = "[FILTERED]"
 
     @instance = T.let(nil, T.nilable(Kirei::Logger))
 
     sig { void }
     def initialize
+      super
       @queue = T.let(Thread::Queue.new, Thread::Queue)
       @thread = T.let(start_logging_thread, Thread)
     end
@@ -98,12 +97,12 @@ module Kirei
           level = log_data.fetch(:level)
           label = log_data.fetch(:label)
           meta = T.let(log_data.fetch(:meta), T::Hash[Symbol, T.untyped])
-          meta[:"service.version"] ||= Kirei.version
+          meta[:"service.version"] ||= Kirei::AppBase.version
           meta[:timestamp] ||= Time.current.utc.iso8601
           meta[:level] ||= level.to_s.upcase
           meta[:label] ||= label
 
-          log_transformer = Kirei.config.log_transformer
+          log_transformer = AppBase.config.log_transformer
 
           loglines = if log_transformer
             log_transformer.call(meta)
@@ -124,7 +123,7 @@ module Kirei
       ).returns(String)
     end
     def self.mask(k, v)
-      return Kirei::Logger::FILTERED if Kirei.config.sensitive_keys.any? { k.match?(_1) }
+      return Kirei::Logger::FILTERED if AppBase.config.sensitive_keys.any? { k.match?(_1) }
 
       v
     end

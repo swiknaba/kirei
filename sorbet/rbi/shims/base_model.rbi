@@ -1,24 +1,17 @@
-# # typed: true
+# typed: true
 
-# # rubocop:disable Style/EmptyMethod
-# module Kirei
-#   module BaseModel
-#     include T::Props::Serializable::ClassMethods
-#   end
+# rubocop:disable Style/EmptyMethod
+module Kirei
+  module BaseModel
+    sig { returns(T.any(String, Integer)) }
+    def id; end
 
-#   module BaseModelClass
-#     include BaseModel
-#     mixes_in_class_methods(BaseModel::ClassMethods)
-#   end
+    module ClassMethods
+      include T::Props::Serializable::ClassMethods
 
-#   module BaseModel
-#     # module InstanceMethods
-#       sig { returns(T.class_of(BaseModelClass)) }
-#       def class; end
-
-#       sig { returns(T.any(String, Integer)) }
-#       def id; end
-#     end
-#   # end
-# end
-# # rubocop:enable Style/EmptyMethod
+      sig { returns(String) }
+      def name; end
+    end
+  end
+end
+# rubocop:enable Style/EmptyMethod

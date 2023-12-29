@@ -7,7 +7,7 @@ module Kirei
     register(Sinatra::Namespace)
 
     before do
-      Thread.current[:request_id] = request.env["HTTP_X_REQUEST_ID"].presence || "req_#{Kirei.env}_#{SecureRandom.uuid}"
+      Thread.current[:request_id] = request.env["HTTP_X_REQUEST_ID"].presence || "req_#{AppBase.env}_#{SecureRandom.uuid}"
     end
   end
 end
