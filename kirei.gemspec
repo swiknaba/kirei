@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
     "oss@dbl.works",
   ]
 
-  spec.summary = "Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant microservices."
+  spec.summary = "Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant microservices." # rubocop:disable Layout/LineLength
   spec.description = <<~TXT
     Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant microservices.
     It is built from the ground up to be clean and easy to use.
