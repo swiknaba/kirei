@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
     "Ludwig Reinmiedl",
   ]
   spec.email = [
-    "oss@dbl.works",
     "lud@reinmiedl.com",
+    "oss@dbl.works",
   ]
 
   spec.summary = "Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant APIs."
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
     Kirei's structure und developer experience is inspired by Rails, but it's not a Rails clone.
     It's a framework that's built from the ground up to be strictly typed, performant and scaleable.
   TXT
-  spec.homepage = "https://github.com/dbl-works/kirei"
+  spec.homepage = "https://github.com/swiknaba/kirei"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 

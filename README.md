@@ -12,10 +12,10 @@ TL;DR:
 
 * **zero magic**
 * **strict typing**
+* **very few low level dependencies**
 * ultra low memory footprint
 * high performance
 * simple to understand
-* very few low level dependencies
 
 ## Versioning
 
@@ -34,7 +34,7 @@ gem 'kirei'
 Test the latest version via git:
 
 ```ruby
-gem 'kirei', git: 'git@github.com:dbl-works/kirei', branch: :main
+gem 'kirei', git: 'git@github.com:swiknaba/kirei', branch: :main
 ```
 
 ## Usage
