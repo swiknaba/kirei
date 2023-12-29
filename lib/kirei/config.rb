@@ -23,10 +23,13 @@ module Kirei
     prop :db_url, T.nilable(String)
 
     # must use "pg_json" to parse jsonb columns to hashes
-    # see https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb
+    #
+    # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb
     prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array]
 
-    # Extra or unknown properties present in the Hash do not raise exceptions at runtime unless the optional strict argument to from_hash is passed
+    # Extra or unknown properties present in the Hash do not raise exceptions at runtime
+    # unless the optional strict argument to from_hash is passed
+    #
     # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
     prop :db_strict_type_resolving, T.nilable(T::Boolean), default: nil
   end
