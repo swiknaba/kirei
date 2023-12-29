@@ -54,13 +54,14 @@ All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They mu
 ```ruby
 class User < T::Struct
   extend T::Sig
-  extend Kirei::BaseModel
+  include Kirei::BaseModel
 
   const :id, T.any(String, Integer)
   const :name, String
 end
 
-user = User.find_by({ name: 'John' })
+user = User.find_by({ name: 'John' }) # T.nilable(User)
+users = User.where({ name: 'John' })  # T::Array[User]
 ```
 
 Updating a record returns a new instance. The original instance is not mutated:
@@ -74,10 +75,11 @@ updated_user.name # => 'Johnny'
 To build more complex queries, Sequel can be used directly:
 
 ```ruby
-query = User.db.where(name: 'John')
+query = User.db.where({ name: 'John' })
+query = query.where('...')
 query = query.limit(10) # query is a Sequel::Dataset, chain as you like
 
-users = User.resolve(query) # T::Array[User]
+users = User.resolve(query)            # T::Array[User]
 first_user = User.resolve_first(query) # T.nilable(User)
 
 # you can also cast the raw result manually
