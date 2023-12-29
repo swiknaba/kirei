@@ -52,7 +52,7 @@ module Kirei
         return @raw_db_connection unless @raw_db_connection.nil?
 
         # calling "Sequel.connect" creates a new connection
-        @raw_db_connection = Sequel.connect(default_db_url)
+        @raw_db_connection = Sequel.connect(AppBase.config.db_url || default_db_url)
 
         config.db_extensions.each do |ext|
           @raw_db_connection.extension(ext)
