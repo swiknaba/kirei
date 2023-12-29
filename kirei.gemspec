@@ -13,10 +13,12 @@ Gem::Specification.new do |spec|
     "oss@dbl.works",
   ]
 
-  spec.summary = "Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant APIs."
+  spec.summary = "Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant microservices."
   spec.description = <<~TXT
-    Kirei's structure und developer experience is inspired by Rails, but it's not a Rails clone.
-    It's a framework that's built from the ground up to be strictly typed, performant and scaleable.
+    Kirei is a strictly typed Ruby micro/REST-framework for building scaleable and performant microservices.
+    It is built from the ground up to be clean and easy to use.
+    Kirei is based on Sequel as an ORM, Sorbet for typing, and Sinatra for routing.
+    It strives to have zero magic and to be as explicit as possible.
   TXT
   spec.homepage = "https://github.com/swiknaba/kirei"
   spec.license = "MIT"
