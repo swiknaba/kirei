@@ -8,7 +8,7 @@ module Kirei
 
     before do
       Thread.current[:request_id] = request.env["HTTP_X_REQUEST_ID"].presence ||
-                                    "req_#{AppBase.env}_#{SecureRandom.uuid}"
+                                    "req_#{AppBase.environment}_#{SecureRandom.uuid}"
     end
   end
 end

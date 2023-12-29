@@ -29,13 +29,13 @@ module Kirei
       end
 
       sig { returns(String) }
-      def env
+      def environment
         ENV.fetch("RACK_ENV", "development")
       end
 
       sig { returns(String) }
       def default_db_name
-        @default_db_name ||= T.let("#{config.app_name}_#{env}".freeze, T.nilable(String))
+        @default_db_name ||= T.let("#{config.app_name}_#{environment}".freeze, T.nilable(String))
       end
 
       sig { returns(String) }
