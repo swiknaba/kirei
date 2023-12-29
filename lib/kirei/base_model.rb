@@ -28,7 +28,7 @@ module Kirei
         ).returns(T.self_type)
       end
       def update(hash)
-        query = self.class.db.where({ id: id }).update(hash)
+        self.class.db.where({ id: id }).update(hash)
         self.class.find_by({ id: id })
       end
     end
@@ -61,7 +61,9 @@ module Kirei
       resolve_first(db.where(hash))
     end
 
-    # Extra or unknown properties present in the Hash do not raise exceptions at runtime unless the optional strict argument to from_hash is passed
+    # Extra or unknown properties present in the Hash do not raise exceptions at
+    # runtime unless the optional strict argument to from_hash is passed
+    #
     # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
     # "strict" defaults to "false".
     sig do
@@ -76,7 +78,7 @@ module Kirei
       query.map do |row|
         row = T.cast(row, T::Hash[Symbol, T.untyped])
         row.stringify_keys! # sequel returns symbolized keys
-        from_hash(row, strict)
+        from_hash(row, strict_loading)
       end
     end
 
