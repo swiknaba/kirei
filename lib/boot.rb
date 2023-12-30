@@ -21,6 +21,8 @@ require "pg"
 require "sequel"
 # "sequel_pg" should be auto-required by "sequel"
 
+require "logger"
+
 Oj.default_options = {
   mode: :compat, # required to dump hashes with symbol-keys
   symbol_keys: false, # T::Struct.new works only with string-keys

@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
     "kirei.gemspec",
     ".irbrc",
     "lib/**/*",
+    # do not include RBIs for gems, because users might use different verions
     "sorbet/rbi/dsl/**/*.rbi",
     "sorbet/rbi/shims/**/*.rbi",
     "LICENSE",
