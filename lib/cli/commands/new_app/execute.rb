@@ -1,7 +1,6 @@
 # typed: false
 
 require "fileutils"
-require "active_support/all"
 
 module Cli
   module Commands
@@ -12,7 +11,7 @@ module Cli
           Files::App.call(app_name)
           Files::Irbrc.call
 
-          puts "Kirei app '#{app_name}' scaffolded successfully!" # rubocop:disable all
+          puts "Kirei app '#{app_name}' scaffolded successfully!"
         end
       end
     end

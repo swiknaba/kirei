@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-puts "Booting Kirei..." # rubocop:disable all
+puts "Booting Kirei..."
 
 require "boot"
 
@@ -33,4 +33,4 @@ end
 
 Kirei.configure(&:itself)
 
-puts "Kirei (#{Kirei::VERSION}) booted!" # rubocop:disable all
+puts "Kirei (#{Kirei::VERSION}) booted!"

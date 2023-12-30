@@ -43,7 +43,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Utilities
-  spec.add_dependency "activesupport", "~> 6.0"
   spec.add_dependency "oj", "~> 3.0"
   spec.add_dependency "rake", "~> 13.0"
   spec.add_dependency "sorbet-runtime", "~> 0.5"

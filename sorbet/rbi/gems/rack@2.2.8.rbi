@@ -825,8 +825,11 @@ class Rack::CommonLogger
   # exceptions raised during the sending of the response body will
   # cause the request not to be logged.
   #
-  # source://rack//lib/rack/common_logger.rb#36
+  # source://sinatra/3.1.0/lib/sinatra/base.rb#259
   def call(env); end
+
+  # source://rack//lib/rack/common_logger.rb#36
+  def call_without_check(env); end
 
   private
 

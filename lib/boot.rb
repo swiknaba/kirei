@@ -14,7 +14,6 @@ require "bundler/setup"
 # Second: load all gems (runtime dependencies only)
 require "sorbet-runtime"
 require "oj"
-require "active_support/all"
 require "puma"
 require "sinatra"
 require "sinatra/namespace" # from sinatra-contrib
