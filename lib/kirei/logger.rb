@@ -98,7 +98,7 @@ module Kirei
           label = log_data.fetch(:label)
           meta = T.let(log_data.fetch(:meta), T::Hash[Symbol, T.untyped])
           meta[:"service.version"] ||= Kirei::AppBase.version
-          meta[:timestamp] ||= Time.current.utc.iso8601
+          meta[:timestamp] ||= Time.now.utc.iso8601
           meta[:level] ||= level.to_s.upcase
           meta[:label] ||= label
 
@@ -137,13 +137,13 @@ module Kirei
     end
     def self.flatten_hash_and_mask_sensitive_values(hash, prefix = :'')
       result = T.let({}, T::Hash[Symbol, T.untyped])
-      hash.deep_symbolize_keys!
+      Kirei::Helpers.deep_transform_keys!(hash) { _1.to_sym rescue _1 } # rubocop:disable Style/RescueModifier
 
       hash.each do |key, value|
-        new_prefix = prefix.blank? ? key : :"#{prefix}.#{key}"
+        new_prefix = Kirei::Helpers.blank?(prefix) ? key : :"#{prefix}.#{key}"
 
         case value
-        when Hash then result.merge!(flatten_hash_and_mask_sensitive_values(value.symbolize_keys, new_prefix))
+        when Hash then result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_sym), new_prefix))
         when Array
           value.each_with_index do |element, index|
             if element.is_a?(Hash) || element.is_a?(Array)
@@ -158,7 +158,9 @@ module Kirei
           if value.respond_to?(:serialize)
             serialized_value = value.serialize
             if serialized_value.is_a?(Hash)
-              result.merge!(flatten_hash_and_mask_sensitive_values(serialized_value.symbolize_keys, new_prefix))
+              result.merge!(
+                flatten_hash_and_mask_sensitive_values(serialized_value.transform_keys(&:to_sym), new_prefix),
+              )
             else
               result[new_prefix] = serialized_value&.to_s
             end
