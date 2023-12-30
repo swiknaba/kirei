@@ -1524,6 +1524,8 @@ class Sequel::Database
   #               uses :auto_savepoint, you can set this to false to not use a savepoint.
   #               If the value given for this option is :only, it will only create a
   #               savepoint if it is inside a transaction.
+  # :skip_transaction :: If set, do not actually open a transaction or savepoint,
+  #                      just checkout a connection and yield it.
   #
   # PostgreSQL specific options:
   #
@@ -1533,7 +1535,7 @@ class Sequel::Database
   #                 appropriately.  Valid values true, :on, false, :off, :local (9.1+),
   #                 and :remote_write (9.2+).
   #
-  # source://sequel//lib/sequel/database/transactions.rb#177
+  # source://sequel//lib/sequel/database/transactions.rb#179
   def transaction(opts = T.unsafe(nil), &block); end
 
   # The default transaction isolation level for this database,
@@ -1602,7 +1604,7 @@ class Sequel::Database
   # Synchronize access to the current transactions, returning the hash
   # of options for the current transaction (if any)
   #
-  # source://sequel//lib/sequel/database/transactions.rb#289
+  # source://sequel//lib/sequel/database/transactions.rb#295
   def _trans(conn); end
 
   # Internal generic transaction method.  Any exception raised by the given
@@ -1610,7 +1612,7 @@ class Sequel::Database
   # not a Sequel::Rollback, the error will be reraised. If no exception occurs
   # inside the block, the transaction is commited.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#244
+  # source://sequel//lib/sequel/database/transactions.rb#250
   def _transaction(conn, opts = T.unsafe(nil)); end
 
   # :nocov:
@@ -1624,25 +1626,25 @@ class Sequel::Database
   # Set the given callable as a hook to be called. Type should be either
   # :after_commit or :after_rollback.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#316
+  # source://sequel//lib/sequel/database/transactions.rb#322
   def add_savepoint_hook(conn, type, block); end
 
   # Add the current thread to the list of active transactions
   #
-  # source://sequel//lib/sequel/database/transactions.rb#294
+  # source://sequel//lib/sequel/database/transactions.rb#300
   def add_transaction(conn, opts); end
 
   # Set the given callable as a hook to be called. Type should be either
   # :after_commit or :after_rollback.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#323
+  # source://sequel//lib/sequel/database/transactions.rb#329
   def add_transaction_hook(conn, type, block); end
 
   # Whether the given connection is already inside a transaction
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/transactions.rb#329
+  # source://sequel//lib/sequel/database/transactions.rb#335
   def already_in_transaction?(conn, opts); end
 
   # source://sequel//lib/sequel/database/schema_methods.rb#468
@@ -1709,27 +1711,27 @@ class Sequel::Database
 
   # Start a new database transaction on the given connection
   #
-  # source://sequel//lib/sequel/database/transactions.rb#350
+  # source://sequel//lib/sequel/database/transactions.rb#356
   def begin_new_transaction(conn, opts); end
 
   # Issue query to begin a new savepoint.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#340
+  # source://sequel//lib/sequel/database/transactions.rb#346
   def begin_savepoint(conn, opts); end
 
   # SQL to start a new savepoint
   #
-  # source://sequel//lib/sequel/database/transactions.rb#345
+  # source://sequel//lib/sequel/database/transactions.rb#351
   def begin_savepoint_sql(depth); end
 
   # Start a new database transaction or a new savepoint on the given connection.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#356
+  # source://sequel//lib/sequel/database/transactions.rb#362
   def begin_transaction(conn, opts = T.unsafe(nil)); end
 
   # SQL to BEGIN a transaction.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#365
+  # source://sequel//lib/sequel/database/transactions.rb#371
   def begin_transaction_sql; end
 
   # Returns true when the object is considered blank.
@@ -1880,28 +1882,28 @@ class Sequel::Database
   # not 2.0+), the thread status will still be "run", so Thread#kill
   # will erroneously commit the transaction, and there isn't a workaround.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#374
+  # source://sequel//lib/sequel/database/transactions.rb#380
   def commit_or_rollback_transaction(exception, conn, opts); end
 
   # SQL to commit a savepoint
   #
-  # source://sequel//lib/sequel/database/transactions.rb#389
+  # source://sequel//lib/sequel/database/transactions.rb#395
   def commit_savepoint_sql(depth); end
 
   # Commit the active transaction on the connection
   #
-  # source://sequel//lib/sequel/database/transactions.rb#394
+  # source://sequel//lib/sequel/database/transactions.rb#400
   def commit_transaction(conn, opts = T.unsafe(nil)); end
 
   # SQL to COMMIT a transaction.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#404
+  # source://sequel//lib/sequel/database/transactions.rb#410
   def commit_transaction_sql; end
 
   # Method called on the connection object to execute SQL on the database,
   # used by the transaction code.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#410
+  # source://sequel//lib/sequel/database/transactions.rb#416
   def connection_execute_method; end
 
   # String including information about the connection, for use when logging
@@ -1928,13 +1930,13 @@ class Sequel::Database
   # Run SQL statement to create the table with the given name from the given
   # SELECT sql statement.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#758
+  # source://sequel//lib/sequel/database/schema_methods.rb#759
   def create_table_as(name, sql, options); end
 
   # SQL statement for creating a table from the result of a SELECT statement.
   # +sql+ should be a string representing a SELECT query.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#765
+  # source://sequel//lib/sequel/database/schema_methods.rb#766
   def create_table_as_sql(name, sql, options); end
 
   # Execute the create table statements using the generator.
@@ -1954,27 +1956,27 @@ class Sequel::Database
 
   # SQL fragment for initial part of CREATE TABLE statement
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#770
+  # source://sequel//lib/sequel/database/schema_methods.rb#771
   def create_table_prefix_sql(name, options); end
 
   # SQL statement for creating a table with the given name, columns, and options
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#724
+  # source://sequel//lib/sequel/database/schema_methods.rb#725
   def create_table_sql(name, generator, options); end
 
   # SQL fragment for initial part of CREATE VIEW statement
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#775
+  # source://sequel//lib/sequel/database/schema_methods.rb#776
   def create_view_prefix_sql(name, options); end
 
   # SQL statement for creating a view.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#780
+  # source://sequel//lib/sequel/database/schema_methods.rb#781
   def create_view_sql(name, source, options); end
 
   # Append the column list to the SQL, if a column list is given.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#791
+  # source://sequel//lib/sequel/database/schema_methods.rb#792
   def create_view_sql_append_columns(sql, columns); end
 
   # Return the Sequel::DatabaseError subclass to wrap the given
@@ -1985,7 +1987,7 @@ class Sequel::Database
 
   # Which transaction errors to translate, blank by default.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#415
+  # source://sequel//lib/sequel/database/transactions.rb#421
   def database_error_classes; end
 
   # An enumerable yielding pairs of regexps and exception classes, used
@@ -2020,7 +2022,7 @@ class Sequel::Database
   # Default index name for the table and columns, may be too long
   # for certain databases.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#802
+  # source://sequel//lib/sequel/database/schema_methods.rb#803
   def default_index_name(table_name, columns); end
 
   # Return true if exception represents a disconnect error, false otherwise.
@@ -2032,24 +2034,24 @@ class Sequel::Database
 
   # The SQL to drop an index for the table.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#815
+  # source://sequel//lib/sequel/database/schema_methods.rb#816
   def drop_index_sql(table, op); end
 
   # SQL DDL statement to drop the table with the given name.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#820
+  # source://sequel//lib/sequel/database/schema_methods.rb#821
   def drop_table_sql(name, options); end
 
   # SQL DDL statement to drop a view with the given name.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#825
+  # source://sequel//lib/sequel/database/schema_methods.rb#826
   def drop_view_sql(name, options); end
 
   # Proxy the filter_expr call to the dataset, used for creating constraints.
   # Support passing Proc arguments as blocks, as well as treating plain strings
   # as literal strings, so that previous migrations that used this API do not break.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#832
+  # source://sequel//lib/sequel/database/schema_methods.rb#833
   def filter_expr(arg = T.unsafe(nil), &block); end
 
   # Whether this dataset considers unquoted identifiers as uppercase. True
@@ -2064,14 +2066,14 @@ class Sequel::Database
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#808
+  # source://sequel//lib/sequel/database/schema_methods.rb#809
   def foreign_key_name(table_name, columns); end
 
   # Whether the connection is currently inside a savepoint.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/transactions.rb#420
+  # source://sequel//lib/sequel/database/transactions.rb#426
   def in_savepoint?(conn); end
 
   # SQL statement for creating an index for the table with the given name
@@ -2079,13 +2081,13 @@ class Sequel::Database
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#850
+  # source://sequel//lib/sequel/database/schema_methods.rb#851
   def index_definition_sql(table_name, index); end
 
   # Array of SQL statements, one for each index specification,
   # for the given table.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#859
+  # source://sequel//lib/sequel/database/schema_methods.rb#860
   def index_sql_list(table_name, indexes); end
 
   # Load extensions during initialization from the given key in opts.
@@ -2105,13 +2107,13 @@ class Sequel::Database
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#865
+  # source://sequel//lib/sequel/database/schema_methods.rb#866
   def join_table_name(hash, options); end
 
   # Extract an individual join table name, which should either be a string
   # or symbol, or a hash containing one of those as the value for :table.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#878
+  # source://sequel//lib/sequel/database/schema_methods.rb#879
   def join_table_name_extract(entry); end
 
   # Log the given SQL and then execute it on the connection, used by
@@ -2153,12 +2155,12 @@ class Sequel::Database
   #
   # Any other object given is just converted to a string, with "_" converted to " " and upcased.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#902
+  # source://sequel//lib/sequel/database/schema_methods.rb#903
   def on_delete_clause(action); end
 
   # Alias of #on_delete_clause, since the two usually behave the same.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#907
+  # source://sequel//lib/sequel/database/schema_methods.rb#908
   def on_update_clause(action); end
 
   # Return a Method object for the dataset's output_identifier_method.
@@ -2170,7 +2172,7 @@ class Sequel::Database
 
   # Add fragment for primary key specification, separated for easier overridding.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#912
+  # source://sequel//lib/sequel/database/schema_methods.rb#913
   def primary_key_constraint_sql_fragment(_); end
 
   # Whether to quote identifiers by default for this database, true by default.
@@ -2180,7 +2182,7 @@ class Sequel::Database
 
   # Proxy the quote_schema_table method to the dataset
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#917
+  # source://sequel//lib/sequel/database/schema_methods.rb#918
   def quote_schema_table(table); end
 
   # Convert the given exception to an appropriate Sequel::DatabaseError
@@ -2196,12 +2198,12 @@ class Sequel::Database
 
   # Remove the current thread from the list of active transactions
   #
-  # source://sequel//lib/sequel/database/transactions.rb#440
+  # source://sequel//lib/sequel/database/transactions.rb#446
   def remove_transaction(conn, committed); end
 
   # SQL statement for renaming a table.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#922
+  # source://sequel//lib/sequel/database/schema_methods.rb#923
   def rename_table_sql(name, new_name); end
 
   # Reset the default dataset used by most Database methods that create datasets.
@@ -2213,46 +2215,46 @@ class Sequel::Database
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/transactions.rb#483
+  # source://sequel//lib/sequel/database/transactions.rb#489
   def rollback_on_transaction_exit?(conn, opts); end
 
   # SQL to rollback to a savepoint
   #
-  # source://sequel//lib/sequel/database/transactions.rb#478
+  # source://sequel//lib/sequel/database/transactions.rb#484
   def rollback_savepoint_sql(depth); end
 
   # Rollback the active transaction on the connection
   #
-  # source://sequel//lib/sequel/database/transactions.rb#494
+  # source://sequel//lib/sequel/database/transactions.rb#500
   def rollback_transaction(conn, opts = T.unsafe(nil)); end
 
   # SQL to ROLLBACK a transaction.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#504
+  # source://sequel//lib/sequel/database/transactions.rb#510
   def rollback_transaction_sql; end
 
   # Retrieve the savepoint hooks that should be run for the given
   # connection and commit status.  This expacts that you are
   # already inside a savepoint when calling.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#427
+  # source://sequel//lib/sequel/database/transactions.rb#433
   def savepoint_hooks(conn, committed); end
 
   # Current savepoint level.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#521
+  # source://sequel//lib/sequel/database/transactions.rb#527
   def savepoint_level(conn); end
 
   # Split the schema information from the table
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#927
+  # source://sequel//lib/sequel/database/schema_methods.rb#928
   def schema_and_table(table_name); end
 
   # Return true if the given column schema represents an autoincrementing primary key.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#932
+  # source://sequel//lib/sequel/database/schema_methods.rb#933
   def schema_autoincrementing_primary_key?(schema); end
 
   # Match the database's column type to a ruby type via a
@@ -2269,7 +2271,7 @@ class Sequel::Database
 
   # The dataset to use for proxying certain schema methods.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#937
+  # source://sequel//lib/sequel/database/schema_methods.rb#938
   def schema_utility_dataset; end
 
   # Return the options for the given server by merging the generic
@@ -2281,12 +2283,12 @@ class Sequel::Database
 
   # Set the transaction isolation level on the given connection
   #
-  # source://sequel//lib/sequel/database/transactions.rb#509
+  # source://sequel//lib/sequel/database/transactions.rb#515
   def set_transaction_isolation(conn, opts); end
 
   # SQL to set the transaction isolation level
   #
-  # source://sequel//lib/sequel/database/transactions.rb#516
+  # source://sequel//lib/sequel/database/transactions.rb#522
   def set_transaction_isolation_sql(level); end
 
   # Determine if logging should be skipped. Defaults to true if no loggers
@@ -2299,7 +2301,7 @@ class Sequel::Database
 
   # Split the schema information from the table
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#942
+  # source://sequel//lib/sequel/database/schema_methods.rb#943
   def split_qualifiers(table_name); end
 
   # Whether the database supports combining multiple alter table
@@ -2335,12 +2337,12 @@ class Sequel::Database
 
   # SQL fragment for temporary table
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#947
+  # source://sequel//lib/sequel/database/schema_methods.rb#948
   def temporary_table_sql; end
 
   # Raise a database error unless the exception is an Rollback.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#526
+  # source://sequel//lib/sequel/database/transactions.rb#532
   def transaction_error(e, opts = T.unsafe(nil)); end
 
   # Finish a subtransaction.  If savepoints are supported, pops the current
@@ -2348,87 +2350,87 @@ class Sequel::Database
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/transactions.rb#536
+  # source://sequel//lib/sequel/database/transactions.rb#542
   def transaction_finished?(conn); end
 
   # Retrieve the transaction hooks that should be run for the given
   # connection and commit status.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#433
+  # source://sequel//lib/sequel/database/transactions.rb#439
   def transaction_hooks(conn, committed); end
 
   # Derive the transaction hash from the options passed to the transaction.
   # Meant to be overridden.
   #
-  # source://sequel//lib/sequel/database/transactions.rb#335
+  # source://sequel//lib/sequel/database/transactions.rb#341
   def transaction_options(conn, opts); end
 
   # SQL fragment specifying the type of a given column.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#952
+  # source://sequel//lib/sequel/database/schema_methods.rb#953
   def type_literal(column); end
 
   # SQL fragment specifying the full type of a column,
   # consider the type with possible modifiers.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#965
+  # source://sequel//lib/sequel/database/schema_methods.rb#966
   def type_literal_generic(column); end
 
   # Alias for type_literal_generic_numeric, to make overriding in a subclass easier.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#976
+  # source://sequel//lib/sequel/database/schema_methods.rb#977
   def type_literal_generic_bigdecimal(column); end
 
   # Sequel uses the bigint type by default for :Bignum symbol.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#981
+  # source://sequel//lib/sequel/database/schema_methods.rb#982
   def type_literal_generic_bignum_symbol(column); end
 
   # Sequel uses the date type by default for Dates.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#986
+  # source://sequel//lib/sequel/database/schema_methods.rb#987
   def type_literal_generic_date(column); end
 
   # Sequel uses the timestamp type by default for DateTimes.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#991
+  # source://sequel//lib/sequel/database/schema_methods.rb#992
   def type_literal_generic_datetime(column); end
 
   # Alias for type_literal_generic_trueclass, to make overriding in a subclass easier.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#996
+  # source://sequel//lib/sequel/database/schema_methods.rb#997
   def type_literal_generic_falseclass(column); end
 
   # Sequel uses the blob type by default for Files.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1001
+  # source://sequel//lib/sequel/database/schema_methods.rb#1002
   def type_literal_generic_file(column); end
 
   # Alias for type_literal_generic_integer, to make overriding in a subclass easier.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1006
+  # source://sequel//lib/sequel/database/schema_methods.rb#1007
   def type_literal_generic_fixnum(column); end
 
   # Sequel uses the double precision type by default for Floats.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1011
+  # source://sequel//lib/sequel/database/schema_methods.rb#1012
   def type_literal_generic_float(column); end
 
   # Sequel uses the integer type by default for integers
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1016
+  # source://sequel//lib/sequel/database/schema_methods.rb#1017
   def type_literal_generic_integer(column); end
 
   # Sequel uses the numeric type by default for Numerics and BigDecimals.
   # If a size is given, it is used, otherwise, it will default to whatever
   # the database default is for an unsized value.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1023
+  # source://sequel//lib/sequel/database/schema_methods.rb#1024
   def type_literal_generic_numeric(column); end
 
   # Use time by default for Time values if :only_time option is used.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1052
+  # source://sequel//lib/sequel/database/schema_methods.rb#1053
   def type_literal_generic_only_time(column); end
 
   # Sequel uses the varchar type by default for Strings.  If a
@@ -2436,24 +2438,24 @@ class Sequel::Database
   # :fixed option is used, Sequel uses the char type.  If the
   # :text option is used, Sequel uses the :text type.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1031
+  # source://sequel//lib/sequel/database/schema_methods.rb#1032
   def type_literal_generic_string(column); end
 
   # Sequel uses the timestamp type by default for Time values.
   # If the :only_time option is used, the time type is used.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1043
+  # source://sequel//lib/sequel/database/schema_methods.rb#1044
   def type_literal_generic_time(column); end
 
   # Sequel uses the boolean type by default for TrueClass and FalseClass.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1057
+  # source://sequel//lib/sequel/database/schema_methods.rb#1058
   def type_literal_generic_trueclass(column); end
 
   # SQL fragment for the given type of a column if the column is not one of the
   # generic types specified with a ruby class.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1063
+  # source://sequel//lib/sequel/database/schema_methods.rb#1064
   def type_literal_specific(column); end
 
   # Check the bytesize of the string value, if value is a string.
@@ -2514,14 +2516,14 @@ class Sequel::Database
 
   # Add fragment for unique specification, separated for easier overridding.
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1072
+  # source://sequel//lib/sequel/database/schema_methods.rb#1073
   def unique_constraint_sql_fragment(_); end
 
   # Whether clob should be used for String text: true columns.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/schema_methods.rb#1077
+  # source://sequel//lib/sequel/database/schema_methods.rb#1078
   def uses_clob_for_text?; end
 
   # The SQL query to issue to check if a connection is valid.
@@ -2898,7 +2900,7 @@ class Sequel::Dataset
   #          given, an empty hash is used.  This can be used to use a hash with
   #          a default value or default proc.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#843
+  # source://sequel//lib/sequel/dataset/actions.rb#847
   def as_hash(key_column, value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Returns the average value for the given column/expression.
@@ -3544,11 +3546,13 @@ class Sequel::Dataset
   #            This does not have an effect if +values+ is a Dataset.
   # :server :: Set the server/shard to use for the transaction and insert
   #            queries.
+  # :skip_transaction :: Do not use a transaction even when using multiple
+  #                      INSERT queries.
   # :slice :: Same as :commit_every, :commit_every takes precedence.
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#360
+  # source://sequel//lib/sequel/dataset/actions.rb#362
   def import(columns, values, opts = T.unsafe(nil)); end
 
   # source://sequel//lib/sequel/dataset/query.rb#625
@@ -3591,7 +3595,7 @@ class Sequel::Dataset
   #   DB[:items].insert([:a, :b], DB[:old_items])
   #   # INSERT INTO items (a, b) SELECT * FROM old_items
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#416
+  # source://sequel//lib/sequel/dataset/actions.rb#418
   def insert(*values, &block); end
 
   # Returns an INSERT SQL query string.  See +insert+.
@@ -3750,7 +3754,7 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#435
+  # source://sequel//lib/sequel/dataset/actions.rb#437
   def last(*args, &block); end
 
   # Marks this dataset as a lateral dataset.  If used in another dataset's FROM
@@ -3824,7 +3828,7 @@ class Sequel::Dataset
   #   DB[:table].map([:id, :name]) # SELECT * FROM table
   #   # => [[1, 'A'], [2, 'B'], [3, 'C'], ...]
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#454
+  # source://sequel//lib/sequel/dataset/actions.rb#456
   def map(column = T.unsafe(nil), &block); end
 
   # Returns the maximum value for the given column/expression.
@@ -3835,7 +3839,7 @@ class Sequel::Dataset
   #   DB[:table].max{function(column)} # SELECT max(function(column)) FROM table LIMIT 1
   #   # => 7
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#475
+  # source://sequel//lib/sequel/dataset/actions.rb#477
   def max(arg = T.unsafe(nil), &block); end
 
   # Execute a MERGE statement, which allows for INSERT, UPDATE, and DELETE
@@ -3884,7 +3888,7 @@ class Sequel::Dataset
   # * DELETE clause requires a condition
   # * DELETE clause only affects rows updated by UPDATE clause
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#525
+  # source://sequel//lib/sequel/dataset/actions.rb#527
   def merge; end
 
   # Return a dataset with a WHEN MATCHED THEN DELETE clause added to the
@@ -3952,7 +3956,7 @@ class Sequel::Dataset
   #   DB[:table].min{function(column)} # SELECT min(function(column)) FROM table LIMIT 1
   #   # => 0
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#536
+  # source://sequel//lib/sequel/dataset/actions.rb#538
   def min(arg = T.unsafe(nil), &block); end
 
   # This is a front end for import that allows you to submit an array of
@@ -3968,7 +3972,7 @@ class Sequel::Dataset
   #
   # This respects the same options as #import.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#553
+  # source://sequel//lib/sequel/dataset/actions.rb#555
   def multi_insert(hashes, opts = T.unsafe(nil)); end
 
   # Returns an array of insert statements for inserting multiple records.
@@ -4120,6 +4124,8 @@ class Sequel::Dataset
   #                   if your ORDER BY expressions are not simple columns, if they contain
   #                   qualified identifiers that would be ambiguous unqualified, if they contain
   #                   any identifiers that are aliased in SELECT, and potentially other cases.
+  # :skip_transaction :: Do not use a transaction. This can be useful if you want to prevent
+  #                      a lock on the database table, at the expense of consistency.
   #
   # Examples:
   #
@@ -4144,7 +4150,7 @@ class Sequel::Dataset
   #   # SELECT * FROM table WHERE id > 1001 ORDER BY id LIMIT 1000
   #   # ...
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#614
+  # source://sequel//lib/sequel/dataset/actions.rb#618
   def paged_each(opts = T.unsafe(nil)); end
 
   # Append literalization of placeholder literal string to SQL string.
@@ -4398,7 +4404,7 @@ class Sequel::Dataset
   # When using this method, you must be sure that each expression has an alias
   # that Sequel can determine.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#692
+  # source://sequel//lib/sequel/dataset/actions.rb#696
   def select_hash(key_column, value_column, opts = T.unsafe(nil)); end
 
   # Returns a hash with key_column values as keys and an array of value_column values.
@@ -4419,7 +4425,7 @@ class Sequel::Dataset
   # When using this method, you must be sure that each expression has an alias
   # that Sequel can determine.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#713
+  # source://sequel//lib/sequel/dataset/actions.rb#717
   def select_hash_groups(key_column, value_column, opts = T.unsafe(nil)); end
 
   # Selects the column given (either as an argument or as a block), and
@@ -4442,7 +4448,7 @@ class Sequel::Dataset
   # If you provide an array of expressions, you must be sure that each entry
   # in the array has an alias that Sequel can determine.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#736
+  # source://sequel//lib/sequel/dataset/actions.rb#740
   def select_map(column = T.unsafe(nil), &block); end
 
   # Alias for select_append.
@@ -4466,7 +4472,7 @@ class Sequel::Dataset
   # If you provide an array of expressions, you must be sure that each entry
   # in the array has an alias that Sequel can determine.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#755
+  # source://sequel//lib/sequel/dataset/actions.rb#759
   def select_order_map(column = T.unsafe(nil), &block); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#238
@@ -4528,7 +4534,7 @@ class Sequel::Dataset
   #   DB[:test].single_record # SELECT * FROM test LIMIT 1
   #   # => {:column_name=>'value'}
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#765
+  # source://sequel//lib/sequel/dataset/actions.rb#769
   def single_record; end
 
   # Returns the first record in dataset, without limiting the dataset. Returns nil if
@@ -4540,7 +4546,7 @@ class Sequel::Dataset
   #   DB[:test].single_record! # SELECT * FROM test
   #   # => {:column_name=>'value'}
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#777
+  # source://sequel//lib/sequel/dataset/actions.rb#781
   def single_record!; end
 
   # Returns the first value of the first record in the dataset.
@@ -4550,7 +4556,7 @@ class Sequel::Dataset
   #   DB[:test].single_value # SELECT * FROM test LIMIT 1
   #   # => 'value'
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#787
+  # source://sequel//lib/sequel/dataset/actions.rb#791
   def single_value; end
 
   # Returns the first value of the first record in the dataset, without limiting the dataset.
@@ -4562,7 +4568,7 @@ class Sequel::Dataset
   #   DB[:test].single_value! # SELECT * FROM test
   #   # => 'value'
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#802
+  # source://sequel//lib/sequel/dataset/actions.rb#806
   def single_value!; end
 
   # Specify that the check for limits/offsets when updating/deleting be skipped for the dataset.
@@ -4610,7 +4616,7 @@ class Sequel::Dataset
   #   DB[:table].sum{function(column)} # SELECT sum(function(column)) FROM table LIMIT 1
   #   # => 10
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#813
+  # source://sequel//lib/sequel/dataset/actions.rb#817
   def sum(arg = T.unsafe(nil), &block); end
 
   # Whether the dataset supports common table expressions, false by default.
@@ -4868,7 +4874,7 @@ class Sequel::Dataset
 
   # Alias of as_hash for backwards compatibility.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#870
+  # source://sequel//lib/sequel/dataset/actions.rb#874
   def to_hash(*a); end
 
   # Returns a hash with one column used as key and the values being an
@@ -4896,7 +4902,7 @@ class Sequel::Dataset
   #          given, an empty hash is used.  This can be used to use a hash with
   #          a default value or default proc.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#898
+  # source://sequel//lib/sequel/dataset/actions.rb#902
   def to_hash_groups(key_column, value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Truncates the dataset.  Returns nil.
@@ -4904,7 +4910,7 @@ class Sequel::Dataset
   #   DB[:table].truncate # TRUNCATE table
   #   # => nil
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#928
+  # source://sequel//lib/sequel/dataset/actions.rb#932
   def truncate; end
 
   # Returns a TRUNCATE SQL query string.  See +truncate+
@@ -5028,7 +5034,7 @@ class Sequel::Dataset
   #  # INNER JOIN c ON (c.d = b.e)
   #  # WHERE ((a.f = b.g) AND (a.id = 10))
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#954
+  # source://sequel//lib/sequel/dataset/actions.rb#958
   def update(values = T.unsafe(nil), &block); end
 
   # Formats an UPDATE statement using the given values.  See +update+.
@@ -5095,7 +5101,7 @@ class Sequel::Dataset
   #   DB[:table].where_all(id: [1,2,3])
   #   # SELECT * FROM table WHERE (id IN (1, 2, 3))
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#969
+  # source://sequel//lib/sequel/dataset/actions.rb#973
   def where_all(cond, &block); end
 
   # Iterate over all rows matching the given filter condition,
@@ -5105,7 +5111,7 @@ class Sequel::Dataset
   #   DB[:table].where_each(id: [1,2,3]){|row| p row}
   #   # SELECT * FROM table WHERE (id IN (1, 2, 3))
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#983
+  # source://sequel//lib/sequel/dataset/actions.rb#987
   def where_each(cond, &block); end
 
   # Filter the datasets using the given filter condition, then return a single value.
@@ -5116,7 +5122,7 @@ class Sequel::Dataset
   #   DB[:table].select(:name).where_single_value(id: 1)
   #   # SELECT name FROM table WHERE (id = 1) LIMIT 1
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#998
+  # source://sequel//lib/sequel/dataset/actions.rb#1002
   def where_single_value(cond); end
 
   # Return a clone of the dataset with an addition named window that can be
@@ -5271,45 +5277,45 @@ class Sequel::Dataset
   # Run the given SQL and return an array of all rows.  If a block is given,
   # each row is yielded to the block after all rows are loaded. See with_sql_each.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1011
+  # source://sequel//lib/sequel/dataset/actions.rb#1015
   def with_sql_all(sql, &block); end
 
   # Execute the given SQL and return the number of rows deleted.  This exists
   # solely as an optimization, replacing with_sql(sql).delete.  It's significantly
   # faster as it does not require cloning the current dataset.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1018
+  # source://sequel//lib/sequel/dataset/actions.rb#1022
   def with_sql_delete(sql); end
 
   # Run the given SQL and yield each returned row to the block.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1024
+  # source://sequel//lib/sequel/dataset/actions.rb#1028
   def with_sql_each(sql); end
 
   # Run the given SQL and return the first row, or nil if no rows were returned.
   # See with_sql_each.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1035
+  # source://sequel//lib/sequel/dataset/actions.rb#1039
   def with_sql_first(sql); end
 
   # Execute the given SQL and (on most databases) return the primary key of the
   # inserted row.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1051
+  # source://sequel//lib/sequel/dataset/actions.rb#1055
   def with_sql_insert(sql); end
 
   # Run the given SQL and return the first value in the first row, or nil if no
   # rows were returned.  For this to make sense, the SQL given should select
   # only a single value.  See with_sql_each.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1043
+  # source://sequel//lib/sequel/dataset/actions.rb#1047
   def with_sql_single_value(sql); end
 
   # Execute the given SQL and return the number of rows deleted.  This exists
   # solely as an optimization, replacing with_sql(sql).delete.  It's significantly
   # faster as it does not require cloning the current dataset.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1018
+  # source://sequel//lib/sequel/dataset/actions.rb#1022
   def with_sql_update(sql); end
 
   protected
@@ -5324,17 +5330,17 @@ class Sequel::Dataset
   # and execute each statement it gives separately. A transaction is only used
   # if there are multiple statements to execute.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1061
+  # source://sequel//lib/sequel/dataset/actions.rb#1065
   def _import(columns, values, opts); end
 
   # Return an array of arrays of values given by the symbols in ret_cols.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1073
+  # source://sequel//lib/sequel/dataset/actions.rb#1077
   def _select_map_multiple(ret_cols); end
 
   # Returns an array of the first value in each row.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1078
+  # source://sequel//lib/sequel/dataset/actions.rb#1082
   def _select_map_single; end
 
   # Access the cache for the current dataset.  Should be used with caution,
@@ -5391,7 +5397,7 @@ class Sequel::Dataset
 
   # A dataset for returning single values from the current dataset.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1084
+  # source://sequel//lib/sequel/dataset/actions.rb#1088
   def single_value_ds; end
 
   # Return a cloned copy of the current dataset extended with
@@ -5404,14 +5410,14 @@ class Sequel::Dataset
 
   # Cached placeholder literalizer for methods that return values using aggregate functions.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1100
+  # source://sequel//lib/sequel/dataset/actions.rb#1104
   def _aggregate(function, arg); end
 
   # Internals of all and with_sql_all
   #
   # @yield [a]
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1091
+  # source://sequel//lib/sequel/dataset/actions.rb#1095
   def _all(block); end
 
   # Internals of the check_*_allowed! methods
@@ -5430,14 +5436,14 @@ class Sequel::Dataset
   # for the column when records are returned.  Return nil if no hash key
   # can be determined
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1210
+  # source://sequel//lib/sequel/dataset/actions.rb#1212
   def _hash_key_symbol(s, recursing = T.unsafe(nil)); end
 
   # Use a transaction when yielding to the block if multiple values/statements
   # are provided. When only a single value or statement is provided, then yield
   # without using a transaction.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1113
+  # source://sequel//lib/sequel/dataset/actions.rb#1117
   def _import_transaction(values, trans_opts, &block); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#1256
@@ -5493,17 +5499,17 @@ class Sequel::Dataset
 
   # Internals of +select_hash+ and +select_hash_groups+
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1122
+  # source://sequel//lib/sequel/dataset/actions.rb#1124
   def _select_hash(meth, key_column, value_column, opts = T.unsafe(nil)); end
 
   # Internals of +select_map+ and +select_order_map+
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1128
+  # source://sequel//lib/sequel/dataset/actions.rb#1130
   def _select_map(column, order, &block); end
 
   # A cached dataset for a single record for this dataset.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1142
+  # source://sequel//lib/sequel/dataset/actions.rb#1144
   def _single_record_ds; end
 
   # Formats the truncate statement.  Assumes the table given has already been
@@ -5523,14 +5529,14 @@ class Sequel::Dataset
 
   # Loader used for where_all and where_each.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1147
+  # source://sequel//lib/sequel/dataset/actions.rb#1149
   def _where_loader(where_args, where_block); end
 
   # Cached dataset to use for with_sql_#{all,each,first,single_value}.
   # This is used so that the columns returned by the given SQL do not
   # affect the receiver of the with_sql_* method.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1328
+  # source://sequel//lib/sequel/dataset/actions.rb#1330
   def _with_sql_dataset; end
 
   # Add the given filter condition. Arguments:
@@ -5584,7 +5590,7 @@ class Sequel::Dataset
 
   # Automatically alias the given expression if it does not have an identifiable alias.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1154
+  # source://sequel//lib/sequel/dataset/actions.rb#1156
   def auto_alias_expression(v); end
 
   # source://sequel//lib/sequel/dataset/prepared_statements.rb#409
@@ -5701,7 +5707,7 @@ class Sequel::Dataset
   # The default number of rows that can be inserted in a single INSERT statement via import.
   # The default is for no limit.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1165
+  # source://sequel//lib/sequel/dataset/actions.rb#1167
   def default_import_slice; end
 
   # The default :qualify option to use for join tables if one is not specified.
@@ -5717,7 +5723,7 @@ class Sequel::Dataset
 
   # Set the server to use to :default unless it is already set in the passed opts
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1170
+  # source://sequel//lib/sequel/dataset/actions.rb#1172
   def default_server_opts(opts); end
 
   # The strftime format to use when literalizing the time.
@@ -5778,22 +5784,22 @@ class Sequel::Dataset
   # Execute the given select SQL on the database using execute. Use the
   # :read_only server unless a specific server is set.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1180
+  # source://sequel//lib/sequel/dataset/actions.rb#1182
   def execute(sql, opts = T.unsafe(nil), &block); end
 
   # Execute the given SQL on the database using execute_ddl.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1191
+  # source://sequel//lib/sequel/dataset/actions.rb#1193
   def execute_ddl(sql, opts = T.unsafe(nil), &block); end
 
   # Execute the given SQL on the database using execute_dui.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1197
+  # source://sequel//lib/sequel/dataset/actions.rb#1199
   def execute_dui(sql, opts = T.unsafe(nil), &block); end
 
   # Execute the given SQL on the database using execute_insert.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1202
+  # source://sequel//lib/sequel/dataset/actions.rb#1204
   def execute_insert(sql, opts = T.unsafe(nil), &block); end
 
   # Append literalization of array of expressions to SQL string, separating them
@@ -5843,14 +5849,14 @@ class Sequel::Dataset
   # for the column when records are returned.  Raise Error if the hash key
   # symbol cannot be returned.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1230
+  # source://sequel//lib/sequel/dataset/actions.rb#1232
   def hash_key_symbol(s); end
 
   # If s is an array, return an array with the given hash key symbols.
   # Otherwise, return a hash key symbol for the given expression
   # If a hash key symbol cannot be determined, raise an error.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1241
+  # source://sequel//lib/sequel/dataset/actions.rb#1243
   def hash_key_symbols(s); end
 
   # Return two datasets, the first a clone of the receiver with the WITH
@@ -5882,7 +5888,7 @@ class Sequel::Dataset
   # receiver's current order. This yields the row and the array of order expressions
   # to the block, which should return an array of values to use.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1248
+  # source://sequel//lib/sequel/dataset/actions.rb#1250
   def ignore_values_preceding(row); end
 
   # Set the db, opts, and cache for the copy of the dataset.
@@ -6083,7 +6089,7 @@ class Sequel::Dataset
 
   # Downcase identifiers by default when outputing them from the database.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1273
+  # source://sequel//lib/sequel/dataset/actions.rb#1275
   def output_identifier(v); end
 
   # This is run inside .all, after all of the records have been loaded
@@ -6091,7 +6097,7 @@ class Sequel::Dataset
   # a single argument, an array of all returned records.  Does nothing by
   # default, added to make the model eager loading code simpler.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1282
+  # source://sequel//lib/sequel/dataset/actions.rb#1284
   def post_load(all_records); end
 
   # The argument placeholder.  Most databases used unnumbered
@@ -6140,7 +6146,7 @@ class Sequel::Dataset
   # Yields each row as a plain hash to the block if one is given, or returns
   # an array of plain hashes for all rows if a block is not given
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1288
+  # source://sequel//lib/sequel/dataset/actions.rb#1290
   def returning_fetch_rows(sql, &block); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#1496
@@ -6287,7 +6293,7 @@ class Sequel::Dataset
   # implicit aliases in symbols, as well as SQL::AliasedExpression
   # objects.  Other objects are returned as is.
   #
-  # source://sequel//lib/sequel/dataset/actions.rb#1302
+  # source://sequel//lib/sequel/dataset/actions.rb#1304
   def unaliased_identifier(c); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#1599
@@ -7308,8 +7314,28 @@ Sequel::MAJOR = T.let(T.unsafe(nil), Integer)
 # source://sequel//lib/sequel/version.rb#9
 Sequel::MINOR = T.let(T.unsafe(nil), Integer)
 
-# source://sequel//lib/sequel/model/exceptions.rb#30
-class Sequel::MassAssignmentRestriction < ::Sequel::Error; end
+# Raised when a mass assignment method is called in strict mode with either a restricted column
+# or a column without a setter method.
+#
+# source://sequel//lib/sequel/model/exceptions.rb#29
+class Sequel::MassAssignmentRestriction < ::Sequel::Error
+  # The column related to this exception, as a string.
+  #
+  # source://sequel//lib/sequel/model/exceptions.rb#34
+  def column; end
+
+  # The Sequel::Model object related to this exception.
+  #
+  # source://sequel//lib/sequel/model/exceptions.rb#31
+  def model; end
+
+  class << self
+    # Create an instance of this class with the model and column set.
+    #
+    # source://sequel//lib/sequel/model/exceptions.rb#37
+    def create(msg, model, column); end
+  end
+end
 
 # <tt>Sequel::Model</tt> is an object relational mapper built on top of Sequel core.  Each
 # model class is backed by a dataset instance, and many dataset methods can be
@@ -11025,14 +11051,14 @@ end
 
 # DatasetMethods contains methods that all model datasets have.
 #
-# source://sequel//lib/sequel/model/base.rb#2120
+# source://sequel//lib/sequel/model/base.rb#2123
 module Sequel::Model::DatasetMethods
   # Assume if a single integer is given that it is a lookup by primary
   # key, and call with_pk with the argument.
   #
   #   Artist.dataset[1] # SELECT * FROM artists WHERE (id = 1) LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2132
+  # source://sequel//lib/sequel/model/base.rb#2135
   def [](*args); end
 
   # This allows you to call +as_hash+ without any arguments, which will
@@ -11044,7 +11070,7 @@ module Sequel::Model::DatasetMethods
   #   #     2=>#<Artist {:id=>2, ...}>,
   #   #     ...}
   #
-  # source://sequel//lib/sequel/model/base.rb#2191
+  # source://sequel//lib/sequel/model/base.rb#2195
   def as_hash(key_column = T.unsafe(nil), value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Destroy each row in the dataset by instantiating it and then calling
@@ -11057,7 +11083,7 @@ module Sequel::Model::DatasetMethods
   #   # DELETE FROM artists WHERE (id = 2)
   #   # ...
   #
-  # source://sequel//lib/sequel/model/base.rb#2149
+  # source://sequel//lib/sequel/model/base.rb#2152
   def destroy; end
 
   # If there is no order already defined on this dataset, order it by
@@ -11066,14 +11092,14 @@ module Sequel::Model::DatasetMethods
   #   Album.last
   #   # SELECT * FROM albums ORDER BY id DESC LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2159
+  # source://sequel//lib/sequel/model/base.rb#2163
   def last(*a, &block); end
 
   # The model class associated with this dataset
   #
   #   Artist.dataset.model # => Artist
   #
-  # source://sequel//lib/sequel/model/base.rb#2124
+  # source://sequel//lib/sequel/model/base.rb#2127
   def model; end
 
   # If there is no order already defined on this dataset, order it by
@@ -11085,12 +11111,12 @@ module Sequel::Model::DatasetMethods
   #   # SELECT * FROM albums ORDER BY id LIMIT 1000 OFFSET 2000
   #   # ...
   #
-  # source://sequel//lib/sequel/model/base.rb#2175
+  # source://sequel//lib/sequel/model/base.rb#2179
   def paged_each(*a, &block); end
 
   # Alias of as_hash for backwards compatibility.
   #
-  # source://sequel//lib/sequel/model/base.rb#2201
+  # source://sequel//lib/sequel/model/base.rb#2205
   def to_hash(*a); end
 
   # Given a primary key value, return the first record in the dataset with that primary key
@@ -11104,31 +11130,37 @@ module Sequel::Model::DatasetMethods
   #   Artist.dataset.with_pk([1, 2])
   #   # SELECT * FROM artists WHERE ((artists.id1 = 1) AND (artists.id2 = 2)) LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2215
+  # source://sequel//lib/sequel/model/base.rb#2219
   def with_pk(pk); end
 
   # Same as with_pk, but raises NoMatchingRow instead of returning nil if no
   # row matches.
   #
-  # source://sequel//lib/sequel/model/base.rb#2225
+  # source://sequel//lib/sequel/model/base.rb#2229
   def with_pk!(pk); end
 
   private
 
+  # Return the dataset ordered by the model's primary key.  This should not
+  # be used if the model does not have a primary key.
+  #
+  # source://sequel//lib/sequel/model/base.rb#2237
+  def _force_primary_key_order; end
+
   # If the dataset is not already ordered, and the model has a primary key,
   # return a clone ordered by the primary key.
   #
-  # source://sequel//lib/sequel/model/base.rb#2233
+  # source://sequel//lib/sequel/model/base.rb#2243
   def _primary_key_order; end
 
   # A cached placeholder literalizer, if one exists for the current dataset.
   #
-  # source://sequel//lib/sequel/model/base.rb#2240
+  # source://sequel//lib/sequel/model/base.rb#2250
   def _with_pk_loader; end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2256
+  # source://sequel//lib/sequel/model/base.rb#2266
   def non_sql_option?(key); end
 end
 
@@ -12077,7 +12109,7 @@ module Sequel::Model::InstanceMethods
 
   # Change the value of the column to given value, recording the change.
   #
-  # source://sequel//lib/sequel/model/base.rb#1953
+  # source://sequel//lib/sequel/model/base.rb#1955
   def change_column_value(column, value); end
 
   # If not raising on failure, check for HookFailed
@@ -12089,45 +12121,45 @@ module Sequel::Model::InstanceMethods
   # If transactions should be used, wrap the yield in a transaction block.
   #
   # source://sequel//lib/sequel/model/base.rb#1948
-  def checked_transaction(opts = T.unsafe(nil)); end
+  def checked_transaction(opts = T.unsafe(nil), &block); end
 
   # Default error class used for errors.
   #
-  # source://sequel//lib/sequel/model/base.rb#1959
+  # source://sequel//lib/sequel/model/base.rb#1961
   def errors_class; end
 
   # A HookFailed exception for the given message tied to the current instance.
   #
-  # source://sequel//lib/sequel/model/base.rb#1964
+  # source://sequel//lib/sequel/model/base.rb#1966
   def hook_failed_error(msg); end
 
   # Clone constructor -- freeze internal data structures if the original's
   # are frozen.
   #
-  # source://sequel//lib/sequel/model/base.rb#1970
+  # source://sequel//lib/sequel/model/base.rb#1972
   def initialize_clone(other); end
 
   # Copy constructor -- Duplicate internal data structures.
   #
-  # source://sequel//lib/sequel/model/base.rb#1977
+  # source://sequel//lib/sequel/model/base.rb#1979
   def initialize_copy(other); end
 
   # Set the columns with the given hash.  By default, the same as +set+, but
   # exists so it can be overridden.  This is called only for new records, before
   # changed_columns is cleared.
   #
-  # source://sequel//lib/sequel/model/base.rb#1988
+  # source://sequel//lib/sequel/model/base.rb#1990
   def initialize_set(h); end
 
   # Default inspection output for the values hash, overwrite to change what #inspect displays.
   #
-  # source://sequel//lib/sequel/model/base.rb#1993
+  # source://sequel//lib/sequel/model/base.rb#1995
   def inspect_values; end
 
   # Raise an error appropriate to the hook type. May be swallowed by
   # checked_save_failure depending on the raise_on_failure? setting.
   #
-  # source://sequel//lib/sequel/model/base.rb#2007
+  # source://sequel//lib/sequel/model/base.rb#2009
   def raise_hook_failure(type = T.unsafe(nil)); end
 
   # Whether to raise or return false if this action fails. If the
@@ -12137,18 +12169,18 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2001
+  # source://sequel//lib/sequel/model/base.rb#2003
   def raise_on_failure?(opts); end
 
   # Get the ruby class or classes related to the given column's type.
   #
-  # source://sequel//lib/sequel/model/base.rb#2021
+  # source://sequel//lib/sequel/model/base.rb#2023
   def schema_type_class(column); end
 
   # Call setter methods based on keys in hash, with the appropriate values.
   # Restrict which methods can be called based on the provided type.
   #
-  # source://sequel//lib/sequel/model/base.rb#2029
+  # source://sequel//lib/sequel/model/base.rb#2031
   def set_restricted(hash, type); end
 
   # Returns all methods that can be used for attribute assignment (those that end with =),
@@ -12158,13 +12190,13 @@ module Sequel::Model::InstanceMethods
   # :all :: Allow setting all setters, except those specifically restricted (such as ==).
   # Array :: Only allow setting of columns in the given array.
   #
-  # source://sequel//lib/sequel/model/base.rb#2059
+  # source://sequel//lib/sequel/model/base.rb#2062
   def setter_methods(type); end
 
   # The server/shard that the model object's dataset uses, or :default if the
   # model object's dataset does not have an associated shard.
   #
-  # source://sequel//lib/sequel/model/base.rb#2071
+  # source://sequel//lib/sequel/model/base.rb#2074
   def this_server; end
 
   # Typecast the value to the column's type if typecasting.  Calls the database's
@@ -12173,17 +12205,17 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [InvalidValue]
   #
-  # source://sequel//lib/sequel/model/base.rb#2084
+  # source://sequel//lib/sequel/model/base.rb#2087
   def typecast_value(column, value); end
 
   # Set the columns, filtered by the only and except arrays.
   #
-  # source://sequel//lib/sequel/model/base.rb#2096
+  # source://sequel//lib/sequel/model/base.rb#2099
   def update_restricted(hash, type); end
 
   # Set the given dataset to use the current object's shard.
   #
-  # source://sequel//lib/sequel/model/base.rb#2102
+  # source://sequel//lib/sequel/model/base.rb#2105
   def use_server(ds); end
 
   # Whether to use a transaction for this action.  If the :transaction
@@ -12192,12 +12224,12 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2109
+  # source://sequel//lib/sequel/model/base.rb#2112
   def use_transaction?(opts = T.unsafe(nil)); end
 
   # An ValidationFailed exception instance to raise for this instance.
   #
-  # source://sequel//lib/sequel/model/base.rb#2114
+  # source://sequel//lib/sequel/model/base.rb#2117
   def validation_failed_error; end
 end
 
@@ -15498,20 +15530,20 @@ Sequel::VIRTUAL_ROW = T.let(T.unsafe(nil), Sequel::SQL::VirtualRow)
 
 # Exception class raised when +raise_on_save_failure+ is set and validation fails
 #
-# source://sequel//lib/sequel/model/exceptions.rb#34
+# source://sequel//lib/sequel/model/exceptions.rb#46
 class Sequel::ValidationFailed < ::Sequel::Error
   # @return [ValidationFailed] a new instance of ValidationFailed
   #
-  # source://sequel//lib/sequel/model/exceptions.rb#41
+  # source://sequel//lib/sequel/model/exceptions.rb#53
   def initialize(errors = T.unsafe(nil)); end
 
   # The Sequel::Model::Errors object related to this exception.
   #
-  # source://sequel//lib/sequel/model/exceptions.rb#39
+  # source://sequel//lib/sequel/model/exceptions.rb#51
   def errors; end
 
   # The Sequel::Model object related to this exception.
   #
-  # source://sequel//lib/sequel/model/exceptions.rb#36
+  # source://sequel//lib/sequel/model/exceptions.rb#48
   def model; end
 end

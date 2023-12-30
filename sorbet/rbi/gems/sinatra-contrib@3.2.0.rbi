@@ -7,16 +7,16 @@
 # source://sinatra-contrib//lib/sinatra/namespace.rb#6
 module Sinatra
   class << self
-    # source://sinatra/3.1.0/lib/sinatra/base.rb#2095
+    # source://sinatra/3.2.0/lib/sinatra/base.rb#2107
     def helpers(*extensions, &block); end
 
-    # source://sinatra/3.1.0/lib/sinatra/base.rb#2083
+    # source://sinatra/3.2.0/lib/sinatra/base.rb#2095
     def new(base = T.unsafe(nil), &block); end
 
-    # source://sinatra/3.1.0/lib/sinatra/base.rb#2090
+    # source://sinatra/3.2.0/lib/sinatra/base.rb#2102
     def register(*extensions, &block); end
 
-    # source://sinatra/3.1.0/lib/sinatra/base.rb#2100
+    # source://sinatra/3.2.0/lib/sinatra/base.rb#2112
     def use(*args, &block); end
   end
 end
