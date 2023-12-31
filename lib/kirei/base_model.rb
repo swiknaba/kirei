@@ -16,6 +16,7 @@ module Kirei
       ).returns(T.self_type)
     end
     def update(hash)
+      hash[:updated_at] = Time.now.utc if respond_to?(:updated_at) && hash[:updated_at].nil?
       self.class.db.where({ id: id }).update(hash)
       self.class.find_by({ id: id })
     end
@@ -132,6 +133,9 @@ module Kirei
             all_attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
           end
         end
+
+        all_attributes["created_at"] = Time.now.utc if new_record.respond_to?(:created_at) && all_attributes["created_at"].nil?
+        all_attributes["updated_at"] = Time.now.utc if new_record.respond_to?(:updated_at) && all_attributes["updated_at"].nil?
 
         pkey = T.let(db.insert(all_attributes), String)
 
