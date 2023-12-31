@@ -55,7 +55,12 @@ module Kirei
         @raw_db_connection = Sequel.connect(AppBase.config.db_url || default_db_url)
 
         config.db_extensions.each do |ext|
-          @raw_db_connection.extension(ext)
+          T.cast(@raw_db_connection, Sequel::Database).extension(ext)
+        end
+
+        if config.db_extensions.include?(:pg_json)
+          # https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb#L8
+          @raw_db_connection.wrap_json_primitives = true
         end
 
         @raw_db_connection
