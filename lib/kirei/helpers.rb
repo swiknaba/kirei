@@ -23,6 +23,26 @@ module Kirei
         string.nil? || string.to_s.empty?
       end
 
+      sig { params(object: T.untyped).returns(T.untyped) }
+      def deep_stringify_keys(object)
+        deep_transform_keys(object) { _1.to_s rescue _1 } # rubocop:disable Style/RescueModifier
+      end
+
+      sig { params(object: T.untyped).returns(T.untyped) }
+      def deep_stringify_keys!(object)
+        deep_transform_keys!(object) { _1.to_s rescue _1 } # rubocop:disable Style/RescueModifier
+      end
+
+      sig { params(object: T.untyped).returns(T.untyped) }
+      def deep_symbolize_keys(object)
+        deep_transform_keys(object) { _1.to_sym rescue _1 } # rubocop:disable Style/RescueModifier
+      end
+
+      sig { params(object: T.untyped).returns(T.untyped) }
+      def deep_symbolize_keys!(object)
+        deep_transform_keys!(object) { _1.to_sym rescue _1 } # rubocop:disable Style/RescueModifier
+      end
+
       # Simplified version from Rails' ActiveSupport
       sig do
         params(
@@ -30,7 +50,7 @@ module Kirei
           block: Proc,
         ).returns(T.untyped) # could be anything due to recursive calls
       end
-      def deep_transform_keys(object, &block)
+      private def deep_transform_keys(object, &block)
         case object
         when Hash
           object.each_with_object({}) do |(key, value), result|
@@ -49,7 +69,7 @@ module Kirei
           block: Proc,
         ).returns(T.untyped) # could be anything due to recursive calls
       end
-      def deep_transform_keys!(object, &block)
+      private def deep_transform_keys!(object, &block)
         case object
         when Hash
           # using `each_key` results in a `RuntimeError: can't add a new key into hash during iteration`
