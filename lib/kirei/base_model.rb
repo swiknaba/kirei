@@ -21,13 +21,13 @@ module Kirei
     end
 
     # warning: this is not concurrency-safe
-    sig do
-      params(
-        hash: T::Hash[Symbol, T.untyped],
-      ).returns(T.self_type)
-    end
-    def save(hash)
+    sig { returns(T.self_type) }
+    def save
       previous_record = self.class.find_by({ id: id })
+
+      hash = serialize
+      Helpers.deep_symbolize_keys!(hash)
+      hash = T.cast(hash, T::Hash[Symbol, T.untyped])
 
       if previous_record.nil?
         self.class.create(hash)

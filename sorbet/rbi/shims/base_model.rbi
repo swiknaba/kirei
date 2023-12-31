@@ -3,6 +3,8 @@
 # rubocop:disable Style/EmptyMethod
 module Kirei
   module BaseModel
+    include T::Props::Serializable
+
     sig { returns(T.any(String, Integer)) }
     def id; end
 
