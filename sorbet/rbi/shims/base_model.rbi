@@ -12,6 +12,10 @@ module Kirei
       sig { returns(String) }
       def name; end
     end
+
+    module BaseClassInterface
+      # include T::Props::Serializable::ClassMethods
+    end
   end
 end
 # rubocop:enable Style/EmptyMethod
