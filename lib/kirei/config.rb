@@ -17,16 +17,18 @@ module Kirei
 
     prop :logger, ::Logger, factory: -> { ::Logger.new($stdout) }
     prop :log_transformer, T.nilable(T.proc.params(msg: T::Hash[Symbol, T.untyped]).returns(T::Array[String]))
+    prop :log_default_metadata, T::Hash[Symbol, String], default: {}
+
     # dup to allow the user to extend the existing list of sensitive keys
     prop :sensitive_keys, T::Array[Regexp], factory: -> { SENSITIVE_KEYS.dup }
+
     prop :app_name, String, default: "kirei"
-    prop :db_url, T.nilable(String)
 
     # must use "pg_json" to parse jsonb columns to hashes
     #
     # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb
     prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array]
-
+    prop :db_url, T.nilable(String)
     # Extra or unknown properties present in the Hash do not raise exceptions at runtime
     # unless the optional strict argument to from_hash is passed
     #

@@ -17,12 +17,12 @@ module Kirei
   #
   # You can define a custom log transformer to transform the logline:
   #
-  #    Kirei.config.log_transformer = Proc.new { _1 }
+  #    Kirei::AppBase.config.log_transformer = Proc.new { _1 }
   #
-  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei.config.sensitive_keys`.
+  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei::AppBase.config.sensitive_keys`.
   # You can also build on top of the provided log transformer:
   #
-  #   Kirei.config.log_transformer = Proc.new do |meta|
+  #   Kirei::AppBase.config.log_transformer = Proc.new do |meta|
   #      flattened_meta = Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta)
   #      # Do something with the flattened meta
   #      flattened_meta.map { _1.to_json }
@@ -83,6 +83,14 @@ module Kirei
       ).void
     end
     def call(level:, label:, meta: {})
+      Kirei::AppBase.config.log_default_metadata.each_pair do |key, value|
+        meta[key] ||= value
+      end
+
+      #
+      # key names follow OpenTelemetry Semantic Conventions
+      # Source: https://opentelemetry.io/docs/concepts/semantic-conventions/
+      #
       meta[:"service.instance.id"] ||= Thread.current[:request_id]
       meta[:"service.name"] ||= Kirei::AppBase.config.app_name
 
