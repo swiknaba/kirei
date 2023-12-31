@@ -110,7 +110,7 @@ module Kirei
         resolve(db.where(hash))
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       # default values defined in the model are used, if omitted in the hash
       sig do
         override.params(
@@ -135,14 +135,18 @@ module Kirei
           end
         end
 
-        all_attributes["created_at"] = Time.now.utc if new_record.respond_to?(:created_at) && all_attributes["created_at"].nil?
-        all_attributes["updated_at"] = Time.now.utc if new_record.respond_to?(:updated_at) && all_attributes["updated_at"].nil?
+        if new_record.respond_to?(:created_at) && all_attributes["created_at"].nil?
+          all_attributes["created_at"] = Time.now.utc
+        end
+        if new_record.respond_to?(:updated_at) && all_attributes["updated_at"].nil?
+          all_attributes["updated_at"] = Time.now.utc
+        end
 
         pkey = T.let(db.insert(all_attributes), String)
 
         T.must(find_by({ id: pkey }))
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       sig do
         override.params(
