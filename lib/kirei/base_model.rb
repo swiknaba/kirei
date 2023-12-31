@@ -62,9 +62,16 @@ module Kirei
 
       include BaseClassInterface
 
+      # defaults to a pluralized, underscored version of the class name
       sig { override.returns(String) }
       def table_name
-        T.must(name.split("::").last).pluralize.underscore
+        @table_name ||= T.let(
+          begin
+            table_name_ = Kirei::Helpers.underscore(T.must(name.split("::").last))
+            "#{table_name_}s"
+          end,
+          T.nilable(String),
+        )
       end
 
       sig { override.returns(Sequel::Dataset) }
@@ -106,7 +113,7 @@ module Kirei
 
         query.map do |row|
           row = T.cast(row, T::Hash[Symbol, T.untyped])
-          row.stringify_keys! # sequel returns symbolized keys
+          row.transform_keys!(&:to_s) # sequel returns symbolized keys
           from_hash(row, strict_loading)
         end
       end

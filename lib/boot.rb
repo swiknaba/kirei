@@ -12,15 +12,14 @@
 require "bundler/setup"
 
 # Second: load all gems (runtime dependencies only)
+require "logger"
 require "sorbet-runtime"
 require "oj"
-require "active_support/all"
 require "puma"
 require "sinatra"
 require "sinatra/namespace" # from sinatra-contrib
 require "pg"
-require "sequel"
-# "sequel_pg" should be auto-required by "sequel"
+require "sequel" # "sequel_pg" is auto-required by "sequel"
 
 Oj.default_options = {
   mode: :compat, # required to dump hashes with symbol-keys
