@@ -22,6 +22,7 @@ module Kirei
     end
 
     # warning: this is not concurrency-safe
+    # save keeps the original object intact, and returns a new object with the updated values.
     sig { returns(T.self_type) }
     def save
       previous_record = self.class.find_by({ id: id })
