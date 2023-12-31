@@ -52,7 +52,9 @@ module Kirei
       def deep_transform_keys!(object, &block)
         case object
         when Hash
-          object.each_key do |key|
+          # using `each_key` results in a `RuntimeError: can't add a new key into hash during iteration`
+          # which is, because the receiver here does not necessarily have a `Hash` type
+          object.keys.each do |key| # rubocop:disable Style/HashEachMethods
             value = object.delete(key)
             object[yield(key)] = deep_transform_keys!(value, &block)
           end
