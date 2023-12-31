@@ -84,6 +84,7 @@ module Kirei
     end
     def call(level:, label:, meta: {})
       meta[:"service.instance.id"] ||= Thread.current[:request_id]
+      meta[:"service.name"] ||= Kirei::AppBase.config.app_name
 
       # The Ruby logger only accepts one string as the only argument
       @queue << { level: level, label: label, meta: meta }
