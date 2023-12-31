@@ -11,7 +11,9 @@ module Cli
           Files::App.call(app_name)
           Files::Irbrc.call
 
-          puts "Kirei app '#{app_name}' scaffolded successfully!"
+          Kirei::Logger.logger.info(
+            "Kirei app '#{app_name}' scaffolded successfully!",
+          )
         end
       end
     end

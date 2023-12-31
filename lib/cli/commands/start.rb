@@ -12,7 +12,7 @@ module Cli
           app_name = app_name.gsub(/[-\s]/, "_").classify
           NewApp::Execute.call(app_name: app_name)
         else
-          puts "Unknown command"
+          Kirei::Logger.logger.info("Unknown command")
         end
       end
     end
