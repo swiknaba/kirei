@@ -146,7 +146,7 @@ module Kirei
     end
     def self.flatten_hash_and_mask_sensitive_values(hash, prefix = :'')
       result = T.let({}, T::Hash[Symbol, T.untyped])
-      Kirei::Helpers.deep_transform_keys!(hash) { _1.to_sym rescue _1 } # rubocop:disable Style/RescueModifier
+      Kirei::Helpers.deep_symbolize_keys!(hash)
 
       hash.each do |key, value|
         new_prefix = Kirei::Helpers.blank?(prefix) ? key : :"#{prefix}.#{key}"

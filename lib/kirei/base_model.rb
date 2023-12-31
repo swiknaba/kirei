@@ -20,6 +20,22 @@ module Kirei
       self.class.find_by({ id: id })
     end
 
+    # warning: this is not concurrency-safe
+    sig do
+      params(
+        hash: T::Hash[Symbol, T.untyped],
+      ).returns(T.self_type)
+    end
+    def save(hash)
+      previous_record = self.class.find_by({ id: id })
+
+      if previous_record.nil?
+        self.class.create(hash)
+      else
+        update(hash)
+      end
+    end
+
     module BaseClassInterface
       extend T::Sig
       extend T::Helpers
@@ -31,6 +47,10 @@ module Kirei
 
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
       def where(hash)
+      end
+
+      sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+      def create(hash)
       end
 
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
@@ -88,6 +108,37 @@ module Kirei
         resolve(db.where(hash))
       end
 
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+      # default values defined in the model are used, if omitted in the hash
+      sig do
+        override.params(
+          hash: T::Hash[Symbol, T.untyped],
+        ).returns(T.attached_class)
+      end
+      def create(hash)
+        # instantiate a new object to ensure we use default values defined in the model
+        without_id = !hash.key?(:id)
+        hash[:id] = "kirei-fake-id" if without_id
+        new_record = from_hash(Helpers.deep_stringify_keys(hash))
+        all_attributes = T.let(new_record.serialize, T::Hash[String, T.untyped])
+        all_attributes.delete("id") if without_id && all_attributes["id"] == "kirei-fake-id"
+
+        # setting `@raw_db_connection.wrap_json_primitives = true`
+        # only works on JSON primitives, but not on blank hashes/arrays
+        if AppBase.config.db_extensions.include?(:pg_json)
+          all_attributes.each_pair do |key, value|
+            next unless value.is_a?(Hash) || value.is_a?(Array)
+
+            all_attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
+          end
+        end
+
+        pkey = T.let(db.insert(all_attributes), String)
+
+        T.must(find_by({ id: pkey }))
+      end
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+
       sig do
         override.params(
           hash: T::Hash[Symbol, T.untyped],
@@ -125,7 +176,9 @@ module Kirei
         ).returns(T.nilable(T.attached_class))
       end
       def resolve_first(query, strict = nil)
-        resolve(query.limit(1), strict).first
+        strict_loading = strict.nil? ? AppBase.config.db_strict_type_resolving : strict
+
+        resolve(query.limit(1), strict_loading).first
       end
     end
 
