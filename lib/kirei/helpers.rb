@@ -26,9 +26,9 @@ module Kirei
       # Simplified version from Rails' ActiveSupport
       sig do
         params(
-          object: T.untyped,
+          object: T.untyped, # could be anything due to recursive calls
           block: Proc,
-        ).returns(T::Hash[T.any(String, Symbol), T.untyped])
+        ).returns(T.untyped) # could be anything due to recursive calls
       end
       def deep_transform_keys(object, &block)
         case object
@@ -45,9 +45,9 @@ module Kirei
 
       sig do
         params(
-          object: T.untyped,
+          object: T.untyped, # could be anything due to recursive calls
           block: Proc,
-        ).returns(T::Hash[T.any(String, Symbol), T.untyped])
+        ).returns(T.untyped) # could be anything due to recursive calls
       end
       def deep_transform_keys!(object, &block)
         case object
