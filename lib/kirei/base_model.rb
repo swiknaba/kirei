@@ -64,7 +64,7 @@ module Kirei
       def create(hash)
       end
 
-      sig { abstract.params(attributes: T.untyped).returns(T.untyped) }
+      sig { abstract.params(attributes: T.untyped).void }
       def wrap_jsonb_non_primivitives!(attributes)
       end
 
