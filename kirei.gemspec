@@ -50,7 +50,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tzinfo-data", "~> 1.0" # for containerized environments, e.g. on AWS ECS
 
   # Web server & routing
-  spec.add_dependency "puma", "~> 6.0"
   spec.add_dependency "sinatra", "~> 3.0"
   spec.add_dependency "sinatra-contrib", "~> 3.0"
 

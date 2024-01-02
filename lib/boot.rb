@@ -15,7 +15,6 @@ require "bundler/setup"
 require "logger"
 require "sorbet-runtime"
 require "oj"
-require "puma"
 require "sinatra"
 require "sinatra/namespace" # from sinatra-contrib
 require "pg"
