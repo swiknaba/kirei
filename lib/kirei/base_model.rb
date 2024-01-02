@@ -17,6 +17,7 @@ module Kirei
     end
     def update(hash)
       hash[:updated_at] = Time.now.utc if respond_to?(:updated_at) && hash[:updated_at].nil?
+      self.class.wrap_jsonb_non_primivitives!(hash)
       self.class.db.where({ id: id }).update(hash)
       self.class.find_by({ id: id })
     end
@@ -61,6 +62,10 @@ module Kirei
 
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
       def create(hash)
+      end
+
+      sig { abstract.params(attributes: T.untyped).returns(T.untyped) }
+      def wrap_jsonb_non_primivitives!(attributes)
       end
 
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
@@ -118,7 +123,7 @@ module Kirei
         resolve(db.where(hash))
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       # default values defined in the model are used, if omitted in the hash
       sig do
         override.params(
@@ -133,15 +138,7 @@ module Kirei
         all_attributes = T.let(new_record.serialize, T::Hash[String, T.untyped])
         all_attributes.delete("id") if without_id && all_attributes["id"] == "kirei-fake-id"
 
-        # setting `@raw_db_connection.wrap_json_primitives = true`
-        # only works on JSON primitives, but not on blank hashes/arrays
-        if AppBase.config.db_extensions.include?(:pg_json)
-          all_attributes.each_pair do |key, value|
-            next unless value.is_a?(Hash) || value.is_a?(Array)
-
-            all_attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
-          end
-        end
+        wrap_jsonb_non_primivitives!(all_attributes)
 
         if new_record.respond_to?(:created_at) && all_attributes["created_at"].nil?
           all_attributes["created_at"] = Time.now.utc
@@ -154,7 +151,20 @@ module Kirei
 
         T.must(find_by({ id: pkey }))
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+
+      sig { override.params(attributes: T::Hash[T.any(Symbol, String), T.untyped]).void }
+      def wrap_jsonb_non_primivitives!(attributes)
+        # setting `@raw_db_connection.wrap_json_primitives = true`
+        # only works on JSON primitives, but not on blank hashes/arrays
+        return unless AppBase.config.db_extensions.include?(:pg_json)
+
+        attributes.each_pair do |key, value|
+          next unless value.is_a?(Hash) || value.is_a?(Array)
+
+          attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
+        end
+      end
 
       sig do
         override.params(
