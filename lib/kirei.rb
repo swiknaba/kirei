@@ -6,6 +6,17 @@ require "boot"
 module Kirei
   extend T::Sig
 
+  # we don't know what Oj does under the hood with the options hash, so don't freeze it
+  # rubocop:disable Style/MutableConstant
+  OJ_OPTIONS = T.let(
+    {
+      mode: :compat, # required to dump hashes with symbol-keys
+      symbol_keys: false, # T::Struct.new works only with string-keys
+    },
+    T::Hash[Symbol, T.untyped],
+  )
+  # rubocop:enable Style/MutableConstant
+
   GEM_ROOT = T.let(
     Gem::Specification.find_by_name("kirei").gem_dir,
     String,

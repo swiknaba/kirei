@@ -20,10 +20,5 @@ require "sinatra/namespace" # from sinatra-contrib
 require "pg"
 require "sequel" # "sequel_pg" is auto-required by "sequel"
 
-Oj.default_options = {
-  mode: :compat, # required to dump hashes with symbol-keys
-  symbol_keys: false, # T::Struct.new works only with string-keys
-}
-
 # Third: load all application code
 Dir[File.join(__dir__, "kirei/**/*.rb")].each { require(_1) }

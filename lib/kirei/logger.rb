@@ -116,7 +116,10 @@ module Kirei
           loglines = if log_transformer
             log_transformer.call(meta)
           else
-            [Oj.dump(Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta))]
+            [Oj.dump(
+              Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta),
+              Kirei::OJ_OPTIONS,
+            )]
           end
 
           loglines.each { Kirei::Logger.logger.error(_1) }
