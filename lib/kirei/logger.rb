@@ -143,13 +143,14 @@ module Kirei
 
     sig do
       params(
-        hash: T::Hash[Symbol, T.untyped],
+        hash: T::Hash[T.any(Symbol, String), T.untyped],
         prefix: Symbol,
       ).returns(T::Hash[Symbol, T.untyped])
     end
     def self.flatten_hash_and_mask_sensitive_values(hash, prefix = :'')
       result = T.let({}, T::Hash[Symbol, T.untyped])
       Kirei::Helpers.deep_symbolize_keys!(hash)
+      hash = T.cast(hash, T::Hash[Symbol, T.untyped])
 
       hash.each do |key, value|
         new_prefix = Kirei::Helpers.blank?(prefix) ? key : :"#{prefix}.#{key}"
