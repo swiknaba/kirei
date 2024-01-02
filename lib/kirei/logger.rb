@@ -156,7 +156,11 @@ module Kirei
         new_prefix = Kirei::Helpers.blank?(prefix) ? key : :"#{prefix}.#{key}"
 
         case value
-        when Hash then result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_sym), new_prefix))
+        when Hash
+          # some libraries have custom Hash classes that inhert from Hash, but act differently, e.g. `OmniAuth::AuthHash`
+          # which results in `transform_keys` being available but without any effect
+          value = value.to_h if value.class != Hash
+          result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_sym), new_prefix))
         when Array
           value.each_with_index do |element, index|
             if element.is_a?(Hash) || element.is_a?(Array)
