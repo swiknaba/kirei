@@ -21,6 +21,14 @@ module Kirei
       self.class.find_by({ id: id })
     end
 
+    # Delete keeps the original object intact. Returns true if the record was deleted.
+    # Calling delete multiple times will return false after the first (successful) call.
+    sig { returns(T::Boolean) }
+    def delete
+      count = self.class.db.where({ id: id }).delete
+      count == 1
+    end
+
     # warning: this is not concurrency-safe
     # save keeps the original object intact, and returns a new object with the updated values.
     sig { returns(T.self_type) }
