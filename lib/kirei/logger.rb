@@ -157,8 +157,8 @@ module Kirei
 
         case value
         when Hash
-          # some libraries have custom Hash classes that inhert from Hash, but act differently, e.g. `OmniAuth::AuthHash`
-          # which results in `transform_keys` being available but without any effect
+          # Some libraries have a custom Hash class that inhert from Hash, but act differently, e.g. OmniAuth::AuthHash.
+          # This results in `transform_keys` being available but without any effect.
           value = value.to_h if value.class != Hash
           result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_sym), new_prefix))
         when Array
