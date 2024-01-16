@@ -45,7 +45,6 @@ Gem::Specification.new do |spec|
 
   # Utilities
   spec.add_dependency "oj", "~> 3.0"
-  spec.add_dependency "rake", "~> 13.0"
   spec.add_dependency "sorbet-runtime", "~> 0.5"
   spec.add_dependency "tzinfo-data", "~> 1.0" # for containerized environments, e.g. on AWS ECS
 
