@@ -17,12 +17,13 @@ module Kirei
     sig { returns(T::Hash[String, T.untyped]) }
     attr_reader :params
 
-    # TODO: maybe just `.void`? (so users can just `void` the method instead of `returns(RackResponseType)`)
     sig { params(env: RackEnvType).returns(RackResponseType) }
     def call(env)
       http_verb = T.cast(env.fetch("REQUEST_METHOD"), String)
       req_path = T.cast(env.fetch("REQUEST_PATH"), String)
-      # req_host, req_port = T.cast(env.fetch("HTTP_HOST"), String).split(":")
+      # reject requests from unexpected hosts -> allow configuring allowed hosts in a `cors.rb` file
+      #   ( offer a scaffold for this file )
+      # -> use https://github.com/cyu/rack-cors
 
       route = Router.instance.get(http_verb, req_path)
       return [404, {}, ["Not Found"]] if route.nil?
@@ -40,7 +41,7 @@ module Kirei
         body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
         res = Oj.load(body.read, Kirei::OJ_OPTIONS)
         body.rewind # TODO: maybe don't rewind if we don't need to?
-        res
+        T.cast(res, T::Hash[String, T.untyped])
       end
 
       instance = route.controller.new(params: params)
