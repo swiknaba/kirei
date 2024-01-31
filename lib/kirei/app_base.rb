@@ -1,8 +1,10 @@
 # typed: strict
 # frozen_string_literal: true
 
+require_relative("app")
+
 module Kirei
-  class AppBase < ::Sinatra::Base
+  class AppBase < Kirei::App
     class << self
       extend T::Sig
 

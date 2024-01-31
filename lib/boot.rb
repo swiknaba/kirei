@@ -15,8 +15,7 @@ require "bundler/setup"
 require "logger"
 require "sorbet-runtime"
 require "oj"
-require "sinatra"
-require "sinatra/namespace" # from sinatra-contrib
+require "rack"
 require "pg"
 require "sequel" # "sequel_pg" is auto-required by "sequel"
 

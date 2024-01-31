@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 module Kirei
-  class Base
-    extend T::Sig
+  class Router
   end
 end
