@@ -22,12 +22,12 @@ module Kirei
     def call(env)
       http_verb = T.cast(env.fetch("REQUEST_METHOD"), String)
       req_path = T.cast(env.fetch("REQUEST_PATH"), String)
-      req_host, req_port = T.cast(env.fetch("HTTP_HOST"), String).split(":")
+      # req_host, req_port = T.cast(env.fetch("HTTP_HOST"), String).split(":")
 
       route = Router.instance.get(http_verb, req_path)
       return [404, {}, ["Not Found"]] if route.nil?
 
-      params = if route.verb == 'GET'
+      params = if route.verb == "GET"
         query = T.cast(env.fetch("QUERY_STRING"), String)
         query.split("&").to_h do |p|
           k, v = p.split("=")
