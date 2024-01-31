@@ -46,5 +46,22 @@ module Kirei
       instance = route.controller.new(params: params)
       instance.public_send(route.action)
     end
+
+    sig do
+      params(
+        status: Integer,
+        body: String,
+        headers: T::Hash[String, String],
+      ).returns(RackResponseType)
+    end
+    def render(status:, body:, headers: {})
+      # merge default headers
+      # support a "type" to set content-type header? (or default to json, and users must set the header themselves for other types?)
+      [
+        status,
+        headers,
+        [body],
+      ]
+    end
   end
 end
