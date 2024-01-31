@@ -12,6 +12,21 @@ module Kirei
       ]
     end
 
-    RackEnvType = T.type_alias { T::Hash[String, String] }
+    RackEnvType = T.type_alias do
+      T::Hash[
+        String,
+        T.any(
+          T::Array[T.untyped],
+          IO,
+          T::Boolean,
+          String,
+          Numeric,
+          TCPSocket,
+          Puma::Client,
+          StringIO,
+          Puma::Configuration,
+        )
+      ]
+    end
   end
 end
