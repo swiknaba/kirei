@@ -36,7 +36,7 @@ module Kirei
         end
       else
         body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-        res = Oj.load(body.read)
+        res = Oj.load(body.read, Kirei::OJ_OPTIONS)
         body.rewind # TODO: maybe don't rewind if we don't need to?
         res
       end
