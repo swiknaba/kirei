@@ -139,10 +139,19 @@ Define routes anywhere in your app; by convention, they are defined in `config/r
 # config/routes.rb
 
 Kirei::Router.add_routes([
-  verb: 'GET',,
-  path: '/airports',
-  controller: Controllers::Airports,
-  action: 'index',
+  Kirei::Router::Route.new(
+    verb: "GET",
+    path: "/livez",
+    controller: Controllers::Health,
+    action: "livez",
+  ),
+
+  Kirei::Router::Route.new(
+    verb: "GET",
+    path: "/airports",
+    controller: Controllers::Airports,
+    action: "index",
+  ),
 ])
 ```
 
