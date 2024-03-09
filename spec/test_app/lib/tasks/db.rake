@@ -5,7 +5,6 @@
 #   CREATE DATABASE test_app_development;
 
 require_relative "../../app"
-require 'byebug'
 
 namespace :db do
   # RACK_ENV=development bundle exec rake db:create
@@ -20,7 +19,7 @@ namespace :db do
       reset_memoized_class_level_instance_vars(TestApp)
       url = TestApp.default_db_url.dup # frozen string
       url.gsub!(db_name, "postgres")
-      puts("Connecting to #{url.gsub(/:\/\/.*@/, "_REDACTED_")}")
+      puts("Connecting to #{url.gsub(%r{://.*@}, "_REDACTED_")}")
       db = Sequel.connect(url)
 
       begin
@@ -43,7 +42,7 @@ namespace :db do
       reset_memoized_class_level_instance_vars(TestApp)
       url = TestApp.default_db_url.dup # frozen string
       url.gsub!(db_name, "postgres")
-      puts("Connecting to #{url.gsub(/:\/\/.*@/, "_REDACTED_")}")
+      puts("Connecting to #{url.gsub(%r{://.*@}, "_REDACTED_")}")
       db = Sequel.connect(url)
 
       begin
@@ -100,9 +99,9 @@ namespace :db do
   end
 
   desc "Generate a new migration file"
-  task :migration, [:name] do |t, args|
-    require 'fileutils'
-    require 'time'
+  task :migration, [:name] do |_t, args|
+    require "fileutils"
+    require "time"
 
     # Ensure the migrations directory exists
     migrations_dir = File.join(TestApp.root, "db/migrate")
@@ -135,7 +134,7 @@ namespace :db do
     MIGRATION
 
     # Write the migration file
-    File.open(file_path, "w") { |file| file.write(content) }
+    File.write(file_path, content)
 
     puts "Generated migration: db/migrate/#{filename}"
   end
