@@ -136,12 +136,36 @@ bundle exec rake 'db:migration[CreateAirports]'
 Define routes anywhere in your app; by convention, they are defined in `config/routes.rb`:
 
 ```ruby
+# config/routes.rb
+
 Kirei::Router.add_routes([
   verb: 'GET',,
   path: '/airports',
-  controller: Controllers::AirportsController,
+  controller: Controllers::Airports,
   action: 'index',
 ])
+```
+
+#### Controllers
+
+Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory:
+
+```ruby
+module Controllers
+  class Airports < Kirei::BaseController
+    extend T::Sig
+
+    sig { returns(Kirei::Middleware::RackResponseType) }
+    def index
+      airports = Airport.all
+
+      # or use a serializer
+      data = Oj.dump(airports.map(&:serialize))
+
+      render(status: 200, body: data)
+    end
+  end
+end
 ```
 
 ## Contributions

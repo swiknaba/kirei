@@ -7,7 +7,7 @@ module Controllers
 
     sig { returns(Kirei::Middleware::RackResponseType) }
     def index
-      airports = ::Airport.all
+      airports = Airport.all
       data = Oj.dump(airports.map(&:serialize))
 
       render(
