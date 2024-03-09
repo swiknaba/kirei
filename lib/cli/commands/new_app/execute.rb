@@ -14,6 +14,7 @@ module Cli
           Files::Irbrc.call
           Files::Rakefile.call
           Files::Routes.call
+          Files::SorbetConfig.call
 
           Kirei::Logger.logger.info(
             "Kirei app '#{app_name}' scaffolded successfully!",
