@@ -49,7 +49,7 @@ bundle exec kirei new "MyApp"
 
 ### Quick Start
 
-Find a test app in the `spec/test_app` directory. It is a fully functional example of a Kirei app.
+Find a test app in the [spec/test_app](spec/test_app) directory. It is a fully functional example of a Kirei app.
 
 #### Models
 
