@@ -9,8 +9,8 @@ module Cli
         case args[0]
         when "new"
           app_name = args[1] || "MyApp"
-          # @TODO(lud, 31.12.2023): classify is from ActiveSupport -> remove this?
-          app_name = app_name.gsub(/[-\s]/, "_").classify
+          app_name = app_name.gsub(/[-\s]/, "_")
+          app_name = app_name.split('_').map(&:capitalize).join if app_name.include?('_')
           NewApp::Execute.call(app_name: app_name)
         else
           Kirei::Logger.logger.info("Unknown command")

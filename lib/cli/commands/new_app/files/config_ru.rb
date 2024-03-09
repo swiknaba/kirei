@@ -14,10 +14,10 @@ module Cli
               # typed: false
               # frozen_string_literal: true
 
-              require_relative('app')
+              require_relative("app")
 
               # Load middlewares here
-              use(Rack::Reloader, 0) if #{app_name}.environment == 'development'
+              use(Rack::Reloader, 0) if #{app_name}.environment == "development"
 
               # Launch the app
               run(#{app_name}.new)
