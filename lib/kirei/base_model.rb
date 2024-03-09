@@ -60,6 +60,10 @@ module Kirei
       def where(hash)
       end
 
+      sig { abstract.returns(T.untyped) }
+      def all
+      end
+
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
       def create(hash)
       end
@@ -123,6 +127,11 @@ module Kirei
         resolve(db.where(hash))
       end
 
+      sig { override.returns(T::Array[T.attached_class]) }
+      def all
+        resolve(db.all)
+      end
+
       # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       # default values defined in the model are used, if omitted in the hash
       sig do
@@ -182,7 +191,7 @@ module Kirei
       # "strict" defaults to "false".
       sig do
         override.params(
-          query: Sequel::Dataset,
+          query: T.any(Sequel::Dataset, T::Array[T::Hash[Symbol, T.untyped]]),
           strict: T.nilable(T::Boolean),
         ).returns(T::Array[T.attached_class])
       end
