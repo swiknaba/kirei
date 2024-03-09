@@ -3,6 +3,8 @@
 
 require_relative("middleware")
 
+# rubocop:disable Metrics/AbcSize, Layout/LineLength
+
 module Kirei
   class App
     include Middleware
@@ -66,3 +68,5 @@ module Kirei
     end
   end
 end
+
+# rubocop:enable Metrics/AbcSize, Layout/LineLength

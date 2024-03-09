@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # First: check if all gems are installed correctly
-require "bundler/setup"
+require "bundler/setup" # rubocop:disable Packaging/BundlerSetupInTests
 
 # Second: load all gems
 #         we have runtime/production ("default") and development gems ("development")

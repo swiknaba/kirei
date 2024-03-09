@@ -1,5 +1,7 @@
 # typed: false
 
+# rubocop:disable Metrics/ClassLength
+
 module Cli
   module Commands
     module NewApp
@@ -172,3 +174,5 @@ module Cli
     end
   end
 end
+
+# rubocop:enable Metrics/ClassLength
