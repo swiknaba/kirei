@@ -12,9 +12,9 @@
 #
 Kirei::Router.add_routes([
   Kirei::Router::Route.new(
-    method: 'GET',
-    path: '/airports',
+    method: "GET",
+    path: "/airports",
     controller: Controllers::AirportsController,
-    action: 'index',
+    action: "index",
   ),
 ])
