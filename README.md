@@ -49,6 +49,8 @@ bundle exec kirei new "MyApp"
 
 ### Quick Start
 
+#### Models
+
 All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
 
 ```ruby
@@ -84,6 +86,47 @@ first_user = User.resolve_first(query) # T.nilable(User)
 
 # you can also cast the raw result manually
 first_user = User.from_hash(query.first.stringify_keys)
+```
+
+#### Database Migrations
+
+Read the [Sequel Migrations](https://github.com/jeremyevans/sequel/blob/5.78.0/doc/schema_modification.rdoc) documentation for detailed information.
+
+```ruby
+Sequel.migration do
+  up do
+    create_table(:airports) do
+      primary_key :id
+      String :name, null: false
+    end
+  end
+
+  down do
+    drop_table(:airports)
+  end
+end
+```
+
+Applying migrations:
+
+```shell
+# create the database
+bundle exec rake db:create
+
+# drop the database
+bundle exec rake db:drop
+
+# apply all pending migrations
+bundle exec rake db:migrate
+
+# roll back the last n migration
+STEPS=1 bundle exec rake db:rollback
+
+# run db/seeds.rb to seed the database
+bundle exec rake db:migrate
+
+# scaffold a new migration file
+bundle exec rake 'db:migration[CreateAirports]'
 ```
 
 ## Contributions
