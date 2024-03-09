@@ -137,7 +137,7 @@ Define routes anywhere in your app; by convention, they are defined in `config/r
 
 ```ruby
 Kirei::Router.add_routes([
-  method: 'GET',,
+  verb: 'GET',,
   path: '/airports',
   controller: Controllers::AirportsController,
   action: 'index',

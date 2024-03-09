@@ -16,7 +16,7 @@ module Cli
 
               Kirei::Router.add_routes([
                 # Kirei::Router::Route.new(
-                #   method: "GET",
+                #   verb: "GET",
                 #   path: "/livez",
                 #   controller: Controllers::HealthController,
                 #   action: "livez",

@@ -9,7 +9,7 @@ module Kirei
   #
   # Router.add_routes([
   #   Route.new(
-  #     method: "GET",
+  #     verb: "GET",
   #     path: "/livez",
   #     controller: Controllers::HealthController,
   #     action: "livez",
