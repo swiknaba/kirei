@@ -30,7 +30,9 @@ module Kirei
   #
   # NOTE: The log transformer must return an array of strings to allow emitting multiple lines per log event.
   #
-  class Logger < Kirei::Base
+  class Logger
+    extend T::Sig
+
     FILTERED = "[FILTERED]"
 
     @instance = T.let(nil, T.nilable(Kirei::Logger))

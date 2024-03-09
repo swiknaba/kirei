@@ -26,6 +26,7 @@ gem:
   - syntax_tree
   - tapioca
   - thor
+  - yard
   - yard-sorbet
 dsl:
   # Add your `dsl` command parameters here:

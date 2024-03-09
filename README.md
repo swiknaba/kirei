@@ -49,6 +49,10 @@ bundle exec kirei new "MyApp"
 
 ### Quick Start
 
+Find a test app in the [spec/test_app](spec/test_app) directory. It is a fully functional example of a Kirei app.
+
+#### Models
+
 All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
 
 ```ruby
@@ -84,6 +88,84 @@ first_user = User.resolve_first(query) # T.nilable(User)
 
 # you can also cast the raw result manually
 first_user = User.from_hash(query.first.stringify_keys)
+```
+
+#### Database Migrations
+
+Read the [Sequel Migrations](https://github.com/jeremyevans/sequel/blob/5.78.0/doc/schema_modification.rdoc) documentation for detailed information.
+
+```ruby
+Sequel.migration do
+  up do
+    create_table(:airports) do
+      primary_key :id
+      String :name, null: false
+    end
+  end
+
+  down do
+    drop_table(:airports)
+  end
+end
+```
+
+Applying migrations:
+
+```shell
+# create the database
+bundle exec rake db:create
+
+# drop the database
+bundle exec rake db:drop
+
+# apply all pending migrations
+bundle exec rake db:migrate
+
+# roll back the last n migration
+STEPS=1 bundle exec rake db:rollback
+
+# run db/seeds.rb to seed the database
+bundle exec rake db:migrate
+
+# scaffold a new migration file
+bundle exec rake 'db:migration[CreateAirports]'
+```
+
+#### Routing
+
+Define routes anywhere in your app; by convention, they are defined in `config/routes.rb`:
+
+```ruby
+# config/routes.rb
+
+Kirei::Router.add_routes([
+  verb: 'GET',,
+  path: '/airports',
+  controller: Controllers::Airports,
+  action: 'index',
+])
+```
+
+#### Controllers
+
+Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory:
+
+```ruby
+module Controllers
+  class Airports < Kirei::BaseController
+    extend T::Sig
+
+    sig { returns(Kirei::Middleware::RackResponseType) }
+    def index
+      airports = Airport.all
+
+      # or use a serializer
+      data = Oj.dump(airports.map(&:serialize))
+
+      render(status: 200, body: data)
+    end
+  end
+end
 ```
 
 ## Contributions

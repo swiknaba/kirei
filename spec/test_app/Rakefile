@@ -1,0 +1,6 @@
+# typed: false
+# frozen_string_literal: true
+
+require "rake"
+
+Dir.glob("lib/tasks/**/*.rake").each { import(_1) }

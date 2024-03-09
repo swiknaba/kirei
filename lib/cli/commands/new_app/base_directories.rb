@@ -25,6 +25,9 @@ module Cli
             "db/migrate",
             "db/seeds",
 
+            "lib",
+            "lib/tasks",
+
             "sorbet",
             "sorbet/rbi",
             "sorbet/rbi/shims",

@@ -9,7 +9,11 @@ module Cli
         def self.call(app_name:)
           BaseDirectories.call
           Files::App.call(app_name)
+          Files::ConfigRu.call(app_name)
+          Files::DbRake.call(app_name)
           Files::Irbrc.call
+          Files::Rakefile.call
+          Files::Routes.call
 
           Kirei::Logger.logger.info(
             "Kirei app '#{app_name}' scaffolded successfully!",
