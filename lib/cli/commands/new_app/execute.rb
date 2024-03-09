@@ -10,7 +10,9 @@ module Cli
           BaseDirectories.call
           Files::App.call(app_name)
           Files::ConfigRu.call(app_name)
+          Files::DbRake.call(app_name)
           Files::Irbrc.call
+          Files::Rakefile.call
           Files::Routes.call
 
           Kirei::Logger.logger.info(
