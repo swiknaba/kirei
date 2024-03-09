@@ -136,7 +136,7 @@ module Cli
 
                   # Define the content of the migration file
                   content = <<~MIGRATION
-                    # typed: strict
+                    # typed: false
                     # frozen_string_literal: true
 
                     Sequel.migration do

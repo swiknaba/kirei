@@ -1,0 +1,28 @@
+gem:
+  # Add your `gem` command parameters here:
+  #
+  exclude:
+  - amazing_print
+  - byebug
+  - erubi
+  - parallel
+  - prettier_print
+  - rbi
+  - spoom
+  - syntax_tree
+  - tapioca
+  - thor
+  - yard
+  - yard-sorbet
+  - sequel_pg
+  - tzinfo-data
+  - tzinfo
+  - bigdecimal
+  - concurrent-ruby
+  - nio4r
+dsl:
+  # Add your `dsl` command parameters here:
+  #
+  # exclude:
+  # - SomeGeneratorName
+  # workers: 5
