@@ -4,6 +4,18 @@
 require("singleton")
 
 module Kirei
+  #
+  # Usage:
+  #
+  # Router.add_routes([
+  #   Route.new(
+  #     method: 'GET',
+  #     path: '/livez',
+  #     controller: Controllers::HealthController,
+  #     action: 'livez',
+  #   ),
+  # ])
+  #
   class Router
     extend T::Sig
     include ::Singleton

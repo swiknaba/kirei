@@ -49,6 +49,8 @@ bundle exec kirei new "MyApp"
 
 ### Quick Start
 
+Find a test app in the `spec/test_app` directory. It is a fully functional example of a Kirei app.
+
 #### Models
 
 All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
@@ -127,6 +129,19 @@ bundle exec rake db:migrate
 
 # scaffold a new migration file
 bundle exec rake 'db:migration[CreateAirports]'
+```
+
+#### Routing
+
+Define routes anywhere in your app; by convention, they are defined in `config/routes.rb`:
+
+```ruby
+Kirei::Router.add_routes([
+  method: 'GET',,
+  path: '/airports',
+  controller: Controllers::AirportsController,
+  action: 'index',
+])
 ```
 
 ## Contributions
