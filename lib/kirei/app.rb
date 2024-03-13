@@ -47,7 +47,7 @@ module Kirei
       end
 
       instance = route.controller.new(params: params)
-      instance.public_send(route.action)
+      instance.public_send(route.action) # maybe have it return `returns(T.anything)`?
     end
 
     sig do

@@ -1,6 +1,6 @@
 # Kirei
 
-Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [Sequel](https://github.com/jeremyevans/sequel) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Sinatra](https://github.com/sinatra/sinatra) for routing. It strives to have zero magic and to be as explicit as possible.
+Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [Sequel](https://github.com/jeremyevans/sequel) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Rack](https://github.com/rack/rack) as web server interface. It strives to have zero magic and to be as explicit as possible.
 
 Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and build-in high-performance logging and metric-tracking toolkits. It is opiniated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
 
@@ -166,7 +166,7 @@ module Controllers
 
     sig { returns(Kirei::Middleware::RackResponseType) }
     def index
-      airports = Airport.all
+      airports = Airport.all # T::Array[Airport]
 
       # or use a serializer
       data = Oj.dump(airports.map(&:serialize))
