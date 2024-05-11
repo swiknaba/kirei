@@ -68,6 +68,8 @@ namespace :db do
       current_version = db[:schema_migrations].order(:filename).last[:filename].to_i
       puts "Migrated #{db_name} to version #{current_version}!"
     end
+
+    Rake::Task["db:annotate"].invoke
   end
 
   desc "Rollback the last migration"
