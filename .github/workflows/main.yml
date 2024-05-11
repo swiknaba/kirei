@@ -30,6 +30,6 @@ jobs:
     - name: Lint with RuboCop
       run: bundle exec rubocop --parallel --ignore-unrecognized-cops
     - name: Type check with Sorbet
-      run: bundle exec spoom tc
+      run: bundle exec spoom srb tc
     - name: Run tests with RSpec
       run: bundle exec rspec
