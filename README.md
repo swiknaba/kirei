@@ -125,7 +125,7 @@ bundle exec rake db:migrate
 STEPS=1 bundle exec rake db:rollback
 
 # run db/seeds.rb to seed the database
-bundle exec rake db:migrate
+bundle exec rake db:seed
 
 # scaffold a new migration file
 bundle exec rake 'db:migration[CreateAirports]'

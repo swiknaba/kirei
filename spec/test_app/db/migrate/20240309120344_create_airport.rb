@@ -4,7 +4,7 @@
 Sequel.migration do
   up do
     create_table(:airports) do
-      primary_key :id
+      String :id, null: false, primary_key: true
       String :name, null: false
     end
   end
