@@ -21,6 +21,7 @@ module Cli
               #
               #   CREATE DATABASE #{db_name}_${environment};
 
+              require 'zeitwerk/inflector'
               require_relative "../../app"
 
               namespace :db do
@@ -30,7 +31,7 @@ module Cli
                   envs = ENV.key?("RACK_ENV") ? [ENV.fetch("RACK_ENV")] : %w[development test]
                   envs.each do |env|
                     ENV["RACK_ENV"] = env
-                    db_name = "#{db_name}_#{env}"
+                    db_name = "#{db_name}_\#{env}"
                     puts("Creating database \#{db_name}...")
 
                     reset_memoized_class_level_instance_vars(#{app_name})
@@ -128,7 +129,7 @@ module Cli
                   migration_number = Time.now.utc.strftime("%Y%m%d%H%M%S")
 
                   # Sanitize and format the migration name
-                  formatted_name = args[:name].to_s.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
+                  formatted_name = args[:name].to_s.gsub(/([a-z])([A-Z])/, '\\1_\\2').downcase
 
                   # Combine them to create the filename
                   filename = "\#{migration_number}_\#{formatted_name}.rb"
@@ -155,6 +156,38 @@ module Cli
 
                   puts "Generated migration: db/migrate/\#{filename}"
                 end
+
+                desc "Write the table schema to each model file, or a single file if filename (without extension) is provided"
+                task :annotate, [:model_file_name] do |_t, args|
+                  require "fileutils"
+
+                  db = #{app_name}.raw_db_connection
+                  model_file_name = args[:model_file_name]&.to_s
+
+                  models_dir = #{app_name}.root
+
+                  Dir.glob("app/models/*.rb").each do |model_file|
+                    next if !model_file_name.nil? && model_file == model_file_name
+
+                    model_path = File.expand_path(model_file, models_dir)
+                    model_name = Zeitwerk::Inflector.new.camelize(File.basename(model_file, ".rb"), model_path)
+                    model_klass = Object.const_get(model_name)
+                    table_name = model_klass.table_name
+                    schema = db.schema(table_name)
+
+                    schema_comments = format_schema_comments(table_name, schema)
+
+                    file_contents = File.read(model_path)
+
+                    # Remove existing schema info comments if present
+                    updated_contents = file_contents.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*class)/m, "")
+
+                    # Insert the new schema comments before the class definition
+                    modified_contents = updated_contents.sub(/(\A|\\n)(class \#{model_name})/m, "\\\\1\#{schema_comments}\\n\\n\\\\2")
+
+                    File.write(model_path, modified_contents)
+                  end
+                end
               end
 
               def reset_memoized_class_level_instance_vars(app)
@@ -165,6 +198,19 @@ module Cli
                 ].each do |ivar|
                   app.remove_instance_variable(ivar) if app.instance_variable_defined?(ivar)
                 end
+              end
+
+              def format_schema_comments(table_name, schema)
+                lines = ["# == Schema Info", "#", "# Table name: \#{table_name}", "#"]
+                schema.each do |column|
+                  name, info = column
+                  type = "\#{info[:db_type]}(\#{info[:max_length]})" if info[:max_length]
+                  type ||= info[:db_type]
+                  null = info[:allow_null] ? 'null' : 'not null'
+                  primary_key = info[:primary_key] ? ', primary key' : ''
+                  lines << "#  \#{name.to_s.ljust(20)}:\#{type}    \#{null}\#{primary_key}"
+                end
+                lines.join("\\n") + "\\n#"
               end
 
             RUBY
