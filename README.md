@@ -164,7 +164,7 @@ module Controllers
   class Airports < Kirei::BaseController
     extend T::Sig
 
-    sig { returns(Kirei::Middleware::RackResponseType) }
+    sig { returns(Kirei::Routing::RackResponseType) }
     def index
       airports = Airport.all # T::Array[Airport]
 

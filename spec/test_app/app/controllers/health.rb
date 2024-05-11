@@ -3,7 +3,7 @@
 
 module Controllers
   class Health < Base
-    sig { returns(Kirei::Middleware::RackResponseType) }
+    sig { returns(Kirei::Routing::RackResponseType) }
     def livez
       TestApp.config.logger.info("Health check")
       TestApp.config.logger.info(params.inspect)

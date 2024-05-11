@@ -29,7 +29,11 @@ module Cli
               Dir[File.join(__dir__, "config/initializers", "*.rb")].each { require(_1) }
 
               # Fourth: load all application code
-              Dir[File.join(__dir__, "app/**/*", "*.rb")].each { require(_1) }
+              loader = Zeitwerk::Loader.new
+              loader.tag = File.basename(__FILE__, ".rb")
+              loader.push_dir("#{File.dirname(__FILE__)}/app")
+              loader.push_dir("#{File.dirname(__FILE__)}/app/models") # make models a root namespace so we don't infer a `Models::` module
+              loader.setup
 
               # Fifth: load configs
               Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
@@ -38,6 +42,8 @@ module Cli
                 # Kirei configuration
                 config.app_name = "#{snake_case_app_name}"
               end
+
+              loader.eager_load
             RUBY
           end
         end

@@ -1,7 +1,32 @@
 # typed: strict
 # frozen_string_literal: true
 
-require "boot"
+# This is the entrypoint into the application,
+# This file loads first, hence we don't have Sorbet loaded yet.
+
+#
+# Load Order is important!
+#
+
+# First: check if all gems are installed correctly
+require "bundler/setup"
+
+# Second: load all gems (runtime dependencies only)
+require "logger"
+require "sorbet-runtime"
+require "oj"
+require "rack"
+require "pg"
+require "sequel" # "sequel_pg" is auto-required by "sequel"
+
+# Third: load all application code
+# NOTE: we use Zeitwerk instead
+# Dir[File.join(__dir__, "kirei/**/*.rb")].each { require(_1) }
+
+require("zeitwerk")
+# ignore warning for `cli/` dir, since this is not a runtime dependency/non-autoloadable code
+loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
+loader.setup
 
 module Kirei
   extend T::Sig
@@ -39,6 +64,8 @@ module Kirei
     end
   end
 end
+
+loader.eager_load
 
 Kirei.configure(&:itself)
 

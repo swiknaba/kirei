@@ -1,14 +1,11 @@
 # typed: strict
 # frozen_string_literal: true
 
-require_relative("middleware")
-
 # rubocop:disable Metrics/AbcSize
 
 module Kirei
   module Routing
     class Base
-      include Middleware
       extend T::Sig
 
       sig { params(params: T::Hash[String, T.untyped]).void }

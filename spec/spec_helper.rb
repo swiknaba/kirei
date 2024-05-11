@@ -3,6 +3,7 @@
 # APP_ROOT is set before loading the gem in an application
 APP_ROOT = File.expand_path("..", __dir__)
 require "kirei"
+require "byebug"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -1,18 +1,18 @@
 #!/usr/bin/env ruby
 
-require 'English'
+require "English"
 
-unless system('bundle exec rubocop --parallel --ignore-unrecognized-cops')
+unless system("bundle exec rubocop --parallel --ignore-unrecognized-cops")
   puts $CHILD_STATUS
   exit(1)
 end
 
-unless system('bundle exec spoom tc')
+unless system("bundle exec spoom srb tc")
   puts $CHILD_STATUS
   exit(1)
 end
 
-unless system('bundle exec rspec')
+unless system("bundle exec rspec")
   puts $CHILD_STATUS
   exit(1)
 end

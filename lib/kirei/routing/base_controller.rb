@@ -1,8 +1,6 @@
 # typed: strict
 # frozen_string_literal: true
 
-require_relative("base")
-
 module Kirei
   module Routing
     class BaseController < Routing::Base

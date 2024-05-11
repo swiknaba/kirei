@@ -1,9 +1,6 @@
 # typed: strict
 # frozen_string_literal: true
 
-# The main application must inherit from the Routing::Base to qualify as a Rack App.
-require_relative("routing/base")
-
 module Kirei
   class App < Routing::Base
     class << self
