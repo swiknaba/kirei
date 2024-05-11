@@ -2,8 +2,9 @@
 
 # run on the database server once:
 #
-#   CREATE DATABASE test_app_development;
+#   CREATE DATABASE test_app_${environment};
 
+require 'zeitwerk/inflector'
 require_relative "../../app"
 
 namespace :db do
@@ -14,7 +15,7 @@ namespace :db do
     envs.each do |env|
       ENV["RACK_ENV"] = env
       db_name = "test_app_#{env}"
-      puts("Creating database '#{db_name}'...")
+      puts("Creating database #{db_name}...")
 
       reset_memoized_class_level_instance_vars(TestApp)
       url = TestApp.default_db_url.dup # frozen string
@@ -24,9 +25,9 @@ namespace :db do
 
       begin
         db.execute("CREATE DATABASE #{db_name}")
-        puts("Created database '#{db_name}'.")
+        puts("Created database #{db_name}.")
       rescue Sequel::DatabaseError, PG::DuplicateDatabase
-        puts("Database '#{db_name}' already exists, skipping.")
+        puts("Database #{db_name} already exists, skipping.")
       end
     end
   end
@@ -37,19 +38,19 @@ namespace :db do
     envs.each do |env|
       ENV["RACK_ENV"] = env
       db_name = "test_app_#{env}"
-      puts("Dropping database '#{db_name}'...")
+      puts("Dropping database #{db_name}...")
 
       reset_memoized_class_level_instance_vars(TestApp)
-      url = TestApp.default_db_url.dup # frozen string
+      url = TestApp.default_db_url.dup  # frozen string
       url.gsub!(db_name, "postgres")
       puts("Connecting to #{url.gsub(%r{://.*@}, "_REDACTED_")}")
       db = Sequel.connect(url)
 
       begin
         db.execute("DROP DATABASE #{db_name} (FORCE)")
-        puts("Dropped database '#{db_name}'.")
+        puts("Dropped database #{db_name}.")
       rescue Sequel::DatabaseError, PG::DuplicateDatabase
-        puts("Database '#{db_name}' does not exists, nothing to drop.")
+        puts("Database #{db_name} does not exists, nothing to drop.")
       end
     end
   end
@@ -65,7 +66,7 @@ namespace :db do
       db = Sequel.connect(TestApp.default_db_url)
       Sequel::Migrator.run(db, File.join(TestApp.root, "db/migrate"))
       current_version = db[:schema_migrations].order(:filename).last[:filename].to_i
-      puts "Migrated '#{db_name}' to version #{current_version}!"
+      puts "Migrated #{db_name} to version #{current_version}!"
     end
   end
 
@@ -88,7 +89,7 @@ namespace :db do
         target_version = versions[-steps][:filename].to_i
 
         Sequel::Migrator.run(db, File.join(TestApp.root, "db/migrate"), target: target_version)
-        puts "Rolled back '#{db_name}' #{steps} steps to version #{target_version}"
+        puts "Rolled back #{db_name} #{steps} steps to version #{target_version}"
       end
     end
   end
@@ -138,6 +139,38 @@ namespace :db do
 
     puts "Generated migration: db/migrate/#{filename}"
   end
+
+  desc "Write the table schema to each model file, or a single file if filename (without extension) is provided"
+  task :annotate, [:model_file_name] do |_t, args|
+    require "fileutils"
+
+    db = TestApp.raw_db_connection
+    model_file_name = args[:model_file_name]&.to_s
+
+    models_dir = TestApp.root
+
+    Dir.glob("app/models/*.rb").each do |model_file|
+      next if !model_file_name.nil? && model_file == model_file_name
+
+      model_path = File.expand_path(model_file, models_dir)
+      model_name = Zeitwerk::Inflector.new.camelize(File.basename(model_file, ".rb"), model_path)
+      model_klass = Object.const_get(model_name)
+      table_name = model_klass.table_name
+      schema = db.schema(table_name)
+
+      schema_comments = format_schema_comments(table_name, schema)
+
+      file_contents = File.read(model_path)
+
+      # Remove existing schema info comments if present
+      updated_contents = file_contents.sub(/# == Schema Info\n(.*?)(\n#\n)?\n(?=\s*class)/m, "")
+
+      # Insert the new schema comments before the class definition
+      modified_contents = updated_contents.sub(/(A|\n)(class #{model_name})/m, "\\1#{schema_comments}\n\n\\2")
+
+      File.write(model_path, modified_contents)
+    end
+  end
 end
 
 def reset_memoized_class_level_instance_vars(app)
@@ -149,3 +182,17 @@ def reset_memoized_class_level_instance_vars(app)
     app.remove_instance_variable(ivar) if app.instance_variable_defined?(ivar)
   end
 end
+
+def format_schema_comments(table_name, schema)
+  lines = ["# == Schema Info", "#", "# Table name: #{table_name}", "#"]
+  schema.each do |column|
+    name, info = column
+    type = "#{info[:db_type]}(#{info[:max_length]})" if info[:max_length]
+    type ||= info[:db_type]
+    null = info[:allow_null] ? 'null' : 'not null'
+    primary_key = info[:primary_key] ? ', primary key' : ''
+    lines << "#  #{name.to_s.ljust(20)}:#{type}    #{null}#{primary_key}"
+  end
+  lines.join("\n") + "\n#"
+end
+
