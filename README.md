@@ -121,6 +121,10 @@ bundle exec rake db:drop
 # apply all pending migrations
 bundle exec rake db:migrate
 
+# annotate the models with the schema
+# this runs automatically after each migration
+bundle exec rake db:annotate
+
 # roll back the last n migration
 STEPS=1 bundle exec rake db:rollback
 
