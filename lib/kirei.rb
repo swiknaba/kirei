@@ -20,11 +20,7 @@ require "pg"
 require "sequel" # "sequel_pg" is auto-required by "sequel"
 
 # Third: load all application code
-# NOTE: we use Zeitwerk instead
-# Dir[File.join(__dir__, "kirei/**/*.rb")].each { require(_1) }
-
 require("zeitwerk")
-# ignore warning for `cli/` dir, since this is not a runtime dependency/non-autoloadable code
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
 loader.ignore("#{__dir__}/cli")
 loader.ignore("#{__dir__}/cli.rb")
