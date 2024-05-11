@@ -69,4 +69,4 @@ loader.eager_load
 
 Kirei.configure(&:itself)
 
-Kirei::Logger.logger.info("Kirei (#{Kirei::VERSION}) booted successfully!")
+Kirei::Logger.logger.info("Kirei (v#{Kirei::VERSION}) booted.")
