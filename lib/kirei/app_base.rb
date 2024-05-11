@@ -8,8 +8,10 @@ module Kirei
     class << self
       extend T::Sig
 
+      #
       # convenience method since "Kirei.configuration" must be nilable since it is nil
       # at the beginning of initilization of the app
+      #
       sig { returns(Kirei::Config) }
       def config
         T.must(Kirei.configuration)
@@ -20,6 +22,12 @@ module Kirei
         defined?(::APP_ROOT) ? Pathname.new(::APP_ROOT) : Pathname.new(Dir.pwd)
       end
 
+      #
+      # Returns the version of the app. It checks in the following order:
+      # * ENV["APP_VERSION"]
+      # * ENV["GIT_SHA"]
+      # * `git rev-parse --short HEAD`
+      #
       sig { returns(String) }
       def version
         @version = T.let(@version, T.nilable(String))
@@ -30,16 +38,27 @@ module Kirei
         ).freeze # localhost
       end
 
+      #
+      # Returns ENV["RACK_ENV"] or "development" if it is not set
+      #
       sig { returns(String) }
       def environment
         ENV.fetch("RACK_ENV", "development")
       end
 
+      #
+      # Returns the name of the database based on the app name and the environment,
+      # e.g. "myapp_development"
+      #
       sig { returns(String) }
       def default_db_name
         @default_db_name ||= T.let("#{config.app_name}_#{environment}".freeze, T.nilable(String))
       end
 
+      #
+      # Returns the database URL based on the DATABASE_URL environment variable or
+      # a default value based on the default_db_name
+      #
       sig { returns(String) }
       def default_db_url
         @default_db_url ||= T.let(

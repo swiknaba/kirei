@@ -11,8 +11,8 @@ module Controllers
       data = Oj.dump(airports.map(&:serialize))
 
       render(
+        data,
         status: 200,
-        body: data,
       )
     end
   end

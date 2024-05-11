@@ -3017,7 +3017,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#108
   def count(arg = T.unsafe(nil), &block); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#629
+  # source://sequel//lib/sequel/dataset/query.rb#631
   def cross_join(table, opts = T.unsafe(nil)); end
 
   # An object representing the current date or time, should be an instance
@@ -3153,7 +3153,7 @@ class Sequel::Dataset
   #
   # @raise [InvalidOperation]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#156
+  # source://sequel//lib/sequel/dataset/query.rb#157
   def except(dataset, opts = T.unsafe(nil)); end
 
   # Performs the inverse of Dataset#where.  Note that if you have multiple filter
@@ -3181,7 +3181,7 @@ class Sequel::Dataset
   #   DB[:items].exclude(Sequel.~(category: nil) & {category: 'software'})
   #   # SELECT * FROM items WHERE ((category IS NULL) OR (category != 'software'))
   #
-  # source://sequel//lib/sequel/dataset/query.rb#186
+  # source://sequel//lib/sequel/dataset/query.rb#187
   def exclude(*cond, &block); end
 
   # Inverts the given conditions and adds them to the HAVING clause.
@@ -3192,7 +3192,7 @@ class Sequel::Dataset
   # See documentation for exclude for how inversion is handled in regards
   # to SQL 3-valued boolean logic.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#197
+  # source://sequel//lib/sequel/dataset/query.rb#198
   def exclude_having(*cond, &block); end
 
   # Returns an EXISTS clause for the dataset as an SQL::PlaceholderLiteralString.
@@ -3205,12 +3205,12 @@ class Sequel::Dataset
 
   # :nocov:
   #
-  # source://sequel//lib/sequel/dataset/query.rb#205
+  # source://sequel//lib/sequel/dataset/query.rb#206
   def extension(*exts); end
 
   # Alias for where.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#225
+  # source://sequel//lib/sequel/dataset/query.rb#226
   def filter(*cond, &block); end
 
   # Returns the first matching record if no arguments are given.
@@ -3292,7 +3292,7 @@ class Sequel::Dataset
   #
   #   DB[:table].for_update # SELECT * FROM table FOR UPDATE
   #
-  # source://sequel//lib/sequel/dataset/query.rb#232
+  # source://sequel//lib/sequel/dataset/query.rb#233
   def for_update; end
 
   # :nocov:
@@ -3310,7 +3310,7 @@ class Sequel::Dataset
   #   DB[:items].from(:blah, :foo) # SQL: SELECT * FROM blah, foo
   #   DB[:items].from{fun(arg)} # SQL: SELECT * FROM fun(arg)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#245
+  # source://sequel//lib/sequel/dataset/query.rb#247
   def from(*source, &block); end
 
   # Returns a dataset selecting from the current dataset.
@@ -3331,13 +3331,13 @@ class Sequel::Dataset
   #   ds.from_self(alias: :foo, column_aliases: [:c1, :c2])
   #   # SELECT * FROM (SELECT id, name FROM items ORDER BY name) AS foo(c1, c2)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#293
+  # source://sequel//lib/sequel/dataset/query.rb#295
   def from_self(opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def full_join(*args, &block); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def full_outer_join(*args, &block); end
 
   # Append literalization of function call to SQL string.
@@ -3433,7 +3433,7 @@ class Sequel::Dataset
   #   # SELECT * FROM a WHERE ((a LIKE '%foo%' ESCAPE '\') AND (b LIKE '%foo%' ESCAPE '\')
   #   #   AND (a LIKE '%bar%' ESCAPE '\') AND (b LIKE '%bar%' ESCAPE '\'))
   #
-  # source://sequel//lib/sequel/dataset/query.rb#342
+  # source://sequel//lib/sequel/dataset/query.rb#344
   def grep(columns, patterns, opts = T.unsafe(nil)); end
 
   # Returns a copy of the dataset with the results grouped by the value of
@@ -3444,7 +3444,7 @@ class Sequel::Dataset
   #   DB[:items].group(:id, :name) # SELECT * FROM items GROUP BY id, name
   #   DB[:items].group{[a, sum(b)]} # SELECT * FROM items GROUP BY a, sum(b)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#364
+  # source://sequel//lib/sequel/dataset/query.rb#366
   def group(*columns, &block); end
 
   # Returns a dataset grouped by the given column with count by group.
@@ -3469,7 +3469,7 @@ class Sequel::Dataset
   #   # SELECT substr(first_name, 1, 1) AS initial, count(*) AS count FROM items GROUP BY substr(first_name, 1, 1)
   #   # => [{:initial=>'a', :count=>1}, ...]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#395
+  # source://sequel//lib/sequel/dataset/query.rb#397
   def group_and_count(*columns, &block); end
 
   # Returns a copy of the dataset with the given columns added to the list of
@@ -3479,33 +3479,33 @@ class Sequel::Dataset
   #   DB[:items].group_append(:b) # SELECT * FROM items GROUP BY b
   #   DB[:items].group(:a).group_append(:b) # SELECT * FROM items GROUP BY a, b
   #
-  # source://sequel//lib/sequel/dataset/query.rb#405
+  # source://sequel//lib/sequel/dataset/query.rb#407
   def group_append(*columns, &block); end
 
   # Alias of group
   #
-  # source://sequel//lib/sequel/dataset/query.rb#370
+  # source://sequel//lib/sequel/dataset/query.rb#372
   def group_by(*columns, &block); end
 
   # Adds the appropriate CUBE syntax to GROUP BY.
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#411
+  # source://sequel//lib/sequel/dataset/query.rb#413
   def group_cube; end
 
   # Adds the appropriate ROLLUP syntax to GROUP BY.
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#417
+  # source://sequel//lib/sequel/dataset/query.rb#419
   def group_rollup; end
 
   # Adds the appropriate GROUPING SETS syntax to GROUP BY.
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#423
+  # source://sequel//lib/sequel/dataset/query.rb#425
   def grouping_sets; end
 
   # Define a hash value such that datasets with the same class, DB, and opts,
@@ -3519,7 +3519,7 @@ class Sequel::Dataset
   #   DB[:items].group(:sum).having(sum: 10)
   #   # SELECT * FROM items GROUP BY sum HAVING (sum = 10)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#432
+  # source://sequel//lib/sequel/dataset/query.rb#434
   def having(*cond, &block); end
 
   # Inserts multiple records into the associated table. This method can be
@@ -3564,7 +3564,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#362
   def import(columns, values, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def inner_join(*args, &block); end
 
   # Inserts values into the associated table.  The returned value is generally
@@ -3641,7 +3641,7 @@ class Sequel::Dataset
   #
   # @raise [InvalidOperation]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#453
+  # source://sequel//lib/sequel/dataset/query.rb#455
   def intersect(dataset, opts = T.unsafe(nil)); end
 
   # Inverts the current WHERE and HAVING clauses.  If there is neither a
@@ -3656,12 +3656,12 @@ class Sequel::Dataset
   # See documentation for exclude for how inversion is handled in regards
   # to SQL 3-valued boolean logic.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#470
+  # source://sequel//lib/sequel/dataset/query.rb#472
   def invert; end
 
   # Alias of +inner_join+
   #
-  # source://sequel//lib/sequel/dataset/query.rb#485
+  # source://sequel//lib/sequel/dataset/query.rb#487
   def join(*args, &block); end
 
   # Append literalization of JOIN clause without ON or USING to SQL string.
@@ -3735,7 +3735,7 @@ class Sequel::Dataset
   #   # SELECT * FROM a NATURAL JOIN b INNER JOIN c
   #   #   ON ((c.d > b.e) AND (c.f IN (SELECT g FROM b)))
   #
-  # source://sequel//lib/sequel/dataset/query.rb#549
+  # source://sequel//lib/sequel/dataset/query.rb#551
   def join_table(type, table, expr = T.unsafe(nil), options = T.unsafe(nil), &block); end
 
   # Append literalization of JOIN USING clause to SQL string.
@@ -3773,13 +3773,13 @@ class Sequel::Dataset
   #   DB.from(:a, DB[:b].where(Sequel[:a][:c]=>Sequel[:b][:d]).lateral)
   #   # SELECT * FROM a, LATERAL (SELECT * FROM b WHERE (a.c = b.d))
   #
-  # source://sequel//lib/sequel/dataset/query.rb#643
+  # source://sequel//lib/sequel/dataset/query.rb#645
   def lateral; end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def left_join(*args, &block); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def left_outer_join(*args, &block); end
 
   # If given an integer, the dataset will contain only the first l results.
@@ -3793,7 +3793,7 @@ class Sequel::Dataset
   #   DB[:items].limit(10..20) # SELECT * FROM items LIMIT 11 OFFSET 10
   #   DB[:items].limit(nil, 20) # SELECT * FROM items OFFSET 20
   #
-  # source://sequel//lib/sequel/dataset/query.rb#657
+  # source://sequel//lib/sequel/dataset/query.rb#660
   def limit(l, o = T.unsafe(nil)); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#291
@@ -3828,7 +3828,7 @@ class Sequel::Dataset
   #   DB[:items].lock_style('FOR UPDATE OF table1 SKIP LOCKED')
   #   # SELECT * FROM items FOR UPDATE OF table1 SKIP LOCKED
   #
-  # source://sequel//lib/sequel/dataset/query.rb#687
+  # source://sequel//lib/sequel/dataset/query.rb#690
   def lock_style(style); end
 
   # Maps column values for each record in the dataset (if an argument is given)
@@ -3919,7 +3919,7 @@ class Sequel::Dataset
   #   merge_delete{a > 30}
   #   # WHEN MATCHED AND (a > 30) THEN DELETE
   #
-  # source://sequel//lib/sequel/dataset/query.rb#700
+  # source://sequel//lib/sequel/dataset/query.rb#703
   def merge_delete(&block); end
 
   # Return a dataset with a WHEN NOT MATCHED THEN INSERT clause added to the
@@ -3935,7 +3935,7 @@ class Sequel::Dataset
   #   merge_insert(:i2, Sequel[:b]+11){a > 30}
   #   # WHEN NOT MATCHED AND (a > 30) THEN INSERT VALUES (i2, (b + 11))
   #
-  # source://sequel//lib/sequel/dataset/query.rb#716
+  # source://sequel//lib/sequel/dataset/query.rb#719
   def merge_insert(*values, &block); end
 
   # The SQL to use for the MERGE statement.
@@ -3955,7 +3955,7 @@ class Sequel::Dataset
   #   merge_update(i1: :i2){a > 30}
   #   # WHEN MATCHED AND (a > 30) THEN UPDATE SET i1 = i2
   #
-  # source://sequel//lib/sequel/dataset/query.rb#729
+  # source://sequel//lib/sequel/dataset/query.rb#732
   def merge_update(values, &block); end
 
   # Return a dataset with the source and join condition to use for the MERGE statement.
@@ -3963,7 +3963,7 @@ class Sequel::Dataset
   #   merge_using(:m2, i1: :i2)
   #   # USING m2 ON (i1 = i2)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#737
+  # source://sequel//lib/sequel/dataset/query.rb#740
   def merge_using(source, join_condition); end
 
   # Returns the minimum value for the given column/expression.
@@ -4006,19 +4006,19 @@ class Sequel::Dataset
   #   ds.all # => [{2=>:id}]
   #   ds.naked.all # => [{:id=>2}]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#746
+  # source://sequel//lib/sequel/dataset/query.rb#749
   def naked; end
 
-  # source://sequel//lib/sequel/dataset/query.rb#629
+  # source://sequel//lib/sequel/dataset/query.rb#631
   def natural_full_join(table, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#629
+  # source://sequel//lib/sequel/dataset/query.rb#631
   def natural_join(table, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#629
+  # source://sequel//lib/sequel/dataset/query.rb#631
   def natural_left_join(table, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#629
+  # source://sequel//lib/sequel/dataset/query.rb#631
   def natural_right_join(table, opts = T.unsafe(nil)); end
 
   # Append literalization of negative boolean constant to SQL string.
@@ -4032,7 +4032,7 @@ class Sequel::Dataset
   #   DB[:items].for_update.nowait
   #   # SELECT * FROM items FOR UPDATE NOWAIT
   #
-  # source://sequel//lib/sequel/dataset/query.rb#755
+  # source://sequel//lib/sequel/dataset/query.rb#759
   def nowait; end
 
   # Returns a copy of the dataset with a specified order. Can be safely combined with limit.
@@ -4041,7 +4041,7 @@ class Sequel::Dataset
   #
   #   DB[:items].offset(10) # SELECT * FROM items OFFSET 10
   #
-  # source://sequel//lib/sequel/dataset/query.rb#767
+  # source://sequel//lib/sequel/dataset/query.rb#772
   def offset(o); end
 
   # The hash of options for this dataset, keys are symbols.
@@ -4056,7 +4056,7 @@ class Sequel::Dataset
   #   DB[:items].where(:a).or(:b) # SELECT * FROM items WHERE a OR b
   #   DB[:items].or(:b) # SELECT * FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#781
+  # source://sequel//lib/sequel/dataset/query.rb#786
   def or(*cond, &block); end
 
   # Returns a copy of the dataset with the order changed. If the dataset has an
@@ -4074,7 +4074,7 @@ class Sequel::Dataset
   #   DB[:items].order{sum(name).desc} # SELECT * FROM items ORDER BY sum(name) DESC
   #   DB[:items].order(nil) # SELECT * FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#803
+  # source://sequel//lib/sequel/dataset/query.rb#808
   def order(*columns, &block); end
 
   # Returns a copy of the dataset with the order columns added
@@ -4083,17 +4083,17 @@ class Sequel::Dataset
   #   DB[:items].order(:a).order(:b) # SELECT * FROM items ORDER BY b
   #   DB[:items].order(:a).order_append(:b) # SELECT * FROM items ORDER BY a, b
   #
-  # source://sequel//lib/sequel/dataset/query.rb#813
+  # source://sequel//lib/sequel/dataset/query.rb#818
   def order_append(*columns, &block); end
 
   # Alias of order
   #
-  # source://sequel//lib/sequel/dataset/query.rb#819
+  # source://sequel//lib/sequel/dataset/query.rb#824
   def order_by(*columns, &block); end
 
   # Alias of order_append.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#824
+  # source://sequel//lib/sequel/dataset/query.rb#829
   def order_more(*columns, &block); end
 
   # Returns a copy of the dataset with the order columns added
@@ -4102,7 +4102,7 @@ class Sequel::Dataset
   #   DB[:items].order(:a).order(:b) # SELECT * FROM items ORDER BY b
   #   DB[:items].order(:a).order_prepend(:b) # SELECT * FROM items ORDER BY b, a
   #
-  # source://sequel//lib/sequel/dataset/query.rb#833
+  # source://sequel//lib/sequel/dataset/query.rb#838
   def order_prepend(*columns, &block); end
 
   # Append literalization of ordered expression to SQL string.
@@ -4230,7 +4230,7 @@ class Sequel::Dataset
   #   DB[:items].where(id: 1).qualify(:i)
   #   # SELECT i.* FROM items WHERE (i.id = 1)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#845
+  # source://sequel//lib/sequel/dataset/query.rb#850
   def qualify(table = T.unsafe(nil)); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#291
@@ -4310,7 +4310,7 @@ class Sequel::Dataset
   #     # hash for each row deleted, with values for all columns
   #   end
   #
-  # source://sequel//lib/sequel/dataset/query.rb#879
+  # source://sequel//lib/sequel/dataset/query.rb#884
   def returning(*values); end
 
   # Returns a copy of the dataset with the order reversed. If no order is
@@ -4321,18 +4321,18 @@ class Sequel::Dataset
   #   DB[:items].order(:id).reverse # SELECT * FROM items ORDER BY id DESC
   #   DB[:items].order(:id).reverse(Sequel.desc(:name)) # SELECT * FROM items ORDER BY name ASC
   #
-  # source://sequel//lib/sequel/dataset/query.rb#898
+  # source://sequel//lib/sequel/dataset/query.rb#904
   def reverse(*order, &block); end
 
   # Alias of +reverse+
   #
-  # source://sequel//lib/sequel/dataset/query.rb#908
+  # source://sequel//lib/sequel/dataset/query.rb#914
   def reverse_order(*order, &block); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def right_join(*args, &block); end
 
-  # source://sequel//lib/sequel/dataset/query.rb#625
+  # source://sequel//lib/sequel/dataset/query.rb#627
   def right_outer_join(*args, &block); end
 
   # The alias to use for the row_number column, used when emulating OFFSET
@@ -4366,7 +4366,7 @@ class Sequel::Dataset
   #   DB[:items].select(:a, :b) # SELECT a, b FROM items
   #   DB[:items].select{[a, sum(b)]} # SELECT a, sum(b) FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#919
+  # source://sequel//lib/sequel/dataset/query.rb#925
   def select(*columns, &block); end
 
   # Returns a copy of the dataset selecting the wildcard if no arguments
@@ -4377,7 +4377,7 @@ class Sequel::Dataset
   #   DB[:items].select_all(:items) # SELECT items.* FROM items
   #   DB[:items].select_all(:items, :foo) # SELECT items.*, foo.* FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#931
+  # source://sequel//lib/sequel/dataset/query.rb#937
   def select_all(*tables); end
 
   # Returns a copy of the dataset with the given columns added
@@ -4388,7 +4388,7 @@ class Sequel::Dataset
   #   DB[:items].select(:a).select_append(:b) # SELECT a, b FROM items
   #   DB[:items].select_append(:b) # SELECT *, b FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#946
+  # source://sequel//lib/sequel/dataset/query.rb#953
   def select_append(*columns, &block); end
 
   # Set both the select and group clauses with the given +columns+.
@@ -4401,7 +4401,7 @@ class Sequel::Dataset
   #   DB[:items].select_group(Sequel[:c].as(:a)){f(c2)}
   #   # SELECT c AS a, f(c2) FROM items GROUP BY c, f(c2)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#966
+  # source://sequel//lib/sequel/dataset/query.rb#967
   def select_group(*columns, &block); end
 
   # Returns a hash with key_column values as keys and value_column values as
@@ -4472,7 +4472,7 @@ class Sequel::Dataset
 
   # Alias for select_append.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#972
+  # source://sequel//lib/sequel/dataset/query.rb#973
   def select_more(*columns, &block); end
 
   # The same as select_map, but in addition orders the array by the column.
@@ -4494,6 +4494,17 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#759
   def select_order_map(column = T.unsafe(nil), &block); end
 
+  # Returns a copy of the dataset with the given columns added
+  # to the existing selected columns.  If no columns are currently selected,
+  # it will select the columns given in addition to *.
+  #
+  #   DB[:items].select(:a).select(:b) # SELECT b FROM items
+  #   DB[:items].select(:a).select_prepend(:b) # SELECT b, a FROM items
+  #   DB[:items].select_prepend(:b) # SELECT b, * FROM items
+  #
+  # source://sequel//lib/sequel/dataset/query.rb#984
+  def select_prepend(*columns, &block); end
+
   # source://sequel//lib/sequel/dataset/sql.rb#265
   def select_sql; end
 
@@ -4507,7 +4518,7 @@ class Sequel::Dataset
   #   DB[:items].delete # Uses the :default server
   #   DB[:items].server(:blah).delete # Uses the :blah server
   #
-  # source://sequel//lib/sequel/dataset/query.rb#985
+  # source://sequel//lib/sequel/dataset/query.rb#998
   def server(servr); end
 
   # If the database uses sharding and the current dataset has not had a
@@ -4516,7 +4527,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#992
+  # source://sequel//lib/sequel/dataset/query.rb#1005
   def server?(server); end
 
   # This allows you to manually specify the graph aliases to use
@@ -4592,12 +4603,12 @@ class Sequel::Dataset
 
   # Specify that the check for limits/offsets when updating/deleting be skipped for the dataset.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1001
+  # source://sequel//lib/sequel/dataset/query.rb#1014
   def skip_limit_check; end
 
   # Skip locked rows when returning results from this dataset.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1008
+  # source://sequel//lib/sequel/dataset/query.rb#1022
   def skip_locked; end
 
   # Splits a possible implicit alias in +c+, handling both SQL::AliasedExpressions
@@ -4944,7 +4955,7 @@ class Sequel::Dataset
   #   DB[:items].group(:a).having(a: 1).where(:b).unfiltered
   #   # SELECT * FROM items GROUP BY a
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1019
+  # source://sequel//lib/sequel/dataset/query.rb#1034
   def unfiltered; end
 
   # Remove the splitting of results into subhashes, and all metadata
@@ -4958,7 +4969,7 @@ class Sequel::Dataset
   #   DB[:items].group(:a).having(a: 1).where(:b).ungrouped
   #   # SELECT * FROM items WHERE b
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1027
+  # source://sequel//lib/sequel/dataset/query.rb#1043
   def ungrouped; end
 
   # Adds a UNION clause using a second dataset object.
@@ -4978,21 +4989,21 @@ class Sequel::Dataset
   #   DB[:items].union(DB[:other_items], alias: :i)
   #   # SELECT * FROM (SELECT * FROM items UNION SELECT * FROM other_items) AS i
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1047
+  # source://sequel//lib/sequel/dataset/query.rb#1064
   def union(dataset, opts = T.unsafe(nil)); end
 
   # Returns a copy of the dataset with no limit or offset.
   #
   #   DB[:items].limit(10, 20).unlimited # SELECT * FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1054
+  # source://sequel//lib/sequel/dataset/query.rb#1071
   def unlimited; end
 
   # Returns a copy of the dataset with no order.
   #
   #   DB[:items].order(:a).unordered # SELECT * FROM items
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1061
+  # source://sequel//lib/sequel/dataset/query.rb#1079
   def unordered; end
 
   # This returns an SQL::Identifier or SQL::AliasedExpression containing an
@@ -5110,7 +5121,7 @@ class Sequel::Dataset
   #
   # See the {"Dataset Filtering" guide}[rdoc-ref:doc/dataset_filtering.rdoc] for more examples and details.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1107
+  # source://sequel//lib/sequel/dataset/query.rb#1126
   def where(*cond, &block); end
 
   # Return an array of all rows matching the given filter condition, also
@@ -5151,7 +5162,7 @@ class Sequel::Dataset
   #   DB[:items].window(:w, partition: :c1, order: :c2)
   #   # SELECT * FROM items WINDOW w AS (PARTITION BY c1 ORDER BY c2)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1117
+  # source://sequel//lib/sequel/dataset/query.rb#1136
   def window(name, opts); end
 
   # Append literalization of windows (for window functions) to SQL string.
@@ -5175,12 +5186,12 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1132
+  # source://sequel//lib/sequel/dataset/query.rb#1151
   def with(name, dataset, opts = T.unsafe(nil)); end
 
   # :nocov:
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1221
+  # source://sequel//lib/sequel/dataset/query.rb#1240
   def with_extend(*mods, &block); end
 
   # Return a modified dataset with quote_identifiers set.
@@ -5247,7 +5258,7 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1198
+  # source://sequel//lib/sequel/dataset/query.rb#1217
   def with_recursive(name, nonrecursive, recursive, opts = T.unsafe(nil)); end
 
   # Returns a cloned dataset with the given row_proc.
@@ -5256,7 +5267,7 @@ class Sequel::Dataset
   #   ds.all # => [{:id=>2}]
   #   ds.with_row_proc(:invert.to_proc).all # => [{2=>:id}]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1250
+  # source://sequel//lib/sequel/dataset/query.rb#1269
   def with_row_proc(callable); end
 
   # Returns a copy of the dataset with the static SQL used.  This is useful if you want
@@ -5290,7 +5301,7 @@ class Sequel::Dataset
   # * insert (if an INSERT statement, with no arguments)
   # * truncate (if a TRUNCATE statement, with no arguments)
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1284
+  # source://sequel//lib/sequel/dataset/query.rb#1303
   def with_sql(sql, *args); end
 
   # Run the given SQL and return an array of all rows.  If a block is given,
@@ -5390,7 +5401,7 @@ class Sequel::Dataset
 
   # Add the dataset to the list of compounds
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1296
+  # source://sequel//lib/sequel/dataset/query.rb#1315
   def compound_clone(type, dataset, opts); end
 
   # Return a from_self dataset if an order or limit is specified, so it works as expected
@@ -5401,7 +5412,7 @@ class Sequel::Dataset
 
   # Return true if the dataset has a non-nil value for any key in opts.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1306
+  # source://sequel//lib/sequel/dataset/query.rb#1325
   def options_overlap(opts); end
 
   # Whether this dataset is a simple select from an underlying table, such as:
@@ -5411,7 +5422,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1317
+  # source://sequel//lib/sequel/dataset/query.rb#1336
   def simple_select_all?; end
 
   # A dataset for returning single values from the current dataset.
@@ -5450,6 +5461,17 @@ class Sequel::Dataset
   # to call it internally.
   def _clone(freeze: T.unsafe(nil)); end
 
+  # A frozen array for the currently selected columns.
+  #
+  # source://sequel//lib/sequel/dataset/query.rb#1376
+  def _current_select(allow_plain_wildcard); end
+
+  # An array of SQL::ColumnAll objects for all FROM and JOIN tables.  Used for select_append
+  # and select_prepend.
+  #
+  # source://sequel//lib/sequel/dataset/query.rb#1400
+  def _current_select_column_all; end
+
   # Return a plain symbol given a potentially qualified or aliased symbol,
   # specifying the symbol that is likely to be used as the hash key
   # for the column when records are returned.  Return nil if no hash key
@@ -5476,7 +5498,7 @@ class Sequel::Dataset
 
   # If invert is true, invert the condition.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1357
+  # source://sequel//lib/sequel/dataset/query.rb#1406
   def _invert_filter(cond, invert); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#896
@@ -5493,7 +5515,7 @@ class Sequel::Dataset
   # Append to the current MERGE WHEN clauses.
   # Mutates the hash to add the conditions, if a virtual row block is passed.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1367
+  # source://sequel//lib/sequel/dataset/query.rb#1416
   def _merge_when(hash, &block); end
 
   # Append MERGE WHEN conditions, if there are conditions provided.
@@ -5564,7 +5586,7 @@ class Sequel::Dataset
   # invert :: Whether the condition should be inverted (true or false)
   # combine :: How to combine the condition with an existing condition, should be :AND or :OR
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1382
+  # source://sequel//lib/sequel/dataset/query.rb#1431
   def add_filter(clause, cond, invert = T.unsafe(nil), combine = T.unsafe(nil), &block); end
 
   # Whether to use from_self for an aggregate dataset.
@@ -5731,13 +5753,13 @@ class Sequel::Dataset
 
   # The default :qualify option to use for join tables if one is not specified.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1413
+  # source://sequel//lib/sequel/dataset/query.rb#1462
   def default_join_table_qualification; end
 
   # Return self if the dataset already has a server, or a cloned dataset with the
   # default server otherwise.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1488
+  # source://sequel//lib/sequel/dataset/query.rb#1537
   def default_server; end
 
   # Set the server to use to :default unless it is already set in the passed opts
@@ -5834,7 +5856,7 @@ class Sequel::Dataset
 
   # SQL expression object based on the expr type.  See +where+.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1418
+  # source://sequel//lib/sequel/dataset/query.rb#1467
   def filter_expr(expr = T.unsafe(nil), &block); end
 
   # Format the timestamp based on the default_timestamp_format.
@@ -5852,7 +5874,7 @@ class Sequel::Dataset
   # where the first element is an array of identifiers suitable to pass to
   # a select method, and the second is a new hash of preprocessed graph aliases.
   #
-  # source://sequel//lib/sequel/dataset/graph.rb#283
+  # source://sequel//lib/sequel/dataset/graph.rb#284
   def graph_alias_columns(graph_aliases); end
 
   # Append literalization of array of grouping elements to SQL string, seperating them with commas.
@@ -5879,14 +5901,14 @@ class Sequel::Dataset
   # clause from the given dataset added to it, and the second a clone of
   # the given dataset with the WITH clause removed.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1460
+  # source://sequel//lib/sequel/dataset/query.rb#1509
   def hoist_cte(ds); end
 
   # Whether CTEs need to be hoisted from the given ds into the current ds.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1465
+  # source://sequel//lib/sequel/dataset/query.rb#1514
   def hoist_cte?(ds); end
 
   # Append literalization of identifier to SQL string, considering regular strings
@@ -5960,7 +5982,7 @@ class Sequel::Dataset
   #   DB[:items].invert_order([Sequel.desc(:id)]]) #=> [Sequel.asc(:id)]
   #   DB[:items].invert_order([:category, Sequel.desc(:price)]) #=> [Sequel.desc(:category), Sequel.asc(:price)]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1474
+  # source://sequel//lib/sequel/dataset/query.rb#1523
   def invert_order(order); end
 
   # SQL fragment specifying a JOIN type, converts underscores to
@@ -6105,7 +6127,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1493
+  # source://sequel//lib/sequel/dataset/query.rb#1542
   def non_sql_option?(key); end
 
   # Downcase identifiers by default when outputing them from the database.
@@ -6146,7 +6168,7 @@ class Sequel::Dataset
   # double embedded underscores which would be considered an implicit qualified identifier
   # if not wrapped in an SQL::Identifier.
   #
-  # source://sequel//lib/sequel/dataset/graph.rb#265
+  # source://sequel//lib/sequel/dataset/graph.rb#266
   def qualifier_from_alias_symbol(aliaz, identifier); end
 
   # Whether ORDER BY col NULLS FIRST/LAST must be emulated.
@@ -6359,7 +6381,7 @@ class Sequel::Dataset
   # Treat the +block+ as a virtual_row block if not +nil+ and
   # add the resulting columns to the +columns+ array (modifies +columns+).
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1499
+  # source://sequel//lib/sequel/dataset/query.rb#1548
   def virtual_row_columns(columns, block); end
 
   # Return the class name for this dataset, but skip anonymous classes
@@ -6554,6 +6576,9 @@ class Sequel::Dataset::DatasetModule < ::Module
 
   # source://sequel//lib/sequel/dataset/dataset_module.rb#29
   def select_group(name, *args, &block); end
+
+  # source://sequel//lib/sequel/dataset/dataset_module.rb#29
+  def select_prepend(name, *args, &block); end
 
   # source://sequel//lib/sequel/dataset/dataset_module.rb#29
   def server(name, *args, &block); end
@@ -7003,7 +7028,7 @@ Sequel::Dataset::REGEXP_OPERATORS = T.let(T.unsafe(nil), Array)
 
 # From types allowed to be considered a simple_select_all
 #
-# source://sequel//lib/sequel/dataset/query.rb#1311
+# source://sequel//lib/sequel/dataset/query.rb#1330
 Sequel::Dataset::SIMPLE_SELECT_ALL_ALLOWED_FROM = T.let(T.unsafe(nil), Array)
 
 # Whether Dataset#freeze can actually freeze datasets.  True only on ruby 2.4+,
@@ -9975,7 +10000,7 @@ end
 #   natural_join, natural_left_join, natural_right_join, offset, order, order_append, order_by,
 #   order_more, order_prepend, paged_each, qualify, reverse, reverse_order, right_join,
 #   right_outer_join, select, select_all, select_append, select_group, select_hash,
-#   select_hash_groups, select_map, select_more, select_order_map, server,
+#   select_hash_groups, select_map, select_more, select_order_map, select_prepend, server,
 #   single_record, single_record!, single_value, single_value!, sum, to_hash, to_hash_groups,
 #   truncate, unfiltered, ungraphed, ungrouped, union, unlimited, unordered, where, where_all,
 #   where_each, where_single_value, with, with_recursive, with_sql
@@ -10688,6 +10713,9 @@ module Sequel::Model::ClassMethods
 
   # source://sequel//lib/sequel/model/plugins.rb#33
   def select_order_map(*args, **_arg1, &block); end
+
+  # source://sequel//lib/sequel/model/plugins.rb#33
+  def select_prepend(*args, **_arg1, &block); end
 
   # source://sequel//lib/sequel/model/plugins.rb#33
   def server(*args, **_arg1, &block); end

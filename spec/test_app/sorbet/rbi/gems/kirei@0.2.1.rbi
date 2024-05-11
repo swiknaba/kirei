@@ -44,15 +44,19 @@ class Kirei::App
   sig { returns(T::Hash[::String, T.untyped]) }
   def params; end
 
-  # source://kirei//lib/kirei/app.rb#60
+  # Kirei::App#render
+  # * "status" defaults to 200
+  # * "headers" defaults to an empty hash
+  #
+  # source://kirei//lib/kirei/app.rb#65
   sig do
     params(
-      status: ::Integer,
       body: ::String,
+      status: ::Integer,
       headers: T::Hash[::String, ::String]
     ).returns([::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])])
   end
-  def render(status:, body:, headers: T.unsafe(nil)); end
+  def render(body, status: T.unsafe(nil), headers: T.unsafe(nil)); end
 end
 
 # source://kirei//lib/kirei/app_base.rb#7

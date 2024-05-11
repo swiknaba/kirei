@@ -8,7 +8,7 @@ module Controllers
     sig { returns(Kirei::Middleware::RackResponseType) }
     def livez
       puts(params.inspect)
-      render(status: 200, body: "OK")
+      render("OK", status: 200)
     end
   end
 end
