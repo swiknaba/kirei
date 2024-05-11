@@ -5,6 +5,7 @@ inherit_gem:
 AllCops:
   TargetRubyVersion: 3
   Exclude:
+    - 'vendor/**/*'
     - 'sorbet/**/*'
     - 'spec/test_app/**/*'
     - 'lib/cli/**/*'
