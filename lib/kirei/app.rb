@@ -1,83 +1,92 @@
 # typed: strict
 # frozen_string_literal: true
 
-require_relative("middleware")
-
-# rubocop:disable Metrics/AbcSize
+# The main application must inherit from the Routing::Base to qualify as a Rack App.
+require_relative("routing/base")
 
 module Kirei
-  class App
-    include Middleware
-    extend T::Sig
+  class App < Routing::Base
+    class << self
+      extend T::Sig
 
-    sig { params(params: T::Hash[String, T.untyped]).void }
-    def initialize(params: {})
-      @router = T.let(Router.instance, Router)
-      @params = T.let(params, T::Hash[String, T.untyped])
-    end
-
-    sig { returns(T::Hash[String, T.untyped]) }
-    attr_reader :params
-
-    sig { params(env: RackEnvType).returns(RackResponseType) }
-    def call(env)
-      http_verb = Router::Verb.deserialize(env.fetch("REQUEST_METHOD"))
-      req_path = T.cast(env.fetch("REQUEST_PATH"), String)
       #
-      # TODO: reject requests from unexpected hosts -> allow configuring allowed hosts in a `cors.rb` file
-      #   ( offer a scaffold for this file )
-      # -> use https://github.com/cyu/rack-cors ?
+      # convenience method since "Kirei.configuration" must be nilable since it is nil
+      # at the beginning of initilization of the app
       #
-
-      route = Router.instance.get(http_verb, req_path)
-      return [404, {}, ["Not Found"]] if route.nil?
-
-      params = case route.verb
-               when Router::Verb::GET
-                 query = T.cast(env.fetch("QUERY_STRING"), String)
-                 query.split("&").to_h do |p|
-                   k, v = p.split("=")
-                   k = T.cast(k, String)
-                   [k, v]
-                 end
-               when Router::Verb::POST, Router::Verb::PUT, Router::Verb::PATCH
-                 # TODO: based on content-type, parse the body differently
-                 #       build-in support for JSON & XML
-                 body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-                 res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                 body.rewind # TODO: maybe don't rewind if we don't need to?
-                 T.cast(res, T::Hash[String, T.untyped])
-               else
-                 Logger.logger.warn("Unsupported HTTP verb: #{http_verb.serialize} send to #{req_path}")
-                 {}
+      sig { returns(Kirei::Config) }
+      def config
+        T.must(Kirei.configuration)
       end
 
-      instance = route.controller.new(params: params)
-      instance.public_send(route.action) # maybe have it return `returns(T.anything)`?
-    end
+      sig { returns(Pathname) }
+      def root
+        defined?(::APP_ROOT) ? Pathname.new(::APP_ROOT) : Pathname.new(Dir.pwd)
+      end
 
-    #
-    # Kirei::App#render
-    # * "status": defaults to 200
-    # * "headers": defaults to an empty hash
-    #
-    sig do
-      params(
-        body: String,
-        status: Integer,
-        headers: T::Hash[String, String],
-      ).returns(RackResponseType)
-    end
-    def render(body, status: 200, headers: {})
-      # merge default headers
-      # support a "type" to set content-type header? (or default to json, and users must set the header themselves for other types?)
-      [
-        status,
-        headers,
-        [body],
-      ]
+      #
+      # Returns the version of the app. It checks in the following order:
+      # * ENV["APP_VERSION"]
+      # * ENV["GIT_SHA"]
+      # * `git rev-parse --short HEAD`
+      #
+      sig { returns(String) }
+      def version
+        @version = T.let(@version, T.nilable(String))
+        @version ||= ENV.fetch("APP_VERSION", nil)
+        @version ||= ENV.fetch("GIT_SHA", nil)
+        @version ||= T.must(
+          `command -v git && git rev-parse --short HEAD`.to_s.split("\n").last,
+        ).freeze # localhost
+      end
+
+      #
+      # Returns ENV["RACK_ENV"] or "development" if it is not set
+      #
+      sig { returns(String) }
+      def environment
+        ENV.fetch("RACK_ENV", "development")
+      end
+
+      #
+      # Returns the name of the database based on the app name and the environment,
+      # e.g. "myapp_development"
+      #
+      sig { returns(String) }
+      def default_db_name
+        @default_db_name ||= T.let("#{config.app_name}_#{environment}".freeze, T.nilable(String))
+      end
+
+      #
+      # Returns the database URL based on the DATABASE_URL environment variable or
+      # a default value based on the default_db_name
+      #
+      sig { returns(String) }
+      def default_db_url
+        @default_db_url ||= T.let(
+          ENV.fetch("DATABASE_URL", "postgresql://localhost:5432/#{default_db_name}"),
+          T.nilable(String),
+        )
+      end
+
+      sig { returns(Sequel::Database) }
+      def raw_db_connection
+        @raw_db_connection = T.let(@raw_db_connection, T.nilable(Sequel::Database))
+        return @raw_db_connection unless @raw_db_connection.nil?
+
+        # calling "Sequel.connect" creates a new connection
+        @raw_db_connection = Sequel.connect(App.config.db_url || default_db_url)
+
+        config.db_extensions.each do |ext|
+          T.cast(@raw_db_connection, Sequel::Database).extension(ext)
+        end
+
+        if config.db_extensions.include?(:pg_json)
+          # https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb#L8
+          @raw_db_connection.wrap_json_primitives = true
+        end
+
+        @raw_db_connection
+      end
     end
   end
 end
-
-# rubocop:enable Metrics/AbcSize

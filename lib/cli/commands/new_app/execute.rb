@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 
 require "fileutils"
 
@@ -13,7 +13,7 @@ module Cli
           Files::DbRake.call(app_name)
           Files::Irbrc.call
           Files::Rakefile.call
-          Files::Routes.call
+          Files::Routes.call(app_name)
           Files::SorbetConfig.call
 
           Kirei::Logger.logger.info(

@@ -1,10 +1,10 @@
 # typed: strict
 # frozen_string_literal: true
 
-module Controllers
-  class Airports < Kirei::BaseController
-    extend T::Sig
+require_relative("base") # TODO: use Zeitwerk
 
+module Controllers
+  class Airports < Base
     sig { returns(Kirei::Middleware::RackResponseType) }
     def index
       airports = Airport.all

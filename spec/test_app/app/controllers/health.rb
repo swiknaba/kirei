@@ -2,13 +2,12 @@
 # frozen_string_literal: true
 
 module Controllers
-  class Health < Kirei::BaseController
-    extend T::Sig
-
+  class Health < Base
     sig { returns(Kirei::Middleware::RackResponseType) }
     def livez
-      puts(params.inspect)
-      render("OK", status: 200)
+      TestApp.config.logger.info("Health check")
+      TestApp.config.logger.info(params.inspect)
+      render(TestApp.version, status: 200)
     end
   end
 end

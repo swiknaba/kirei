@@ -115,7 +115,7 @@ module Kirei
 
       sig { override.returns(Sequel::Dataset) }
       def db
-        AppBase.raw_db_connection[table_name.to_sym]
+        App.raw_db_connection[table_name.to_sym]
       end
 
       sig do
@@ -166,7 +166,7 @@ module Kirei
       def wrap_jsonb_non_primivitives!(attributes)
         # setting `@raw_db_connection.wrap_json_primitives = true`
         # only works on JSON primitives, but not on blank hashes/arrays
-        return unless AppBase.config.db_extensions.include?(:pg_json)
+        return unless App.config.db_extensions.include?(:pg_json)
 
         attributes.each_pair do |key, value|
           next unless value.is_a?(Hash) || value.is_a?(Array)
@@ -196,7 +196,7 @@ module Kirei
         ).returns(T::Array[T.attached_class])
       end
       def resolve(query, strict = nil)
-        strict_loading = strict.nil? ? AppBase.config.db_strict_type_resolving : strict
+        strict_loading = strict.nil? ? App.config.db_strict_type_resolving : strict
 
         query.map do |row|
           row = T.cast(row, T::Hash[Symbol, T.untyped])
@@ -212,7 +212,7 @@ module Kirei
         ).returns(T.nilable(T.attached_class))
       end
       def resolve_first(query, strict = nil)
-        strict_loading = strict.nil? ? AppBase.config.db_strict_type_resolving : strict
+        strict_loading = strict.nil? ? App.config.db_strict_type_resolving : strict
 
         resolve(query.limit(1), strict_loading).first
       end

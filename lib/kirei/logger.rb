@@ -17,12 +17,12 @@ module Kirei
   #
   # You can define a custom log transformer to transform the logline:
   #
-  #    Kirei::AppBase.config.log_transformer = Proc.new { _1 }
+  #    Kirei::App.config.log_transformer = Proc.new { _1 }
   #
-  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei::AppBase.config.sensitive_keys`.
+  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei::App.config.sensitive_keys`.
   # You can also build on top of the provided log transformer:
   #
-  #   Kirei::AppBase.config.log_transformer = Proc.new do |meta|
+  #   Kirei::App.config.log_transformer = Proc.new do |meta|
   #      flattened_meta = Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta)
   #      # Do something with the flattened meta
   #      flattened_meta.map { _1.to_json }
@@ -85,7 +85,7 @@ module Kirei
       ).void
     end
     def call(level:, label:, meta: {})
-      Kirei::AppBase.config.log_default_metadata.each_pair do |key, value|
+      Kirei::App.config.log_default_metadata.each_pair do |key, value|
         meta[key] ||= value
       end
 
@@ -94,7 +94,7 @@ module Kirei
       # Source: https://opentelemetry.io/docs/concepts/semantic-conventions/
       #
       meta[:"service.instance.id"] ||= Thread.current[:request_id]
-      meta[:"service.name"] ||= Kirei::AppBase.config.app_name
+      meta[:"service.name"] ||= Kirei::App.config.app_name
 
       # The Ruby logger only accepts one string as the only argument
       @queue << { level: level, label: label, meta: meta }
@@ -108,12 +108,12 @@ module Kirei
           level = log_data.fetch(:level)
           label = log_data.fetch(:label)
           meta = T.let(log_data.fetch(:meta), T::Hash[Symbol, T.untyped])
-          meta[:"service.version"] ||= Kirei::AppBase.version
+          meta[:"service.version"] ||= Kirei::App.version
           meta[:timestamp] ||= Time.now.utc.iso8601
           meta[:level] ||= level.to_s.upcase
           meta[:label] ||= label
 
-          log_transformer = AppBase.config.log_transformer
+          log_transformer = App.config.log_transformer
 
           loglines = if log_transformer
             log_transformer.call(meta)
@@ -137,7 +137,7 @@ module Kirei
       ).returns(String)
     end
     def self.mask(k, v)
-      return Kirei::Logger::FILTERED if AppBase.config.sensitive_keys.any? { k.match?(_1) }
+      return Kirei::Logger::FILTERED if App.config.sensitive_keys.any? { k.match?(_1) }
 
       v
     end

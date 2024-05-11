@@ -1,16 +1,18 @@
 # typed: strict
 # frozen_string_literal: true
 
-Kirei::Router.add_routes(
+include(Kirei::Routing)
+
+Router.add_routes(
   [
-    Kirei::Router::Route.new(
-      verb: "GET",
+    Router::Route.new(
+      verb: Router::Verb::GET,
       path: "/livez",
       controller: Controllers::Health,
       action: "livez",
     ),
-    Kirei::Router::Route.new(
-      verb: "GET",
+    Router::Route.new(
+      verb: Router::Verb::GET,
       path: "/airports",
       controller: Controllers::Airports,
       action: "index",

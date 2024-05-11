@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+bundle update kirei
+bundle exec tapioca gem kirei

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 if ! command -v git &> /dev/null
 then

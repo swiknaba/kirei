@@ -19,7 +19,7 @@ Dir[File.join(__dir__, "app/**/*", "*.rb")].each { require(_1) }
 # Fifth: load configs
 Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
 
-class TestApp < Kirei::AppBase
+class TestApp < Kirei::App
   # Kirei configuration
   config.app_name = "test_app"
 end

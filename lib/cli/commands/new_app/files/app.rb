@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 
 module Cli
   module Commands
@@ -34,7 +34,7 @@ module Cli
               # Fifth: load configs
               Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
 
-              class #{app_name} < Kirei::AppBase
+              class #{app_name} < Kirei::App
                 # Kirei configuration
                 config.app_name = "#{snake_case_app_name}"
               end
