@@ -70,6 +70,26 @@ module Sequel
     # source://sequel//lib/sequel/core.rb#419
     def jdbc(*args, &block); end
 
+    # The preferred method for writing Sequel migrations, using a DSL:
+    #
+    #   Sequel.migration do
+    #     up do
+    #       create_table(:artists) do
+    #         primary_key :id
+    #         String :name
+    #       end
+    #     end
+    #
+    #     down do
+    #       drop_table(:artists)
+    #     end
+    #   end
+    #
+    # Designed to be used with the +Migrator+ class, part of the +migration+ extension.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#308
+    def migration(&block); end
+
     # source://sequel//lib/sequel/core.rb#419
     def mock(*args, &block); end
 
@@ -7311,6 +7331,112 @@ module Sequel::Inflections
   end
 end
 
+# The default migrator, recommended in most cases.  Uses a simple incrementing
+# version number starting with 1, where missing or duplicate migration file
+# versions are not allowed.  Part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#536
+class Sequel::IntegerMigrator < ::Sequel::Migrator
+  # Set up all state for the migrator instance
+  #
+  # @raise [Error]
+  # @return [IntegerMigrator] a new instance of IntegerMigrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#549
+  def initialize(db, directory, opts = T.unsafe(nil)); end
+
+  # The current version for this migrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#540
+  def current; end
+
+  # The direction of the migrator, either :up or :down
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#543
+  def direction; end
+
+  # The integer migrator is current if the current version is the same as the target version.
+  #
+  # @return [Boolean]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#580
+  def is_current?; end
+
+  # The migrations used by this migrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#546
+  def migrations; end
+
+  # Apply all migrations on the database
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#585
+  def run; end
+
+  private
+
+  # Gets the current migration version stored in the database. If no version
+  # number is stored, 0 is returned.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#603
+  def current_migration_version; end
+
+  # The default column storing schema version.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#608
+  def default_schema_column; end
+
+  # The default table storing schema version.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#613
+  def default_schema_table; end
+
+  # Returns any found migration files in the supplied directory.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#618
+  def get_migration_files; end
+
+  # Returns a list of migration classes filtered for the migration range and
+  # ordered according to the migration direction.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#635
+  def get_migrations; end
+
+  # Returns the latest version available in the specified directory.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#640
+  def latest_migration_version; end
+
+  # Returns the dataset for the schema_info table. If no such table
+  # exists, it is automatically created.
+  #
+  # @raise [Error]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#647
+  def schema_dataset; end
+
+  # Sets the current migration version stored in the database.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#660
+  def set_migration_version(version); end
+
+  # Whether or not this is an up migration
+  #
+  # @return [Boolean]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#665
+  def up?; end
+
+  # An array of numbers corresponding to the migrations,
+  # so that each number in the array is the migration version
+  # that will be in affect after the migration is run.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#672
+  def version_numbers; end
+end
+
+# source://sequel//lib/sequel/extensions/migration.rb#537
+Sequel::IntegerMigrator::Error = Sequel::Migrator::Error
+
 # source://sequel//lib/sequel/exceptions.rb#93
 class Sequel::InvalidOperation < ::Sequel::Error; end
 
@@ -7382,6 +7508,444 @@ class Sequel::MassAssignmentRestriction < ::Sequel::Error
     def create(msg, model, column); end
   end
 end
+
+# Sequel's older migration class, available for backward compatibility.
+# Uses subclasses with up and down instance methods for each migration:
+#
+#   Class.new(Sequel::Migration) do
+#     def up
+#       create_table(:artists) do
+#         primary_key :id
+#         String :name
+#       end
+#     end
+#
+#     def down
+#       drop_table(:artists)
+#     end
+#   end
+#
+# Part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#34
+class Sequel::Migration
+  # Set the database associated with this migration.
+  #
+  # @return [Migration] a new instance of Migration
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#36
+  def initialize(db); end
+
+  # The default down action does nothing
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#63
+  def down; end
+
+  # Intercepts method calls intended for the database and sends them along.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#67
+  def method_missing(method_sym, *args, **_arg2, &block); end
+
+  # The default up action does nothing
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#81
+  def up; end
+
+  private
+
+  # This object responds to all methods the database responds to.
+  #
+  # @return [Boolean]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#76
+  def respond_to_missing?(meth, include_private); end
+
+  class << self
+    # Applies the migration to the supplied database in the specified
+    # direction.
+    #
+    # @raise [ArgumentError]
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#42
+    def apply(db, direction); end
+
+    # Returns the list of Migration descendants.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#48
+    def descendants; end
+
+    # Adds the new migration class to the list of Migration descendants.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#53
+    def inherited(base); end
+
+    # Don't allow transaction overriding in old migrations.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#58
+    def use_transactions; end
+  end
+end
+
+# Handles reversing an alter_table block in a reversible migration.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#244
+class Sequel::MigrationAlterTableReverser < ::Sequel::BasicObject
+  # @return [MigrationAlterTableReverser] a new instance of MigrationAlterTableReverser
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#245
+  def initialize; end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#249
+  def reverse(&block); end
+
+  private
+
+  # source://sequel//lib/sequel/extensions/migration.rb#258
+  def add_column(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#262
+  def add_constraint(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#268
+  def add_foreign_key(key, table, *args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#277
+  def add_full_text_index(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#277
+  def add_index(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#272
+  def add_primary_key(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#277
+  def add_spatial_index(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#283
+  def rename_column(name, new_name); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#287
+  def set_column_allow_null(name, allow_null = T.unsafe(nil)); end
+end
+
+# Internal class used by the Sequel.migration DSL, part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#116
+class Sequel::MigrationDSL < ::Sequel::BasicObject
+  # Create a new migration class, and instance_exec the block.
+  #
+  # @return [MigrationDSL] a new instance of MigrationDSL
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#125
+  def initialize(&block); end
+
+  # Creates a reversible migration.  This is the same as creating
+  # the same block with +up+, but it also calls the block and attempts
+  # to create a +down+ block that will reverse the changes made by
+  # the block.
+  #
+  # There are no guarantees that this will work perfectly
+  # in all cases, but it works for some simple cases.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#158
+  def change(&block); end
+
+  # Defines the migration's down action.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#132
+  def down(&block); end
+
+  # The underlying SimpleMigration instance
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#118
+  def migration; end
+
+  # Disable the use of transactions for the related migration
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#137
+  def no_transaction; end
+
+  # Creates a revert migration.  This is the same as creating
+  # the same block with +down+, but it also calls the block and attempts
+  # to create a +up+ block that will reverse the changes made by
+  # the block.  This is designed to revert the changes in the
+  # provided block.
+  #
+  # There are no guarantees that this will work perfectly
+  # in all cases, but it works for some simple cases.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#171
+  def revert(&block); end
+
+  # Enable the use of transactions for the related migration
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#142
+  def transaction; end
+
+  # Defines the migration's up action.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#147
+  def up(&block); end
+
+  class << self
+    # source://sequel//lib/sequel/extensions/migration.rb#120
+    def create(&block); end
+  end
+end
+
+# :nocov:
+#
+# source://sequel//lib/sequel/extensions/migration.rb#180
+class Sequel::MigrationReverser < ::Sequel::BasicObject
+  # @return [MigrationReverser] a new instance of MigrationReverser
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#181
+  def initialize; end
+
+  # Reverse the actions for the given block.  Takes the block given
+  # and returns a new block that reverses the actions taken by
+  # the given block.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#188
+  def reverse(&block); end
+
+  private
+
+  # source://sequel//lib/sequel/extensions/migration.rb#210
+  def add_column(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#214
+  def add_index(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#218
+  def alter_table(table, &block); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#222
+  def create_join_table(*args); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#226
+  def create_table(name, opts = T.unsafe(nil)); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#230
+  def create_view(name, _, opts = T.unsafe(nil)); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#234
+  def rename_column(table, name, new_name); end
+
+  # source://sequel//lib/sequel/extensions/migration.rb#238
+  def rename_table(table, new_name); end
+end
+
+# The +Migrator+ class performs migrations based on migration files in a
+# specified directory. The migration files should be named using the
+# following pattern:
+#
+#   <version>_<title>.rb
+#
+# For example, the following files are considered migration files:
+#
+#   001_create_sessions.rb
+#   002_add_data_column.rb
+#
+# You can also use timestamps as version numbers:
+#
+#   1273253850_create_sessions.rb
+#   1273257248_add_data_column.rb
+#
+# If any migration filenames use timestamps as version numbers, Sequel
+# uses the +TimestampMigrator+ to migrate, otherwise it uses the +IntegerMigrator+.
+# The +TimestampMigrator+ can handle migrations that are run out of order
+# as well as migrations with the same timestamp,
+# while the +IntegerMigrator+ is more strict and raises exceptions for missing
+# or duplicate migration files.
+#
+# The migration files should contain either one +Migration+
+# subclass or one <tt>Sequel.migration</tt> call.
+#
+# Migrations are generally run via the sequel command line tool,
+# using the -m and -M switches.  The -m switch specifies the migration
+# directory, and the -M switch specifies the version to which to migrate.
+#
+# You can apply migrations using the Migrator API, as well (this is necessary
+# if you want to specify the version from which to migrate in addition to the version
+# to which to migrate).
+# To apply a migrator, the +apply+ method must be invoked with the database
+# instance, the directory of migration files and the target version. If
+# no current version is supplied, it is read from the database. The migrator
+# automatically creates a table (schema_info for integer migrations and
+# schema_migrations for timestamped migrations). in the database to keep track
+# of the current migration version. If no migration version is stored in the
+# database, the version is considered to be 0. If no target version is
+# specified, or the target version specified is greater than the latest
+# version available, the database is migrated to the latest version available in the
+# migration directory.
+#
+# For example, to migrate the database to the latest version:
+#
+#   Sequel::Migrator.run(DB, '.')
+#
+# For example, to migrate the database all the way down:
+#
+#   Sequel::Migrator.run(DB, '.', target: 0)
+#
+# For example, to migrate the database to version 4:
+#
+#   Sequel::Migrator.run(DB, '.', target: 4)
+#
+# To migrate the database from version 1 to version 5:
+#
+#   Sequel::Migrator.run(DB, '.', target: 5, current: 1)
+#
+# Part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#373
+class Sequel::Migrator
+  # Setup the state for the migrator
+  #
+  # @raise [Error]
+  # @return [Migrator] a new instance of Migrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#481
+  def initialize(db, directory, opts = T.unsafe(nil)); end
+
+  # The column to use to hold the migration version number for integer migrations or
+  # filename for timestamp migrations (defaults to :version for integer migrations and
+  # :filename for timestamp migrations)
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#458
+  def column; end
+
+  # The database related to this migrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#461
+  def db; end
+
+  # The directory for this migrator's files
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#464
+  def directory; end
+
+  # The dataset for this migrator, representing the +schema_info+ table for integer
+  # migrations and the +schema_migrations+ table for timestamp migrations
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#468
+  def ds; end
+
+  # All migration files in this migrator's directory
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#471
+  def files; end
+
+  # The table to use to hold the applied migration data (defaults to :schema_info for
+  # integer migrations and :schema_migrations for timestamp migrations)
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#475
+  def table; end
+
+  # The target version for this migrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#478
+  def target; end
+
+  private
+
+  # If transactions should be used for the migration, yield to the block
+  # inside a transaction.  Otherwise, just yield to the block.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#498
+  def checked_transaction(migration, &block); end
+
+  # Load the migration file, raising an exception if the file does not define
+  # a single migration.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#514
+  def load_migration_file(file); end
+
+  # Return the integer migration version based on the filename.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#528
+  def migration_version_from_file(filename); end
+
+  class << self
+    # Wrapper for +run+, maintaining backwards API compatibility
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#390
+    def apply(db, directory, target = T.unsafe(nil), current = T.unsafe(nil)); end
+
+    # Raise a NotCurrentError unless the migrator is current, takes the same
+    # arguments as #run.
+    #
+    # @raise [NotCurrentError]
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#396
+    def check_current(*args); end
+
+    # Return whether the migrator is current (i.e. it does not need to make
+    # any changes).  Takes the same arguments as #run.
+    #
+    # @return [Boolean]
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#402
+    def is_current?(db, directory, opts = T.unsafe(nil)); end
+
+    # Choose the Migrator subclass to use.  Uses the TimestampMigrator
+    # if the version number is greater than 20000101, otherwise uses the IntegerMigrator.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#442
+    def migrator_class(directory); end
+
+    # Migrates the supplied database using the migration files in the specified directory. Options:
+    # :allow_missing_migration_files :: Don't raise an error if there are missing migration files.
+    #                                   It is very risky to use this option, since it can result in
+    #                                   the database schema version number not matching the expected
+    #                                   database schema.
+    # :column :: The column in the :table argument storing the migration version (default: :version).
+    # :current :: The current version of the database.  If not given, it is retrieved from the database
+    #             using the :table and :column options.
+    # :relative :: Run the given number of migrations, with a positive number being migrations to migrate
+    #              up, and a negative number being migrations to migrate down (IntegerMigrator only).
+    # :table :: The table containing the schema version (default: :schema_info for integer migrations and
+    #           :schema_migrations for timestamped migrations).
+    # :target :: The target version to which to migrate.  If not given, migrates to the maximum version.
+    # :use_advisory_lock :: Use advisory locks in migrations (only use this if Sequel supports advisory
+    #                       locks for the database).
+    #
+    # Examples:
+    #   Sequel::Migrator.run(DB, "migrations")
+    #   Sequel::Migrator.run(DB, "migrations", target: 15, current: 10)
+    #   Sequel::Migrator.run(DB, "app1/migrations", column: :app2_version)
+    #   Sequel::Migrator.run(DB, "app2/migrations", column: :app2_version, table: :schema_info2)
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#432
+    def run(db, directory, opts = T.unsafe(nil)); end
+  end
+end
+
+# Exception class raised when there is an error with the migrator's
+# file structure, database, or arguments.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#381
+class Sequel::Migrator::Error < ::Sequel::Error; end
+
+# Lock ID to use for advisory locks when running migrations
+# "sequel-migration".codepoints.reduce(:*) % (2**63)
+#
+# source://sequel//lib/sequel/extensions/migration.rb#408
+Sequel::Migrator::MIGRATION_ADVISORY_LOCK_ID = T.let(T.unsafe(nil), Integer)
+
+# source://sequel//lib/sequel/extensions/migration.rb#374
+Sequel::Migrator::MIGRATION_FILE_PATTERN = T.let(T.unsafe(nil), Regexp)
+
+# Mutex used around migration file loading
+#
+# source://sequel//lib/sequel/extensions/migration.rb#377
+Sequel::Migrator::MUTEX = T.let(T.unsafe(nil), Thread::Mutex)
+
+# Exception class raised when Migrator.check_current signals that it is
+# not current.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#386
+class Sequel::Migrator::NotCurrentError < ::Sequel::Migrator::Error; end
 
 # <tt>Sequel::Model</tt> is an object relational mapper built on top of Sequel core.  Each
 # model class is backed by a dataset instance, and many dataset methods can be
@@ -15550,11 +16114,169 @@ end
 # source://sequel//lib/sequel/exceptions.rb#80
 class Sequel::SerializationFailure < ::Sequel::DatabaseError; end
 
+# Migration class used by the Sequel.migration DSL,
+# using instances for each migration, unlike the
+# +Migration+ class, which uses subclasses for each
+# migration. Part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#89
+class Sequel::SimpleMigration
+  # Don't set transaction use by default.
+  #
+  # @return [SimpleMigration] a new instance of SimpleMigration
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#101
+  def initialize; end
+
+  # Apply the appropriate block on the +Database+
+  # instance using instance_exec.
+  #
+  # @raise [ArgumentError]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#107
+  def apply(db, direction); end
+
+  # Proc used for the down action
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#91
+  def down; end
+
+  # Proc used for the down action
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#91
+  def down=(_arg0); end
+
+  # Proc used for the up action
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#94
+  def up; end
+
+  # Proc used for the up action
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#94
+  def up=(_arg0); end
+
+  # Whether to use transactions for this migration, default depends on the
+  # database.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#98
+  def use_transactions; end
+
+  # Whether to use transactions for this migration, default depends on the
+  # database.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#98
+  def use_transactions=(_arg0); end
+end
+
 # The tiny version of Sequel.  Usually 0, only bumped for bugfix
 # releases that fix regressions from previous versions.
 #
 # source://sequel//lib/sequel/version.rb#13
 Sequel::TINY = T.let(T.unsafe(nil), Integer)
+
+# The migrator used if any migration file version is greater than 20000101.
+# Stores filenames of migration files, and can figure out which migrations
+# have not been applied and apply them, even if earlier migrations are added
+# after later migrations.  If you plan to do that, the responsibility is on
+# you to make sure the migrations don't conflict. Part of the +migration+ extension.
+#
+# source://sequel//lib/sequel/extensions/migration.rb#690
+class Sequel::TimestampMigrator < ::Sequel::Migrator
+  # Set up all state for the migrator instance
+  #
+  # @return [TimestampMigrator] a new instance of TimestampMigrator
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#700
+  def initialize(db, directory, opts = T.unsafe(nil)); end
+
+  # Array of strings of applied migration filenames
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#694
+  def applied_migrations; end
+
+  # The timestamp migrator is current if there are no migrations to apply
+  # in either direction.
+  #
+  # @return [Boolean]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#716
+  def is_current?; end
+
+  # Get tuples of migrations, filenames, and actions for each migration
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#697
+  def migration_tuples; end
+
+  # Apply all migration tuples on the database
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#721
+  def run; end
+
+  # Apply single migration tuple at the given path with the given direction
+  # on the database.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#730
+  def run_single(path, direction); end
+
+  private
+
+  # Apply a single migration with the given filename in the given direction.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#744
+  def apply_migration(migration, file_name, direction); end
+
+  # Convert the schema_info table to the new schema_migrations table format,
+  # using the version of the schema_info table and the current migration files.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#758
+  def convert_from_schema_info; end
+
+  # The default column storing migration filenames.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#770
+  def default_schema_column; end
+
+  # The default table storing migration filenames.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#775
+  def default_schema_table; end
+
+  # Returns filenames of all applied migrations
+  #
+  # @raise [Error]
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#780
+  def get_applied_migrations; end
+
+  # Returns any migration files found in the migrator's directory.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#788
+  def get_migration_files; end
+
+  # Returns tuples of migration, filename, and direction
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#798
+  def get_migration_tuples; end
+
+  # Returns the dataset for the schema_migrations table. If no such table
+  # exists, it is automatically created.
+  #
+  # source://sequel//lib/sequel/extensions/migration.rb#821
+  def schema_dataset; end
+
+  class << self
+    # Apply the migration in the given file path.  See Migrator.run for the
+    # available options.  Additionally, this method supports the :direction
+    # option for whether to run the migration up (default) or down.
+    #
+    # source://sequel//lib/sequel/extensions/migration.rb#710
+    def run_single(db, path, opts = T.unsafe(nil)); end
+  end
+end
+
+# source://sequel//lib/sequel/extensions/migration.rb#691
+Sequel::TimestampMigrator::Error = Sequel::Migrator::Error
 
 # Backwards compatible alias
 #
