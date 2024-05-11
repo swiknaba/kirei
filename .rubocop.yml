@@ -4,6 +4,11 @@ inherit_gem:
 
 AllCops:
   TargetRubyVersion: 3
+  Exclude:
+    - 'sorbet/**/*'
+    - 'spec/test_app/**/*'
+    - 'lib/cli/**/*'
+    - 'bin/kirei' # for now
 
 Style/StringLiterals:
   Enabled: true
