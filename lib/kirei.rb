@@ -26,6 +26,8 @@ require "sequel" # "sequel_pg" is auto-required by "sequel"
 require("zeitwerk")
 # ignore warning for `cli/` dir, since this is not a runtime dependency/non-autoloadable code
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
+loader.ignore("#{__dir__}/cli")
+loader.ignore("#{__dir__}/cli.rb")
 loader.setup
 
 module Kirei
