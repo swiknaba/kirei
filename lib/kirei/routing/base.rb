@@ -68,6 +68,9 @@ module Kirei
 
         headers["X-Request-Id"] ||= req_id
 
+        default_headers.each do |header_name, default_value|
+          headers[header_name] ||= default_value
+        end
 
         [
           status,
@@ -96,6 +99,24 @@ module Kirei
           headers,
           [body],
         ]
+      end
+
+      sig { returns(T::Hash[String, String]) }
+      def default_headers
+        # "Access-Control-Allow-Origin": the user should set that
+        {
+          # security relevant headers
+          "X-Frame-Options" => "DENY",
+          "X-Content-Type-Options" => "nosniff",
+          "X-XSS-Protection" => "1; mode=block", # for legacy clients/browsers
+          "Strict-Transport-Security" => "max-age=31536000; includeSubDomains", # for HTTPS
+          "Cache-Control" => "no-store", # the user should set that if caching is needed
+          "Referrer-Policy" => "strict-origin-when-cross-origin",
+          "Content-Security-Policy" => "default-src 'none'; frame-ancestors 'none'",
+
+          # other headers
+          "Content-Type" => "application/json; charset=utf-8",
+        }
       end
 
       sig { params(hooks: NilableHooksType).void }
