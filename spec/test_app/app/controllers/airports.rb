@@ -16,7 +16,7 @@ module Controllers
       puts "running AFTER filter from Airports 1"
     end
 
-    sig { returns(Kirei::Routing::RackResponseType) }
+    sig { returns(T.anything) }
     def index
       airports = Airport.all
       data = Oj.dump(airports.map(&:serialize))

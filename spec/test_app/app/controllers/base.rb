@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Controllers
-  class Base < Kirei::Routing::BaseController
+  class Base < Kirei::Controller
     extend T::Sig
 
     before do

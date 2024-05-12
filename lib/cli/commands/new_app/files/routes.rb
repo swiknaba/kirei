@@ -16,18 +16,18 @@ module Cli
               # typed: strict
               # frozen_string_literal: true
 
-              include(Kirei::Routing)
-
-              Router.add_routes(
-                [
-                  Router::Route.new(
-                    verb: Router::Verb::GET,
-                    path: "/livez",
-                    controller: Controllers::Health,
-                    action: "livez",
-                  ),
-                ],
-              )
+              module Kirei::Routing
+                Router.add_routes(
+                  [
+                    Router::Route.new(
+                      verb: Router::Verb::GET,
+                      path: "/livez",
+                      controller: Controllers::Health,
+                      action: "livez",
+                    ),
+                  ],
+                )
+              end
             RUBY
           end
 
@@ -37,7 +37,7 @@ module Cli
               # frozen_string_literal: true
 
               module Controllers
-                class Base < Kirei::Routing::BaseController
+                class Base < Kirei::Controller
                   extend T::Sig
                 end
               end
@@ -51,7 +51,7 @@ module Cli
 
               module Controllers
                 class Health < Base
-                  sig { returns(Kirei::Routing::RackResponseType) }
+                  sig { returns(T.anything) }
                   def livez
                     #{app_name}.config.logger.info("Health check")
                     #{app_name}.config.logger.info(params.inspect)

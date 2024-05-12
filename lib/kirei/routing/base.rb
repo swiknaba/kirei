@@ -58,7 +58,7 @@ module Kirei
         before_hooks = collect_hooks(controller, :before_hooks)
         run_hooks(before_hooks)
 
-        status, headers, body = T.let(
+        status, headers, body = T.cast(
           controller.new(params: params).public_send(route.action),
           RackResponseType,
         )
@@ -128,7 +128,7 @@ module Kirei
 
       sig do
         params(
-          controller: T.class_of(BaseController),
+          controller: T.class_of(Controller),
           hooks_type: Symbol,
         ).returns(NilableHooksType)
       end
@@ -136,7 +136,7 @@ module Kirei
         result = T.let(Set.new, T::Set[T.proc.void])
 
         controller.ancestors.reverse.each do |ancestor|
-          next unless ancestor < BaseController
+          next unless ancestor < Controller
 
           supported_hooks = %i[before_hooks after_hooks]
           unless supported_hooks.include?(hooks_type)

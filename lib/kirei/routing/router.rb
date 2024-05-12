@@ -47,7 +47,7 @@ module Kirei
       class Route < T::Struct
         const :verb, Verb
         const :path, String
-        const :controller, T.class_of(BaseController)
+        const :controller, T.class_of(Controller)
         const :action, String
       end
 

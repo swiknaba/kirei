@@ -93,6 +93,35 @@ end
 # source://kirei//lib/kirei/config.rb#8
 Kirei::Config::SENSITIVE_KEYS = T.let(T.unsafe(nil), Array)
 
+# source://kirei//lib/kirei/controller.rb#5
+class Kirei::Controller < ::Kirei::Routing::Base
+  class << self
+    # Statements to be executed after every action.
+    #
+    # source://kirei//lib/kirei/controller.rb#39
+    sig { params(block: T.nilable(T.proc.void)).void }
+    def after(&block); end
+
+    # @return [Routing::NilableHooksType]
+    #
+    # source://kirei//lib/kirei/controller.rb#10
+    def after_hooks; end
+
+    # Statements to be executed before every action.
+    #
+    # In development mode, Rack Reloader might reload this file causing
+    # the before hooks to be executed multiple times.
+    #
+    # source://kirei//lib/kirei/controller.rb#26
+    sig { params(block: T.nilable(T.proc.void)).void }
+    def before(&block); end
+
+    # source://kirei//lib/kirei/controller.rb#10
+    sig { returns(T.nilable(T::Set[T.proc.void])) }
+    def before_hooks; end
+  end
+end
+
 # source://kirei//lib/kirei.rb#43
 Kirei::GEM_ROOT = T.let(T.unsafe(nil), String)
 
@@ -408,7 +437,7 @@ class Kirei::Routing::Base
   # source://kirei//lib/kirei/routing/base.rb#135
   sig do
     params(
-      controller: T.class_of(Kirei::Routing::BaseController),
+      controller: T.class_of(Kirei::Controller),
       hooks_type: ::Symbol
     ).returns(T.nilable(T::Set[T.proc.void]))
   end
@@ -417,35 +446,6 @@ class Kirei::Routing::Base
   # source://kirei//lib/kirei/routing/base.rb#123
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
-end
-
-# source://kirei//lib/kirei/routing/base_controller.rb#6
-class Kirei::Routing::BaseController < ::Kirei::Routing::Base
-  class << self
-    # Statements to be executed after every action.
-    #
-    # source://kirei//lib/kirei/routing/base_controller.rb#40
-    sig { params(block: T.nilable(T.proc.void)).void }
-    def after(&block); end
-
-    # @return [NilableHooksType]
-    #
-    # source://kirei//lib/kirei/routing/base_controller.rb#11
-    def after_hooks; end
-
-    # Statements to be executed before every action.
-    #
-    # In development mode, Rack Reloader might reload this file causing
-    # the before hooks to be executed multiple times.
-    #
-    # source://kirei//lib/kirei/routing/base_controller.rb#27
-    sig { params(block: T.nilable(T.proc.void)).void }
-    def before(&block); end
-
-    # source://kirei//lib/kirei/routing/base_controller.rb#11
-    sig { returns(T.nilable(T::Set[T.proc.void])) }
-    def before_hooks; end
-  end
 end
 
 # source://kirei//lib/kirei/routing/nilable_hooks_type.rb#6
@@ -508,7 +508,7 @@ end
 class Kirei::Routing::Router::Route < ::T::Struct
   const :verb, ::Kirei::Routing::Router::Verb
   const :path, ::String
-  const :controller, T.class_of(Kirei::Routing::BaseController)
+  const :controller, T.class_of(Kirei::Controller)
   const :action, ::String
 
   class << self

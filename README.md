@@ -76,12 +76,21 @@ user.name         # => 'John'
 updated_user.name # => 'Johnny'
 ```
 
+Delete keeps the original object intact. Returns `true` if the record was deleted. Calling delete multiple times will return `false` after the first (successful) call.
+
+```ruby
+success = user.delete # => T::Boolean
+
+# or delete by any query:
+User.db.where('...').delete # => Integer, number of deleted records
+```
+
 To build more complex queries, Sequel can be used directly:
 
 ```ruby
 query = User.db.where({ name: 'John' })
-query = query.where('...')
-query = query.limit(10) # query is a Sequel::Dataset, chain as you like
+query = query.where('...') # "query" is a 'Sequel::Dataset' that you can chain as you like
+query = query.limit(10)
 
 users = User.resolve(query)            # T::Array[User]
 first_user = User.resolve_first(query) # T.nilable(User)
@@ -142,21 +151,24 @@ Define routes anywhere in your app; by convention, they are defined in `config/r
 ```ruby
 # config/routes.rb
 
-Kirei::Router.add_routes([
-  Kirei::Router::Route.new(
-    verb: "GET",
-    path: "/livez",
-    controller: Controllers::Health,
-    action: "livez",
-  ),
-
-  Kirei::Router::Route.new(
-    verb: "GET",
-    path: "/airports",
-    controller: Controllers::Airports,
-    action: "index",
-  ),
-])
+module Kirei::Routing
+  Router.add_routes(
+    [
+      Router::Route.new(
+        verb: Router::Verb::GET,
+        path: "/livez",
+        controller: Controllers::Health,
+        action: "livez",
+      ),
+      Router::Route.new(
+        verb: Router::Verb::GET,
+        path: "/airports",
+        controller: Controllers::Airports,
+        action: "index",
+      ),
+    ],
+  )
+end
 ```
 
 #### Controllers
@@ -165,10 +177,10 @@ Controllers can be defined anywhere; by convention, they are defined in the `app
 
 ```ruby
 module Controllers
-  class Airports < Kirei::BaseController
+  class Airports < Kirei::Controller
     extend T::Sig
 
-    sig { returns(Kirei::Routing::RackResponseType) }
+    sig { returns(T.anything) }
     def index
       airports = Airport.all # T::Array[Airport]
 
