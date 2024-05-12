@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Kirei
-  module BaseModel
+  module Model
     extend T::Sig
     extend T::Helpers
 

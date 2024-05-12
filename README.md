@@ -53,12 +53,12 @@ Find a test app in the [spec/test_app](spec/test_app) directory. It is a fully f
 
 #### Models
 
-All models must inherit from `T::Struct` and include `Kirei::BaseModel`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
+All models must inherit from `T::Struct` and include `Kirei::Model`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
 
 ```ruby
 class User < T::Struct
   extend T::Sig
-  include Kirei::BaseModel
+  include Kirei::Model
 
   const :id, T.any(String, Integer)
   const :name, String

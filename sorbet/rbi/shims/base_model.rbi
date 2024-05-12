@@ -2,7 +2,7 @@
 
 # rubocop:disable Style/EmptyMethod
 module Kirei
-  module BaseModel
+  module Model
     include Kernel # "self" is a class since we include the module in a class
     include T::Props::Serializable
 

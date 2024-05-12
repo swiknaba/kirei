@@ -73,156 +73,6 @@ class Kirei::App < ::Kirei::Routing::Base
   end
 end
 
-# source://kirei//lib/kirei/base_model.rb#5
-module Kirei::BaseModel
-  mixes_in_class_methods ::Kirei::BaseModel::ClassMethods
-
-  # source://kirei//lib/kirei/base_model.rb#10
-  sig { returns(::Kirei::BaseModel::BaseClassInterface) }
-  def class; end
-
-  # Delete keeps the original object intact. Returns true if the record was deleted.
-  # Calling delete multiple times will return false after the first (successful) call.
-  #
-  # source://kirei//lib/kirei/base_model.rb#28
-  sig { returns(T::Boolean) }
-  def delete; end
-
-  # warning: this is not concurrency-safe
-  # save keeps the original object intact, and returns a new object with the updated values.
-  #
-  # source://kirei//lib/kirei/base_model.rb#36
-  sig { returns(T.self_type) }
-  def save; end
-
-  # An update keeps the original object intact, and returns a new object with the updated values.
-  #
-  # source://kirei//lib/kirei/base_model.rb#18
-  sig { params(hash: T::Hash[::Symbol, T.untyped]).returns(T.self_type) }
-  def update(hash); end
-end
-
-# @abstract Subclasses must implement the `abstract` methods below.
-#
-# source://kirei//lib/kirei/base_model.rb#50
-module Kirei::BaseModel::BaseClassInterface
-  interface!
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#64
-  sig { abstract.returns(T.untyped) }
-  def all; end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#68
-  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
-  def create(hash); end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#88
-  sig { abstract.returns(T.untyped) }
-  def db; end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#56
-  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
-  def find_by(hash); end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#76
-  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
-  def resolve(hash); end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#80
-  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
-  def resolve_first(hash); end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#84
-  sig { abstract.returns(T.untyped) }
-  def table_name; end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#60
-  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
-  def where(hash); end
-
-  # @abstract
-  #
-  # source://kirei//lib/kirei/base_model.rb#72
-  sig { abstract.params(attributes: T.untyped).void }
-  def wrap_jsonb_non_primivitives!(attributes); end
-end
-
-# source://kirei//lib/kirei/base_model.rb#92
-module Kirei::BaseModel::ClassMethods
-  extend T::Generic
-  include ::Kirei::BaseModel::BaseClassInterface
-
-  has_attached_class!
-
-  # source://kirei//lib/kirei/base_model.rb#131
-  sig { override.returns(T::Array[T.attached_class]) }
-  def all; end
-
-  # default values defined in the model are used, if omitted in the hash
-  #
-  # source://kirei//lib/kirei/base_model.rb#142
-  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.attached_class) }
-  def create(hash); end
-
-  # source://kirei//lib/kirei/base_model.rb#117
-  sig { override.returns(::Sequel::Dataset) }
-  def db; end
-
-  # source://kirei//lib/kirei/base_model.rb#183
-  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
-  def find_by(hash); end
-
-  # Extra or unknown properties present in the Hash do not raise exceptions at
-  # runtime unless the optional strict argument to from_hash is passed
-  #
-  # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
-  # "strict" defaults to "false".
-  #
-  # source://kirei//lib/kirei/base_model.rb#198
-  sig do
-    override
-      .params(
-        query: T.any(::Sequel::Dataset, T::Array[T::Hash[::Symbol, T.untyped]]),
-        strict: T.nilable(T::Boolean)
-      ).returns(T::Array[T.attached_class])
-  end
-  def resolve(query, strict = T.unsafe(nil)); end
-
-  # source://kirei//lib/kirei/base_model.rb#214
-  sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
-  def resolve_first(query, strict = T.unsafe(nil)); end
-
-  # defaults to a pluralized, underscored version of the class name
-  #
-  # source://kirei//lib/kirei/base_model.rb#106
-  sig { override.returns(::String) }
-  def table_name; end
-
-  # source://kirei//lib/kirei/base_model.rb#126
-  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T::Array[T.attached_class]) }
-  def where(hash); end
-
-  # source://kirei//lib/kirei/base_model.rb#166
-  sig { override.params(attributes: T::Hash[T.any(::String, ::Symbol), T.untyped]).void }
-  def wrap_jsonb_non_primivitives!(attributes); end
-end
-
 # source://kirei//lib/kirei/config.rb#5
 class Kirei::Config < ::T::Struct
   prop :logger, ::Logger, default: T.unsafe(nil)
@@ -358,6 +208,156 @@ end
 
 # source://kirei//lib/kirei/logger.rb#36
 Kirei::Logger::FILTERED = T.let(T.unsafe(nil), String)
+
+# source://kirei//lib/kirei/model.rb#5
+module Kirei::Model
+  mixes_in_class_methods ::Kirei::Model::ClassMethods
+
+  # source://kirei//lib/kirei/model.rb#10
+  sig { returns(::Kirei::Model::BaseClassInterface) }
+  def class; end
+
+  # Delete keeps the original object intact. Returns true if the record was deleted.
+  # Calling delete multiple times will return false after the first (successful) call.
+  #
+  # source://kirei//lib/kirei/model.rb#28
+  sig { returns(T::Boolean) }
+  def delete; end
+
+  # warning: this is not concurrency-safe
+  # save keeps the original object intact, and returns a new object with the updated values.
+  #
+  # source://kirei//lib/kirei/model.rb#36
+  sig { returns(T.self_type) }
+  def save; end
+
+  # An update keeps the original object intact, and returns a new object with the updated values.
+  #
+  # source://kirei//lib/kirei/model.rb#18
+  sig { params(hash: T::Hash[::Symbol, T.untyped]).returns(T.self_type) }
+  def update(hash); end
+end
+
+# @abstract Subclasses must implement the `abstract` methods below.
+#
+# source://kirei//lib/kirei/model.rb#50
+module Kirei::Model::BaseClassInterface
+  interface!
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#64
+  sig { abstract.returns(T.untyped) }
+  def all; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#68
+  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+  def create(hash); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#88
+  sig { abstract.returns(T.untyped) }
+  def db; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#56
+  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+  def find_by(hash); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#76
+  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+  def resolve(hash); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#80
+  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+  def resolve_first(hash); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#84
+  sig { abstract.returns(T.untyped) }
+  def table_name; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#60
+  sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+  def where(hash); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model.rb#72
+  sig { abstract.params(attributes: T.untyped).void }
+  def wrap_jsonb_non_primivitives!(attributes); end
+end
+
+# source://kirei//lib/kirei/model.rb#92
+module Kirei::Model::ClassMethods
+  extend T::Generic
+  include ::Kirei::Model::BaseClassInterface
+
+  has_attached_class!
+
+  # source://kirei//lib/kirei/model.rb#131
+  sig { override.returns(T::Array[T.attached_class]) }
+  def all; end
+
+  # default values defined in the model are used, if omitted in the hash
+  #
+  # source://kirei//lib/kirei/model.rb#142
+  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.attached_class) }
+  def create(hash); end
+
+  # source://kirei//lib/kirei/model.rb#117
+  sig { override.returns(::Sequel::Dataset) }
+  def db; end
+
+  # source://kirei//lib/kirei/model.rb#183
+  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
+  def find_by(hash); end
+
+  # Extra or unknown properties present in the Hash do not raise exceptions at
+  # runtime unless the optional strict argument to from_hash is passed
+  #
+  # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
+  # "strict" defaults to "false".
+  #
+  # source://kirei//lib/kirei/model.rb#198
+  sig do
+    override
+      .params(
+        query: T.any(::Sequel::Dataset, T::Array[T::Hash[::Symbol, T.untyped]]),
+        strict: T.nilable(T::Boolean)
+      ).returns(T::Array[T.attached_class])
+  end
+  def resolve(query, strict = T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/model.rb#214
+  sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
+  def resolve_first(query, strict = T.unsafe(nil)); end
+
+  # defaults to a pluralized, underscored version of the class name
+  #
+  # source://kirei//lib/kirei/model.rb#106
+  sig { override.returns(::String) }
+  def table_name; end
+
+  # source://kirei//lib/kirei/model.rb#126
+  sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T::Array[T.attached_class]) }
+  def where(hash); end
+
+  # source://kirei//lib/kirei/model.rb#166
+  sig { override.params(attributes: T::Hash[T.any(::String, ::Symbol), T.untyped]).void }
+  def wrap_jsonb_non_primivitives!(attributes); end
+end
 
 # we don't know what Oj does under the hood with the options hash, so don't freeze it
 #

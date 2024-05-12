@@ -11,7 +11,7 @@
 
 class Airport < T::Struct
   extend T::Sig
-  include Kirei::BaseModel
+  include Kirei::Model
 
   const :id, String
   const :name, String
