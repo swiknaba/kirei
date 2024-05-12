@@ -3,6 +3,19 @@
 
 module Controllers
   class Airports < Base
+    before do
+      puts "running before filter from Airports 1"
+      TestApp.config.logger.info("running ANOTHER filter from Airports 1")
+    end
+
+    before do
+      puts "running before filter from Airports 2"
+    end
+
+    after do
+      puts "running AFTER filter from Airports 1"
+    end
+
     sig { returns(Kirei::Routing::RackResponseType) }
     def index
       airports = Airport.all

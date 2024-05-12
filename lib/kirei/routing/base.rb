@@ -50,8 +50,30 @@ module Kirei
                    {}
         end
 
-        instance = route.controller.new(params: params)
-        instance.public_send(route.action) # maybe have it return `returns(T.anything)`?
+        req_id = T.cast(env["HTTP_X_REQUEST_ID"], T.nilable(String))
+        req_id ||= "req_#{App.environment}_#{SecureRandom.uuid}"
+        Thread.current[:request_id] = req_id
+
+        controller = route.controller
+        before_hooks = collect_hooks(controller, :before_hooks)
+        run_hooks(before_hooks)
+
+        status, headers, body = T.let(
+          controller.new(params: params).public_send(route.action),
+          RackResponseType,
+        )
+
+        after_hooks = collect_hooks(controller, :after_hooks)
+        run_hooks(after_hooks)
+
+        headers["X-Request-Id"] ||= req_id
+
+
+        [
+          status,
+          headers,
+          body,
+        ]
       end
 
       #
@@ -74,6 +96,37 @@ module Kirei
           headers,
           [body],
         ]
+      end
+
+      sig { params(hooks: NilableHooksType).void }
+      private def run_hooks(hooks)
+        return if hooks.nil? || hooks.empty?
+
+        hooks.each(&:call)
+      end
+
+      sig do
+        params(
+          controller: T.class_of(BaseController),
+          hooks_type: Symbol,
+        ).returns(NilableHooksType)
+      end
+      private def collect_hooks(controller, hooks_type)
+        result = T.let(Set.new, T::Set[T.proc.void])
+
+        controller.ancestors.reverse.each do |ancestor|
+          next unless ancestor < BaseController
+
+          supported_hooks = %i[before_hooks after_hooks]
+          unless supported_hooks.include?(hooks_type)
+            raise "Unexpected hook type, got #{hooks_type}, expected one of: #{supported_hooks.join(",")}"
+          end
+
+          hooks = T.let(ancestor.public_send(hooks_type), NilableHooksType)
+          result.merge(hooks) if hooks&.any?
+        end
+
+        result
       end
     end
   end
