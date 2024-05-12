@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/all
 
 module Kirei
   module Routing
@@ -153,4 +153,4 @@ module Kirei
   end
 end
 
-# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/all
