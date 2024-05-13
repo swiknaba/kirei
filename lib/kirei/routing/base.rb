@@ -83,7 +83,6 @@ module Kirei
       end
 
       #
-      # Kirei::App#render
       # * "status": defaults to 200
       # * "headers": Kirei adds some default headers for security, but the user can override them
       #
@@ -95,8 +94,6 @@ module Kirei
         ).returns(RackResponseType)
       end
       def render(body, status: 200, headers: {})
-        # merge default headers
-        # support a "type" to set content-type header? (or default to json, and users must set the header themselves for other types?)
         [
           status,
           headers,
@@ -106,7 +103,7 @@ module Kirei
 
       sig { returns(T::Hash[String, String]) }
       def default_headers
-        # "Access-Control-Allow-Origin": the user should set that
+        # "Access-Control-Allow-Origin": the user should set that, see comment about "cors" above
         {
           # security relevant headers
           "X-Frame-Options" => "DENY",
