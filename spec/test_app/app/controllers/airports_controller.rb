@@ -4,16 +4,13 @@
 module Controllers
   class AirportsController < Base
     before do
-      puts "running before filter from Airports 1"
-      TestApp.config.logger.info("running ANOTHER filter from Airports 1")
-    end
-
-    before do
-      puts "running before filter from Airports 2"
+      TestApp.config.logger.info(
+        "filter running BEFORE any action of AirportsController",
+      )
     end
 
     after do
-      puts "running AFTER filter from Airports 1"
+      puts "running AFTER filter from Airports"
     end
 
     sig { returns(T.anything) }

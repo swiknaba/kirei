@@ -17,6 +17,9 @@ module Kirei
       sig { returns(T::Hash[String, T.untyped]) }
       attr_reader :params
 
+      sig { returns(Router) }
+      attr_reader :router; private :router
+
       sig { params(env: RackEnvType).returns(RackResponseType) }
       def call(env)
         http_verb = Router::Verb.deserialize(env.fetch("REQUEST_METHOD"))
@@ -27,7 +30,7 @@ module Kirei
         # -> use https://github.com/cyu/rack-cors ?
         #
 
-        route = Router.instance.get(http_verb, req_path)
+        route = router.get(http_verb, req_path)
         return [404, {}, ["Not Found"]] if route.nil?
 
         params = case route.verb

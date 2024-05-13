@@ -402,7 +402,7 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#21
+  # source://kirei//lib/kirei/routing/base.rb#24
   sig do
     params(
       env: T::Hash[::String, T.any(::IO, ::Numeric, ::Puma::Client, ::Puma::Configuration, ::String, ::StringIO, ::TCPSocket, T::Array[T.untyped], T::Boolean)]
@@ -410,7 +410,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#105
+  # source://kirei//lib/kirei/routing/base.rb#108
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -422,7 +422,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#94
+  # source://kirei//lib/kirei/routing/base.rb#97
   sig do
     params(
       body: ::String,
@@ -434,7 +434,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#135
+  # source://kirei//lib/kirei/routing/base.rb#138
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -443,7 +443,11 @@ class Kirei::Routing::Base
   end
   def collect_hooks(controller, hooks_type); end
 
-  # source://kirei//lib/kirei/routing/base.rb#123
+  # source://kirei//lib/kirei/routing/base.rb#21
+  sig { returns(::Kirei::Routing::Router) }
+  def router; end
+
+  # source://kirei//lib/kirei/routing/base.rb#126
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end

@@ -6,11 +6,11 @@ module Controllers
     extend T::Sig
 
     before do
-      puts "running before filter from Base"
+      puts "filter running BEFORE any action in any controller"
     end
 
     after do
-      puts "running AFTER filter from Base"
+      puts "filter running AFTER any action in any controller"
     end
   end
 end
