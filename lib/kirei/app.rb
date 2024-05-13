@@ -2,6 +2,9 @@
 # frozen_string_literal: true
 
 module Kirei
+  #
+  # This is the entrypoint into the application; it implements the Rack interface.
+  #
   class App < Routing::Base
     class << self
       extend T::Sig

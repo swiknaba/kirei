@@ -24,41 +24,43 @@ module Kirei
   end
 end
 
-# source://kirei//lib/kirei/app.rb#5
+# This is the entrypoint into the application; it implements the Rack interface.
+#
+# source://kirei//lib/kirei/app.rb#8
 class Kirei::App < ::Kirei::Routing::Base
   class << self
     # convenience method since "Kirei.configuration" must be nilable since it is nil
     # at the beginning of initilization of the app
     #
-    # source://kirei//lib/kirei/app.rb#14
+    # source://kirei//lib/kirei/app.rb#17
     sig { returns(::Kirei::Config) }
     def config; end
 
     # Returns the name of the database based on the app name and the environment,
     # e.g. "myapp_development"
     #
-    # source://kirei//lib/kirei/app.rb#52
+    # source://kirei//lib/kirei/app.rb#55
     sig { returns(::String) }
     def default_db_name; end
 
     # Returns the database URL based on the DATABASE_URL environment variable or
     # a default value based on the default_db_name
     #
-    # source://kirei//lib/kirei/app.rb#61
+    # source://kirei//lib/kirei/app.rb#64
     sig { returns(::String) }
     def default_db_url; end
 
     # Returns ENV["RACK_ENV"] or "development" if it is not set
     #
-    # source://kirei//lib/kirei/app.rb#43
+    # source://kirei//lib/kirei/app.rb#46
     sig { returns(::String) }
     def environment; end
 
-    # source://kirei//lib/kirei/app.rb#69
+    # source://kirei//lib/kirei/app.rb#72
     sig { returns(::Sequel::Database) }
     def raw_db_connection; end
 
-    # source://kirei//lib/kirei/app.rb#19
+    # source://kirei//lib/kirei/app.rb#22
     sig { returns(::Pathname) }
     def root; end
 
@@ -67,7 +69,7 @@ class Kirei::App < ::Kirei::Routing::Base
     # * ENV["GIT_SHA"]
     # * `git rev-parse --short HEAD`
     #
-    # source://kirei//lib/kirei/app.rb#30
+    # source://kirei//lib/kirei/app.rb#33
     sig { returns(::String) }
     def version; end
   end
@@ -410,7 +412,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#108
+  # source://kirei//lib/kirei/routing/base.rb#105
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -418,11 +420,10 @@ class Kirei::Routing::Base
   sig { returns(T::Hash[::String, T.untyped]) }
   def params; end
 
-  # Kirei::App#render
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#97
+  # source://kirei//lib/kirei/routing/base.rb#96
   sig do
     params(
       body: ::String,
@@ -434,7 +435,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#138
+  # source://kirei//lib/kirei/routing/base.rb#135
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -447,7 +448,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#126
+  # source://kirei//lib/kirei/routing/base.rb#123
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
