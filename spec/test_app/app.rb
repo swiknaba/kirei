@@ -18,6 +18,7 @@ loader = Zeitwerk::Loader.new
 loader.tag = File.basename(__FILE__, ".rb")
 loader.push_dir("#{File.dirname(__FILE__)}/app")
 loader.push_dir("#{File.dirname(__FILE__)}/app/models") # make models a root namespace so we don't infer a `Models::` module
+loader.push_dir("#{File.dirname(__FILE__)}/app/services") # make services a root namespace so we don't infer a `Services::` module
 loader.setup
 
 # Fifth: load configs

@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Controllers
-  class Airports < Base
+  class AirportsController < Base
     before do
       puts "running before filter from Airports 1"
       TestApp.config.logger.info("running ANOTHER filter from Airports 1")
@@ -18,7 +18,9 @@ module Controllers
 
     sig { returns(T.anything) }
     def index
-      airports = Airport.all
+      search = params.fetch("q", nil)
+      airports = ::Airports::Filter.call(search)
+
       data = Oj.dump(airports.map(&:serialize))
 
       render(

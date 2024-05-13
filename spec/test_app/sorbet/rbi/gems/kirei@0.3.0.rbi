@@ -420,7 +420,7 @@ class Kirei::Routing::Base
 
   # Kirei::App#render
   # * "status": defaults to 200
-  # * "headers": defaults to an empty hash
+  # * "headers": Kirei adds some default headers for security, but the user can override them
   #
   # source://kirei//lib/kirei/routing/base.rb#94
   sig do

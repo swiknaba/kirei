@@ -13,7 +13,7 @@ module Kirei::Routing
       Router::Route.new(
         verb: Router::Verb::GET,
         path: "/airports",
-        controller: Controllers::Airports,
+        controller: Controllers::AirportsController,
         action: "index",
       ),
     ],
