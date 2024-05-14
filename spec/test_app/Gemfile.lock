@@ -9,6 +9,7 @@ PATH
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
       sorbet-runtime (~> 0.5)
+      statsd-instrument (~> 3.0)
       tzinfo-data (~> 1.0)
       zeitwerk (~> 2.5)
 
@@ -54,6 +55,7 @@ GEM
       sorbet-static-and-runtime (>= 0.5.10187)
       syntax_tree (>= 6.1.1)
       thor (>= 0.19.2)
+    statsd-instrument (3.7.0)
     syntax_tree (6.2.0)
       prettier_print (>= 1.2.0)
     tapioca (0.12.0)
@@ -74,7 +76,7 @@ GEM
     yard-sorbet (0.8.1)
       sorbet-runtime (>= 0.5)
       yard (>= 0.9)
-    zeitwerk (2.6.13)
+    zeitwerk (2.6.14)
 
 PLATFORMS
   aarch64-linux

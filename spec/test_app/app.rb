@@ -34,8 +34,12 @@ Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
 class TestApp < Kirei::App
   config.app_name = "test_app"
 
+  # Logging
   config.log_level = Kirei::Logging::Level::INFO
   config.log_default_metadata = {
+    "some_feature_flag_enabled" => "true",
+  }
+  config.metric_default_tags = {
     "some_feature_flag_enabled" => "true",
   }
 end

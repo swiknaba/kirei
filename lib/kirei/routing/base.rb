@@ -22,6 +22,8 @@ module Kirei
 
       sig { params(env: RackEnvType).returns(RackResponseType) }
       def call(env)
+        start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
+
         http_verb = Router::Verb.deserialize(env.fetch("REQUEST_METHOD"))
         req_path = T.cast(env.fetch("REQUEST_PATH"), String)
         #
@@ -67,15 +69,15 @@ module Kirei
           meta: params,
         )
 
+        statsd_timing_tags = {
+          "controller" => controller.name,
+          "route" => route.action,
+        }
+        Logging::Metric.inject_defaults(statsd_timing_tags)
+
         status, headers, response_body = T.cast(
           controller.new(params: params).public_send(route.action),
           RackResponseType,
-        )
-
-        Kirei::Logging::Logger.call(
-          level: Kirei::Logging::Level::INFO,
-          label: "Request Finished",
-          meta: { "response.body" => response_body },
         )
 
         after_hooks = collect_hooks(controller, :after_hooks)
@@ -97,6 +99,18 @@ module Kirei
           headers,
           response_body,
         ]
+      ensure
+        stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
+        if start # early return for 404
+          latency_in_ms = stop - start
+          ::StatsD.measure("request", latency_in_ms, tags: statsd_timing_tags)
+
+          Kirei::Logging::Logger.call(
+            level: Kirei::Logging::Level::INFO,
+            label: "Request Finished",
+            meta: { "response.body" => response_body, "response.latency_in_ms" => latency_in_ms },
+          )
+        end
       end
 
       #
