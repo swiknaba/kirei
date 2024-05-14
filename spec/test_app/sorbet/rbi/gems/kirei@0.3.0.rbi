@@ -80,6 +80,7 @@ class Kirei::Config < ::T::Struct
   prop :logger, ::Logger, default: T.unsafe(nil)
   prop :log_transformer, T.nilable(T.proc.params(msg: T::Hash[::Symbol, T.untyped]).returns(T::Array[::String]))
   prop :log_default_metadata, T::Hash[::Symbol, ::String], default: T.unsafe(nil)
+  prop :log_level, ::Kirei::Logging::Level, default: T.unsafe(nil)
   prop :sensitive_keys, T::Array[::Regexp], default: T.unsafe(nil)
   prop :app_name, ::String, default: T.unsafe(nil)
   prop :db_extensions, T::Array[::Symbol], default: T.unsafe(nil)
@@ -172,7 +173,7 @@ end
 
 # Example Usage:
 #
-#    Kirei::Logger.call(
+#    Kirei::Logging::Logger.call(
 #      level: :info,
 #      label: "Request started",
 #      meta: {
@@ -188,33 +189,54 @@ end
 # You can also build on top of the provided log transformer:
 #
 #   Kirei::App.config.log_transformer = Proc.new do |meta|
-#      flattened_meta = Kirei::Logger.flatten_hash_and_mask_sensitive_values(meta)
+#      flattened_meta = Kirei::Logging::Logger.flatten_hash_and_mask_sensitive_values(meta)
 #      # Do something with the flattened meta
 #      flattened_meta.map { _1.to_json }
 #   end
 #
-# NOTE: The log transformer must return an array of strings to allow emitting multiple lines per log event.
+# NOTE:
+#    * The log transformer must return an array of strings to allow emitting multiple lines per log event.
+#    * When ever possible, key names follow OpenTelemetry Semantic Conventions, https://opentelemetry.io/docs/concepts/semantic-conventions/
 #
-# source://kirei//lib/kirei/logger.rb#33
-class Kirei::Logger
-  # source://kirei//lib/kirei/logger.rb#41
+# source://kirei//lib/kirei/config.rb#0
+module Kirei::Logging; end
+
+# source://kirei//lib/kirei/logging/level.rb#6
+class Kirei::Logging::Level < ::T::Enum
+  enums do
+    UNKNOWN = new
+    FATAL = new
+    ERROR = new
+    WARN = new
+    INFO = new
+    DEBUG = new
+  end
+
+  # source://kirei//lib/kirei/logging/level.rb#19
+  sig { returns(::String) }
+  def to_human; end
+end
+
+# source://kirei//lib/kirei/logging/logger.rb#36
+class Kirei::Logging::Logger
+  # source://kirei//lib/kirei/logging/logger.rb#44
   sig { void }
   def initialize; end
 
-  # source://kirei//lib/kirei/logger.rb#87
-  sig { params(level: T.any(::String, ::Symbol), label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
+  # source://kirei//lib/kirei/logging/logger.rb#95
+  sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
   def call(level:, label:, meta: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/logger.rb#104
+  # source://kirei//lib/kirei/logging/logger.rb#110
   sig { returns(::Thread) }
   def start_logging_thread; end
 
   class << self
-    # source://kirei//lib/kirei/logger.rb#74
-    sig { params(level: T.any(::String, ::Symbol), label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
+    # source://kirei//lib/kirei/logging/logger.rb#77
+    sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
     def call(level:, label:, meta: T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logger.rb#152
+    # source://kirei//lib/kirei/logging/logger.rb#148
     sig do
       params(
         hash: T::Hash[T.any(::String, ::Symbol), T.untyped],
@@ -223,22 +245,22 @@ class Kirei::Logger
     end
     def flatten_hash_and_mask_sensitive_values(hash, prefix = T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logger.rb#48
-    sig { returns(::Kirei::Logger) }
+    # source://kirei//lib/kirei/logging/logger.rb#51
+    sig { returns(::Kirei::Logging::Logger) }
     def instance; end
 
-    # source://kirei//lib/kirei/logger.rb#53
+    # source://kirei//lib/kirei/logging/logger.rb#56
     sig { returns(::Logger) }
     def logger; end
 
-    # source://kirei//lib/kirei/logger.rb#139
+    # source://kirei//lib/kirei/logging/logger.rb#137
     sig { params(k: ::Symbol, v: ::String).returns(::String) }
     def mask(k, v); end
   end
 end
 
-# source://kirei//lib/kirei/logger.rb#36
-Kirei::Logger::FILTERED = T.let(T.unsafe(nil), String)
+# source://kirei//lib/kirei/logging/logger.rb#39
+Kirei::Logging::Logger::FILTERED = T.let(T.unsafe(nil), String)
 
 # source://kirei//lib/kirei/model.rb#5
 module Kirei::Model
@@ -412,7 +434,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#105
+  # source://kirei//lib/kirei/routing/base.rb#110
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -423,7 +445,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#96
+  # source://kirei//lib/kirei/routing/base.rb#101
   sig do
     params(
       body: ::String,
@@ -435,7 +457,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#135
+  # source://kirei//lib/kirei/routing/base.rb#140
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -448,7 +470,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#123
+  # source://kirei//lib/kirei/routing/base.rb#128
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end

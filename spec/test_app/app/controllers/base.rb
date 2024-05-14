@@ -6,7 +6,9 @@ module Controllers
     extend T::Sig
 
     before do
-      puts "filter running BEFORE any action in any controller"
+      # set this to e.g. the ID of the currently authenticated user
+      # avoid PII, since this is attached to each log line.
+      Thread.current[:enduser_id] = "user_c9998ac1"
     end
 
     after do

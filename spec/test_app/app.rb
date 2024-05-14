@@ -30,9 +30,14 @@ loader.setup
 # Fifth: load configs
 Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
 
+# Last: configure the Kirei App
 class TestApp < Kirei::App
-  # Kirei configuration
   config.app_name = "test_app"
+
+  config.log_level = Kirei::Logging::Level::INFO
+  config.log_default_metadata = {
+    some_feature_flag_enabled: "true",
+  }
 end
 
 loader.eager_load

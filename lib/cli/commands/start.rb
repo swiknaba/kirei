@@ -13,7 +13,7 @@ module Cli
           app_name = app_name.split("_").map(&:capitalize).join if app_name.include?("_")
           NewApp::Execute.call(app_name: app_name)
         else
-          Kirei::Logger.logger.info("Unknown command")
+          Kirei::Logging::Logger.logger.info("Unknown command")
         end
       end
     end

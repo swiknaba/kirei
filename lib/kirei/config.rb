@@ -18,6 +18,7 @@ module Kirei
     prop :logger, ::Logger, factory: -> { ::Logger.new($stdout) }
     prop :log_transformer, T.nilable(T.proc.params(msg: T::Hash[Symbol, T.untyped]).returns(T::Array[String]))
     prop :log_default_metadata, T::Hash[Symbol, String], default: {}
+    prop :log_level, Kirei::Logging::Level, default: Kirei::Logging::Level::INFO
 
     # dup to allow the user to extend the existing list of sensitive keys
     prop :sensitive_keys, T::Array[Regexp], factory: -> { SENSITIVE_KEYS.dup }

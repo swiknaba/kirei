@@ -49,7 +49,7 @@ module Kirei
                    body.rewind # TODO: maybe don't rewind if we don't need to?
                    T.cast(res, T::Hash[String, T.untyped])
                  else
-                   Logger.logger.warn("Unsupported HTTP verb: #{http_verb.serialize} send to #{req_path}")
+                   Logging::Logger.logger.warn("Unsupported HTTP verb: #{http_verb.serialize} send to #{req_path}")
                    {}
         end
 
@@ -74,6 +74,11 @@ module Kirei
         default_headers.each do |header_name, default_value|
           headers[header_name] ||= default_value
         end
+
+        # reset global variables after the request has been served
+        # and after all "after" hooks have run to avoid leaking
+        Thread.current[:enduser_id] = nil
+        Thread.current[:request_id] = nil
 
         [
           status,

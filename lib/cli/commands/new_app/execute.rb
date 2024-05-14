@@ -16,7 +16,7 @@ module Cli
           Files::Routes.call(app_name)
           Files::SorbetConfig.call
 
-          Kirei::Logger.logger.info(
+          Kirei::Logging::Logger.logger.info(
             "Kirei app '#{app_name}' scaffolded successfully!",
           )
         end
