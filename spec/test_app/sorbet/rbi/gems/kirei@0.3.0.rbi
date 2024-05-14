@@ -175,7 +175,7 @@ end
 # Example Usage:
 #
 #    Kirei::Logging::Logger.call(
-#      level: :info,
+#      level: Kirei::Logging::Level::INFO,
 #      label: "Request started",
 #      meta: {
 #        key: "value",
@@ -186,7 +186,9 @@ end
 #
 #    Kirei::App.config.log_transformer = Proc.new { _1 }
 #
-# By default, "meta" is flattened, and sensitive values are masked using see `Kirei::App.config.sensitive_keys`.
+# By default, "meta" is flattened, and sensitive values are masked using sane defaults that you
+# can finetune via `Kirei::App.config.sensitive_keys`.
+#
 # You can also build on top of the provided log transformer:
 #
 #   Kirei::App.config.log_transformer = Proc.new do |meta|
@@ -197,7 +199,7 @@ end
 #
 # NOTE:
 #    * The log transformer must return an array of strings to allow emitting multiple lines per log event.
-#    * When ever possible, key names follow OpenTelemetry Semantic Conventions, https://opentelemetry.io/docs/concepts/semantic-conventions/
+#    * Whenever possible, key names follow OpenTelemetry Semantic Conventions, https://opentelemetry.io/docs/concepts/semantic-conventions/
 #
 # source://kirei//lib/kirei/config.rb#0
 module Kirei::Logging; end
@@ -218,26 +220,26 @@ class Kirei::Logging::Level < ::T::Enum
   def to_human; end
 end
 
-# source://kirei//lib/kirei/logging/logger.rb#36
+# source://kirei//lib/kirei/logging/logger.rb#38
 class Kirei::Logging::Logger
-  # source://kirei//lib/kirei/logging/logger.rb#44
+  # source://kirei//lib/kirei/logging/logger.rb#46
   sig { void }
   def initialize; end
 
-  # source://kirei//lib/kirei/logging/logger.rb#95
+  # source://kirei//lib/kirei/logging/logger.rb#97
   sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::String, T.untyped]).void }
   def call(level:, label:, meta: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/logging/logger.rb#110
+  # source://kirei//lib/kirei/logging/logger.rb#112
   sig { returns(::Thread) }
   def start_logging_thread; end
 
   class << self
-    # source://kirei//lib/kirei/logging/logger.rb#77
+    # source://kirei//lib/kirei/logging/logger.rb#79
     sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::String, T.untyped]).void }
     def call(level:, label:, meta: T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logging/logger.rb#148
+    # source://kirei//lib/kirei/logging/logger.rb#150
     sig do
       params(
         hash: T::Hash[T.any(::String, ::Symbol), T.untyped],
@@ -246,21 +248,21 @@ class Kirei::Logging::Logger
     end
     def flatten_hash_and_mask_sensitive_values(hash, prefix = T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logging/logger.rb#51
+    # source://kirei//lib/kirei/logging/logger.rb#53
     sig { returns(::Kirei::Logging::Logger) }
     def instance; end
 
-    # source://kirei//lib/kirei/logging/logger.rb#56
+    # source://kirei//lib/kirei/logging/logger.rb#58
     sig { returns(::Logger) }
     def logger; end
 
-    # source://kirei//lib/kirei/logging/logger.rb#137
+    # source://kirei//lib/kirei/logging/logger.rb#139
     sig { params(k: ::String, v: ::String).returns(::String) }
     def mask(k, v); end
   end
 end
 
-# source://kirei//lib/kirei/logging/logger.rb#39
+# source://kirei//lib/kirei/logging/logger.rb#41
 Kirei::Logging::Logger::FILTERED = T.let(T.unsafe(nil), String)
 
 # source://kirei//lib/kirei/logging/metric.rb#6
@@ -271,7 +273,7 @@ class Kirei::Logging::Metric
     def call(metric_name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
 
     # source://kirei//lib/kirei/logging/metric.rb#27
-    sig { params(tags: T::Hash[::String, T.untyped]).void }
+    sig { params(tags: T::Hash[::String, T.untyped]).returns(T::Hash[::String, T.untyped]) }
     def inject_defaults(tags); end
   end
 end
@@ -568,6 +570,22 @@ class Kirei::Routing::Verb < ::T::Enum
     OPTIONS = new
     TRACE = new
     CONNECT = new
+  end
+end
+
+# source://kirei//lib/kirei/service_runner.rb#5
+class Kirei::ServiceRunner
+  class << self
+    # source://kirei//lib/kirei/service_runner.rb#17
+    sig do
+      type_parameters(:T)
+        .params(
+          class_name: ::String,
+          log_tags: T::Hash[::String, T.untyped],
+          _: T.proc.returns(T.type_parameter(:T))
+        ).returns(T.type_parameter(:T))
+    end
+    def call(class_name, log_tags: T.unsafe(nil), &_); end
   end
 end
 

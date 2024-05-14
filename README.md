@@ -182,12 +182,45 @@ module Controllers
 
     sig { returns(T.anything) }
     def index
-      airports = Airport.all # T::Array[Airport]
+      search = T.let(params.fetch("q", nil), T.nilable(String))
+
+      airports = Kirei::ServiceRunner.call("Airports::Filter") do
+        Airports::Filter.call(search) # T::Array[Airport]
+      end
 
       # or use a serializer
       data = Oj.dump(airports.map(&:serialize))
 
       render(status: 200, body: data)
+    end
+  end
+end
+```
+
+Services can be PORO. You can wrap an execution in `Kirei::ServiceRunner` which will emit a standardized logline and track its execution time.
+
+```ruby
+module Airports
+  class Filter
+    extend T::Sig
+
+    sig do
+      params(
+        search: T.nilable(String),
+      ).returns(T::Array[Airport])
+    end
+    def self.call(search)
+      return Airport.all if search.nil?
+
+      #
+      # SELECT *
+      # FROM "airports"
+      # WHERE (("name" ILIKE 'xx%') OR ("id" ILIKE 'xx%'))
+      #
+      query = Airport.db.where(Sequel.ilike(:name, "#{search}%"))
+      query = query.or(Sequel.ilike(:id, "#{search}%"))
+
+      Airport.resolve(query)
     end
   end
 end

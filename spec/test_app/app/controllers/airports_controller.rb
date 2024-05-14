@@ -7,7 +7,9 @@ module Controllers
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      airports = ::Airports::Filter.call(search)
+      airports = Kirei::ServiceRunner.call("Airports::Filter") do
+        Airports::Filter.call(search)
+      end
 
       Kirei::Logging::Metric.call(
         MetricTypes::AIRPORTS_SEARCH_TERM.serialize,

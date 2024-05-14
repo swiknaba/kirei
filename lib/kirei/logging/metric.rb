@@ -23,7 +23,7 @@ module Kirei
         StatsD.increment(metric_name, value, tags: tags)
       end
 
-      sig { params(tags: T::Hash[String, T.untyped]).void }
+      sig { params(tags: T::Hash[String, T.untyped]).returns(T::Hash[String, T.untyped]) }
       def self.inject_defaults(tags)
         App.config.metric_default_tags.each_pair do |key, default_value|
           tags[key] ||= default_value
@@ -32,6 +32,8 @@ module Kirei
         tags["enduser.id"] ||= Thread.current[:enduser_id]
         tags["service.name"] ||= Kirei::App.config.app_name # OpenTelemetry::SemanticConventions::Resource::SERVICE_NAME
         tags["service.version"] = Kirei::App.version # OpenTelemetry::SemanticConventions::Resource::SERVICE_VERSION
+
+        tags
       end
     end
   end
