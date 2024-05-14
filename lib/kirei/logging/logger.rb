@@ -8,7 +8,7 @@ module Kirei
   # Example Usage:
   #
   #    Kirei::Logging::Logger.call(
-  #      level: :info,
+  #      level: Kirei::Logging::Level::INFO,
   #      label: "Request started",
   #      meta: {
   #        key: "value",
@@ -19,7 +19,9 @@ module Kirei
   #
   #    Kirei::App.config.log_transformer = Proc.new { _1 }
   #
-  # By default, "meta" is flattened, and sensitive values are masked using see `Kirei::App.config.sensitive_keys`.
+  # By default, "meta" is flattened, and sensitive values are masked using sane defaults that you
+  # can finetune via `Kirei::App.config.sensitive_keys`.
+  #
   # You can also build on top of the provided log transformer:
   #
   #   Kirei::App.config.log_transformer = Proc.new do |meta|
@@ -30,7 +32,7 @@ module Kirei
   #
   # NOTE:
   #    * The log transformer must return an array of strings to allow emitting multiple lines per log event.
-  #    * When ever possible, key names follow OpenTelemetry Semantic Conventions, https://opentelemetry.io/docs/concepts/semantic-conventions/
+  #    * Whenever possible, key names follow OpenTelemetry Semantic Conventions, https://opentelemetry.io/docs/concepts/semantic-conventions/
   #
   module Logging
     class Logger
