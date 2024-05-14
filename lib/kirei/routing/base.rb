@@ -24,7 +24,7 @@ module Kirei
       def call(env)
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
 
-        http_verb = Router::Verb.deserialize(env.fetch("REQUEST_METHOD"))
+        http_verb = Verb.deserialize(env.fetch("REQUEST_METHOD"))
         req_path = T.cast(env.fetch("REQUEST_PATH"), String)
         #
         # TODO: reject requests from unexpected hosts -> allow configuring allowed hosts in a `cors.rb` file
@@ -36,14 +36,14 @@ module Kirei
         return [404, {}, ["Not Found"]] if route.nil?
 
         params = case route.verb
-                 when Router::Verb::GET
+                 when Verb::GET
                    query = T.cast(env.fetch("QUERY_STRING"), String)
                    query.split("&").to_h do |p|
                      k, v = p.split("=")
                      k = T.cast(k, String)
                      [k, v]
                    end
-                 when Router::Verb::POST, Router::Verb::PUT, Router::Verb::PATCH
+                 when Verb::POST, Verb::PUT, Verb::PATCH
                    # TODO: based on content-type, parse the body differently
                    #       build-in support for JSON & XML
                    body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))

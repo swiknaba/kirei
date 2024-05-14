@@ -500,11 +500,24 @@ Kirei::Routing::RackEnvType = T.type_alias { T::Hash[::String, T.any(::IO, ::Num
 # source://kirei//lib/kirei/routing/rack_response_type.rb#7
 Kirei::Routing::RackResponseType = T.type_alias { [::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])] }
 
+# source://kirei//lib/kirei/routing/route.rb#6
+class Kirei::Routing::Route < ::T::Struct
+  const :verb, ::Kirei::Routing::Verb
+  const :path, ::String
+  const :controller, T.class_of(Kirei::Controller)
+  const :action, ::String
+
+  class << self
+    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    def inherited(s); end
+  end
+end
+
 # Usage:
 #
 # Router.add_routes([
 #   Route.new(
-#     verb: Kirei::Router::Verb::GET,
+#     verb: Verb::GET,
 #     path: "/livez",
 #     controller: Controllers::HealthController,
 #     action: "livez",
@@ -516,26 +529,21 @@ class Kirei::Routing::Router
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 
-  # source://kirei//lib/kirei/routing/router.rb#59
+  # source://kirei//lib/kirei/routing/router.rb#29
   sig { void }
   def initialize; end
 
-  # source://kirei//lib/kirei/routing/router.rb#72
-  sig do
-    params(
-      verb: ::Kirei::Routing::Router::Verb,
-      path: ::String
-    ).returns(T.nilable(::Kirei::Routing::Router::Route))
-  end
+  # source://kirei//lib/kirei/routing/router.rb#42
+  sig { params(verb: ::Kirei::Routing::Verb, path: ::String).returns(T.nilable(::Kirei::Routing::Route)) }
   def get(verb, path); end
 
-  # source://kirei//lib/kirei/routing/router.rb#64
-  sig { returns(T::Hash[::String, ::Kirei::Routing::Router::Route]) }
+  # source://kirei//lib/kirei/routing/router.rb#34
+  sig { returns(T::Hash[::String, ::Kirei::Routing::Route]) }
   def routes; end
 
   class << self
-    # source://kirei//lib/kirei/routing/router.rb#78
-    sig { params(routes: T::Array[::Kirei::Routing::Router::Route]).void }
+    # source://kirei//lib/kirei/routing/router.rb#48
+    sig { params(routes: T::Array[::Kirei::Routing::Route]).void }
     def add_routes(routes); end
 
     private
@@ -545,24 +553,11 @@ class Kirei::Routing::Router
   end
 end
 
-# source://kirei//lib/kirei/routing/router.rb#47
-class Kirei::Routing::Router::Route < ::T::Struct
-  const :verb, ::Kirei::Routing::Router::Verb
-  const :path, ::String
-  const :controller, T.class_of(Kirei::Controller)
-  const :action, ::String
-
-  class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
-    def inherited(s); end
-  end
-end
-
-# source://kirei//lib/kirei/routing/router.rb#54
-Kirei::Routing::Router::RoutesHash = T.type_alias { T::Hash[::String, ::Kirei::Routing::Router::Route] }
-
 # source://kirei//lib/kirei/routing/router.rb#24
-class Kirei::Routing::Router::Verb < ::T::Enum
+Kirei::Routing::Router::RoutesHash = T.type_alias { T::Hash[::String, ::Kirei::Routing::Route] }
+
+# source://kirei//lib/kirei/routing/verb.rb#6
+class Kirei::Routing::Verb < ::T::Enum
   enums do
     GET = new
     POST = new

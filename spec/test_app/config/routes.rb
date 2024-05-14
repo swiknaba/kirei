@@ -4,14 +4,14 @@
 module Kirei::Routing
   Router.add_routes(
     [
-      Router::Route.new(
-        verb: Router::Verb::GET,
+      Route.new(
+        verb: Verb::GET,
         path: "/livez",
         controller: Controllers::Health,
         action: "livez",
       ),
-      Router::Route.new(
-        verb: Router::Verb::GET,
+      Route.new(
+        verb: Verb::GET,
         path: "/airports",
         controller: Controllers::AirportsController,
         action: "index",
