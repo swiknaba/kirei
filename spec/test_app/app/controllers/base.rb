@@ -12,7 +12,11 @@ module Controllers
     end
 
     after do
-      puts "filter running AFTER any action in any controller"
+      Kirei::Logging::Logger.call(
+        level: Kirei::Logging::Level::DEBUG,
+        label: "after request action",
+        meta: { "debug" => "me" },
+      )
     end
   end
 end

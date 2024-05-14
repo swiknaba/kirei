@@ -3,20 +3,20 @@
 
 module Controllers
   class AirportsController < Base
-    before do
-      TestApp.config.logger.info(
-        "filter running BEFORE any action of AirportsController",
-      )
-    end
-
-    after do
-      puts "running AFTER filter from Airports"
-    end
-
     sig { returns(T.anything) }
     def index
-      search = params.fetch("q", nil)
+      search = T.let(params.fetch("q", nil), T.nilable(String))
+
       airports = ::Airports::Filter.call(search)
+
+      Kirei::Logging::Metric.call(
+        MetricTypes::AIRPORTS_SEARCH_TERM.serialize,
+        tags: {
+          "search.term": search,
+          "results.count": airports.count,
+          "results.0.id": airports.first&.id,
+        }
+      )
 
       data = Oj.dump(airports.map(&:serialize))
 
