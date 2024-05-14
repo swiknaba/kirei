@@ -71,7 +71,7 @@ module Kirei
         params(
           level: Logging::Level,
           label: String,
-          meta: T::Hash[Symbol, T.untyped],
+          meta: T::Hash[String, T.untyped],
         ).void
       end
       def self.call(level:, label:, meta: {})
@@ -79,8 +79,8 @@ module Kirei
         return if level.serialize < App.config.log_level.serialize
 
         # must extract data from current thread before passing this down to the logging thread
-        meta[:"enduser.id"] ||= Thread.current[:enduser_id] # OpenTelemetry::SemanticConventions::Trace::ENDUSER_ID
-        meta[:"service.instance.id"] ||= Thread.current[:request_id] # OpenTelemetry::SemanticConventions::Resource::SERVICE_INSTANCE_ID
+        meta["enduser.id"] ||= Thread.current[:enduser_id] # OpenTelemetry::SemanticConventions::Trace::ENDUSER_ID
+        meta["service.instance.id"] ||= Thread.current[:request_id] # OpenTelemetry::SemanticConventions::Resource::SERVICE_INSTANCE_ID
 
         instance.call(level: level, label: label, meta: meta)
       end
@@ -89,7 +89,7 @@ module Kirei
         params(
           level: Logging::Level,
           label: String,
-          meta: T::Hash[Symbol, T.untyped],
+          meta: T::Hash[String, T.untyped],
         ).void
       end
       def call(level:, label:, meta: {})
@@ -97,11 +97,11 @@ module Kirei
           meta[key] ||= value
         end
 
-        meta[:"service.name"] ||= Kirei::App.config.app_name # OpenTelemetry::SemanticConventions::Resource::SERVICE_NAME
-        meta[:"service.version"] = Kirei::App.version # OpenTelemetry::SemanticConventions::Resource::SERVICE_VERSION
-        meta[:timestamp] ||= Time.now.utc.iso8601
-        meta[:level] ||= level.to_human
-        meta[:label] ||= label
+        meta["service.name"] ||= Kirei::App.config.app_name # OpenTelemetry::SemanticConventions::Resource::SERVICE_NAME
+        meta["service.version"] = Kirei::App.version # OpenTelemetry::SemanticConventions::Resource::SERVICE_VERSION
+        meta["timestamp"] ||= Time.now.utc.iso8601
+        meta["level"] ||= level.to_human
+        meta["label"] ||= label
 
         @queue << meta
       end
@@ -130,7 +130,7 @@ module Kirei
       # rubocop:disable Naming/MethodParameterName
       sig do
         params(
-          k: Symbol,
+          k: String,
           v: String,
         ).returns(String)
       end
@@ -142,29 +142,29 @@ module Kirei
       sig do
         params(
           hash: T::Hash[T.any(Symbol, String), T.untyped],
-          prefix: Symbol,
-        ).returns(T::Hash[Symbol, T.untyped])
+          prefix: String,
+        ).returns(T::Hash[String, T.untyped])
       end
-      def self.flatten_hash_and_mask_sensitive_values(hash, prefix = :'')
-        result = T.let({}, T::Hash[Symbol, T.untyped])
-        Kirei::Helpers.deep_symbolize_keys!(hash)
-        hash = T.cast(hash, T::Hash[Symbol, T.untyped])
+      def self.flatten_hash_and_mask_sensitive_values(hash, prefix = "")
+        result = T.let({}, T::Hash[String, T.untyped])
+        Kirei::Helpers.deep_stringify_keys!(hash)
+        hash = T.cast(hash, T::Hash[String, T.untyped])
 
         hash.each do |key, value|
-          new_prefix = Kirei::Helpers.blank?(prefix) ? key : :"#{prefix}.#{key}"
+          new_prefix = Kirei::Helpers.blank?(prefix) ? key : "#{prefix}.#{key}"
 
           case value
           when Hash
             # Some libraries have a custom Hash class that inhert from Hash, but act differently, e.g. OmniAuth::AuthHash.
             # This results in `transform_keys` being available but without any effect.
             value = value.to_h if value.class != Hash
-            result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_sym), new_prefix))
+            result.merge!(flatten_hash_and_mask_sensitive_values(value.transform_keys(&:to_s), new_prefix))
           when Array
             value.each_with_index do |element, index|
               if element.is_a?(Hash) || element.is_a?(Array)
                 result.merge!(flatten_hash_and_mask_sensitive_values({ index => element }, new_prefix))
               else
-                result[:"#{new_prefix}.#{index}"] = element.is_a?(String) ? mask(key, element) : element
+                result["#{new_prefix}.#{index}"] = element.is_a?(String) ? mask(key, element) : element
               end
             end
           when String then result[new_prefix] = mask(key, value)
@@ -174,7 +174,7 @@ module Kirei
               serialized_value = value.serialize
               if serialized_value.is_a?(Hash)
                 result.merge!(
-                  flatten_hash_and_mask_sensitive_values(serialized_value.transform_keys(&:to_sym), new_prefix),
+                  flatten_hash_and_mask_sensitive_values(serialized_value.transform_keys(&:to_s), new_prefix),
                 )
               else
                 result[new_prefix] = serialized_value&.to_s

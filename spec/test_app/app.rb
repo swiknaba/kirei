@@ -36,7 +36,7 @@ class TestApp < Kirei::App
 
   config.log_level = Kirei::Logging::Level::INFO
   config.log_default_metadata = {
-    some_feature_flag_enabled: "true",
+    "some_feature_flag_enabled" => "true",
   }
 end
 

@@ -33,7 +33,7 @@ module Kirei
   # rubocop:disable Style/MutableConstant
   OJ_OPTIONS = T.let(
     {
-      mode: :compat, # required to dump hashes with symbol-keys
+      mode: :compat, # required to dump hashes with symbol-keys. @TODO(lud, 14.05.2024): drop this, and enforce String Keys?
       symbol_keys: false, # T::Struct.new works only with string-keys
     },
     T::Hash[Symbol, T.untyped],

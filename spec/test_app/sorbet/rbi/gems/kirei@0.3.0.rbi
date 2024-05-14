@@ -79,7 +79,7 @@ end
 class Kirei::Config < ::T::Struct
   prop :logger, ::Logger, default: T.unsafe(nil)
   prop :log_transformer, T.nilable(T.proc.params(msg: T::Hash[::Symbol, T.untyped]).returns(T::Array[::String]))
-  prop :log_default_metadata, T::Hash[::Symbol, ::String], default: T.unsafe(nil)
+  prop :log_default_metadata, T::Hash[::String, ::String], default: T.unsafe(nil)
   prop :log_level, ::Kirei::Logging::Level, default: T.unsafe(nil)
   prop :sensitive_keys, T::Array[::Regexp], default: T.unsafe(nil)
   prop :app_name, ::String, default: T.unsafe(nil)
@@ -224,7 +224,7 @@ class Kirei::Logging::Logger
   def initialize; end
 
   # source://kirei//lib/kirei/logging/logger.rb#95
-  sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
+  sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::String, T.untyped]).void }
   def call(level:, label:, meta: T.unsafe(nil)); end
 
   # source://kirei//lib/kirei/logging/logger.rb#110
@@ -233,15 +233,15 @@ class Kirei::Logging::Logger
 
   class << self
     # source://kirei//lib/kirei/logging/logger.rb#77
-    sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::Symbol, T.untyped]).void }
+    sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::String, T.untyped]).void }
     def call(level:, label:, meta: T.unsafe(nil)); end
 
     # source://kirei//lib/kirei/logging/logger.rb#148
     sig do
       params(
         hash: T::Hash[T.any(::String, ::Symbol), T.untyped],
-        prefix: ::Symbol
-      ).returns(T::Hash[::Symbol, T.untyped])
+        prefix: ::String
+      ).returns(T::Hash[::String, T.untyped])
     end
     def flatten_hash_and_mask_sensitive_values(hash, prefix = T.unsafe(nil)); end
 
@@ -254,7 +254,7 @@ class Kirei::Logging::Logger
     def logger; end
 
     # source://kirei//lib/kirei/logging/logger.rb#137
-    sig { params(k: ::Symbol, v: ::String).returns(::String) }
+    sig { params(k: ::String, v: ::String).returns(::String) }
     def mask(k, v); end
   end
 end
