@@ -61,9 +61,21 @@ module Kirei
         before_hooks = collect_hooks(controller, :before_hooks)
         run_hooks(before_hooks)
 
-        status, headers, body = T.cast(
+        Kirei::Logging::Logger.call(
+          level: Kirei::Logging::Level::INFO,
+          label: "Request Started",
+          meta: params,
+        )
+
+        status, headers, response_body = T.cast(
           controller.new(params: params).public_send(route.action),
           RackResponseType,
+        )
+
+        Kirei::Logging::Logger.call(
+          level: Kirei::Logging::Level::INFO,
+          label: "Request Finished",
+          meta: { "response.body" => response_body },
         )
 
         after_hooks = collect_hooks(controller, :after_hooks)
@@ -83,7 +95,7 @@ module Kirei
         [
           status,
           headers,
-          body,
+          response_body,
         ]
       end
 
