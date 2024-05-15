@@ -17,15 +17,28 @@ module Kirei
       end
       def self.call(class_name, log_tags: {}, &_)
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
-        yield
+        service = yield
+
+        service
       ensure
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         latency_in_ms = stop - T.must(start)
 
-        metric_tags = Logging::Metric.inject_defaults({})
+        result = case service
+                 when Services::Result
+                   service.success? ? "success" : "failure"
+                 else
+                   "unknown"
+        end
+
+        metric_tags = Logging::Metric.inject_defaults({ "service.result" => result })
         ::StatsD.measure(class_name, latency_in_ms, tags: metric_tags)
 
-        logtags = { "service.name" => class_name, "service.latency_in_ms" => latency_in_ms }
+        logtags = {
+          "service.name" => class_name,
+          "service.latency_in_ms" => latency_in_ms,
+          "service.result" => result,
+        }
         logtags.merge!(log_tags)
         Logging::Logger.call(level: Logging::Level::INFO, label: "Service Finished", meta: logtags)
       end
