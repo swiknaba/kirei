@@ -184,7 +184,7 @@ module Controllers
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      airports = Kirei::ServiceRunner.call("Airports::Filter") do
+      airports = Kirei::Services::Runner.call("Airports::Filter") do
         Airports::Filter.call(search) # T::Array[Airport]
       end
 
@@ -197,7 +197,7 @@ module Controllers
 end
 ```
 
-Services can be PORO. You can wrap an execution in `Kirei::ServiceRunner` which will emit a standardized logline and track its execution time.
+Services can be PORO. You can wrap an execution in `Kirei::Services::Runner` which will emit a standardized logline and track its execution time.
 
 ```ruby
 module Airports

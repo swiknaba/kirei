@@ -5,8 +5,8 @@ module Kirei
   module Errors
     class JsonApiErrorSource < T::Struct
       const :attribute, T.any(Symbol, String)
-      const :model, T.nilable(String), default: nil
-      const :id, T.nilable(String), default: nil
+      const :model, T.nilable(String)
+      const :id, T.nilable(String)
     end
   end
 end

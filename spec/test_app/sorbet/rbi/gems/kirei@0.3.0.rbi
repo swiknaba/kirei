@@ -126,6 +126,36 @@ class Kirei::Controller < ::Kirei::Routing::Base
   end
 end
 
+# source://kirei//lib/kirei.rb#0
+module Kirei::Errors; end
+
+# https://jsonapi.org/format/#errors
+# Error objects MUST be returned as an array keyed by errors in the top level of a JSON:API document.
+#
+# source://kirei//lib/kirei/errors/json_api_error.rb#10
+class Kirei::Errors::JsonApiError < ::T::Struct
+  const :code, ::Symbol
+  const :detail, T.nilable(::String)
+  const :source, T.nilable(::Kirei::Errors::JsonApiErrorSource)
+
+  class << self
+    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    def inherited(s); end
+  end
+end
+
+# source://kirei//lib/kirei/errors/json_api_error_source.rb#6
+class Kirei::Errors::JsonApiErrorSource < ::T::Struct
+  const :attribute, T.any(::String, ::Symbol)
+  const :model, T.nilable(::String)
+  const :id, T.nilable(::String)
+
+  class << self
+    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    def inherited(s); end
+  end
+end
+
 # source://kirei//lib/kirei.rb#44
 Kirei::GEM_ROOT = T.let(T.unsafe(nil), String)
 
@@ -573,10 +603,41 @@ class Kirei::Routing::Verb < ::T::Enum
   end
 end
 
-# source://kirei//lib/kirei/service_runner.rb#5
-class Kirei::ServiceRunner
+# source://kirei//lib/kirei.rb#0
+module Kirei::Services; end
+
+# source://kirei//lib/kirei/services/result.rb#6
+class Kirei::Services::Result
+  extend T::Generic
+
+  ErrorType = type_member { { fixed: T::Array[::Kirei::Errors::JsonApiError] } }
+  ResultType = type_member { { upper: Object } }
+
+  # source://kirei//lib/kirei/services/result.rb#19
+  sig { params(result: T.nilable(ResultType), errors: ErrorType).void }
+  def initialize(result: T.unsafe(nil), errors: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/services/result.rb#46
+  sig { returns(ErrorType) }
+  def errors; end
+
+  # source://kirei//lib/kirei/services/result.rb#34
+  sig { returns(T::Boolean) }
+  def failed?; end
+
+  # source://kirei//lib/kirei/services/result.rb#39
+  sig { returns(ResultType) }
+  def result; end
+
+  # source://kirei//lib/kirei/services/result.rb#29
+  sig { returns(T::Boolean) }
+  def success?; end
+end
+
+# source://kirei//lib/kirei/services/runner.rb#6
+class Kirei::Services::Runner
   class << self
-    # source://kirei//lib/kirei/service_runner.rb#17
+    # source://kirei//lib/kirei/services/runner.rb#18
     sig do
       type_parameters(:T)
         .params(

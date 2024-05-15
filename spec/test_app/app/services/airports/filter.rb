@@ -8,10 +8,10 @@ module Airports
     sig do
       params(
         search: T.nilable(String),
-      ).returns(T::Array[Airport])
+      ).returns(Kirei::Services::Result[T::Array[Airport]])
     end
     def self.call(search)
-      return Airport.all if search.nil?
+      return Kirei::Services::Result.new(result: Airport.all) if search.nil?
 
       #
       # SELECT *
@@ -21,7 +21,7 @@ module Airports
       query = Airport.db.where(Sequel.ilike(:name, "#{search}%"))
       query = query.or(Sequel.ilike(:id, "#{search}%"))
 
-      Airport.resolve(query)
+      Kirei::Services::Result.new(result: Airport.resolve(query))
     end
   end
 end

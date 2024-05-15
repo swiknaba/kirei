@@ -7,9 +7,16 @@ module Controllers
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      airports = Kirei::ServiceRunner.call("Airports::Filter") do
+      result = Kirei::Services::Runner.call("Airports::Filter") do
         Airports::Filter.call(search)
       end
+
+      if result.failed?
+        errs = { "errors" => result.errors.map(&:serialize)}
+        return render(Oj.dump(errs), status: 400)
+      end
+
+      airports = result.result
 
       Kirei::Logging::Metric.call(
         MetricTypes::AIRPORTS_SEARCH_TERM.serialize,
