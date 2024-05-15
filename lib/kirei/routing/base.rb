@@ -89,11 +89,6 @@ module Kirei
           headers[header_name] ||= default_value
         end
 
-        # reset global variables after the request has been served
-        # and after all "after" hooks have run to avoid leaking
-        Thread.current[:enduser_id] = nil
-        Thread.current[:request_id] = nil
-
         [
           status,
           headers,
@@ -111,6 +106,11 @@ module Kirei
             meta: { "response.body" => response_body, "response.latency_in_ms" => latency_in_ms },
           )
         end
+
+        # reset global variables after the request has been served
+        # and after all "after" hooks have run to avoid leaking
+        Thread.current[:enduser_id] = nil
+        Thread.current[:request_id] = nil
       end
 
       #
