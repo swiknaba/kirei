@@ -134,7 +134,7 @@ module Kirei::Errors; end
 #
 # source://kirei//lib/kirei/errors/json_api_error.rb#10
 class Kirei::Errors::JsonApiError < ::T::Struct
-  const :code, ::Symbol
+  const :code, ::String
   const :detail, T.nilable(::String)
   const :source, T.nilable(::Kirei::Errors::JsonApiErrorSource)
 
@@ -146,7 +146,7 @@ end
 
 # source://kirei//lib/kirei/errors/json_api_error_source.rb#6
 class Kirei::Errors::JsonApiErrorSource < ::T::Struct
-  const :attribute, T.any(::String, ::Symbol)
+  const :attribute, ::String
   const :model, T.nilable(::String)
   const :id, T.nilable(::String)
 

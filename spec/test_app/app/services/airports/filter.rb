@@ -11,6 +11,7 @@ module Airports
       ).returns(Kirei::Services::Result[T::Array[Airport]])
     end
     def self.call(search)
+      return test_errors if test_failure? # simulate a failure for testing purposes
       return Kirei::Services::Result.new(result: Airport.all) if search.nil?
 
       #
@@ -22,6 +23,21 @@ module Airports
       query = query.or(Sequel.ilike(:id, "#{search}%"))
 
       Kirei::Services::Result.new(result: Airport.resolve(query))
+    end
+
+    sig { returns(T::Boolean) }
+    def self.test_failure?
+      Kernel.rand < 0.3 ? true : false
+    end
+
+    sig { returns(Kirei::Services::Result[T::Array[Airport]]) }
+    def self.test_errors
+      err = Kirei::Errors::JsonApiError.new(
+        code: "500",
+        detail: "Service failed",
+      )
+
+      Kirei::Services::Result.new(errors: [err])
     end
   end
 end
