@@ -269,7 +269,7 @@ class Kirei::Logging::Logger
     sig { params(level: ::Kirei::Logging::Level, label: ::String, meta: T::Hash[::String, T.untyped]).void }
     def call(level:, label:, meta: T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logging/logger.rb#150
+    # source://kirei//lib/kirei/logging/logger.rb#153
     sig do
       params(
         hash: T::Hash[T.any(::String, ::Symbol), T.untyped],
@@ -286,7 +286,7 @@ class Kirei::Logging::Logger
     sig { returns(::Logger) }
     def logger; end
 
-    # source://kirei//lib/kirei/logging/logger.rb#139
+    # source://kirei//lib/kirei/logging/logger.rb#142
     sig { params(k: ::String, v: ::String).returns(::String) }
     def mask(k, v); end
   end
