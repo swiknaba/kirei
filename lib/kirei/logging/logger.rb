@@ -124,7 +124,10 @@ module Kirei
               )]
             end
 
-            loglines.each { Kirei::Logging::Logger.logger.unknown(_1) }
+            loglines.each do |logline|
+              logline = "\n#{logline}\n" if Kirei::App.environment == "development"
+              Kirei::Logging::Logger.logger.unknown(logline)
+            end
           end
         end
       end
