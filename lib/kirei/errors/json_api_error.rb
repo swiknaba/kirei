@@ -11,7 +11,7 @@ module Kirei
       #
       # An application-specific error code, expressed as a string value.
       #
-      const :code, Symbol
+      const :code, String
 
       #
       # A human-readable explanation specific to this occurrence of the problem.
