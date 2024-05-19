@@ -27,3 +27,17 @@ Style/AccessModifierDeclarations:
 
 Layout/LineLength:
   Max: 120
+
+Metrics/MethodLength:
+  Max: 30
+  CountAsOne:
+    - 'array'
+    - 'heredoc'
+    - 'method_call'
+
+Metrics/ModuleLength:
+  Max: 100
+  CountAsOne:
+    - 'array'
+    - 'heredoc'
+    - 'method_call'
