@@ -35,15 +35,18 @@ module Kirei
       def table_name; end
 
       sig { abstract.returns(T.untyped) }
+      def query; end
+
+      sig { abstract.returns(T.untyped) }
       def db; end
 
-      sig { abstract.returns(Integer) }
+      sig { abstract.returns(T.untyped) }
       def human_id_length; end
 
-      sig { abstract.returns(String) }
+      sig { abstract.returns(T.untyped) }
       def human_id_prefix; end
 
-      sig { abstract.returns(String) }
+      sig { abstract.returns(T.untyped) }
       def generate_human_id; end
     end
   end

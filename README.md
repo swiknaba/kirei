@@ -82,13 +82,13 @@ Delete keeps the original object intact. Returns `true` if the record was delete
 success = user.delete # => T::Boolean
 
 # or delete by any query:
-User.db.where('...').delete # => Integer, number of deleted records
+User.query.where('...').delete # => Integer, number of deleted records
 ```
 
 To build more complex queries, Sequel can be used directly:
 
 ```ruby
-query = User.db.where({ name: 'John' })
+query = User.query.where({ name: 'John' })
 query = query.where('...') # "query" is a 'Sequel::Dataset' that you can chain as you like
 query = query.limit(10)
 
@@ -217,7 +217,7 @@ module Airports
       # FROM "airports"
       # WHERE (("name" ILIKE 'xx%') OR ("id" ILIKE 'xx%'))
       #
-      query = Airport.db.where(Sequel.ilike(:name, "#{search}%"))
+      query = Airport.query.where(Sequel.ilike(:name, "#{search}%"))
       query = query.or(Sequel.ilike(:id, "#{search}%"))
 
       Airport.resolve(query)

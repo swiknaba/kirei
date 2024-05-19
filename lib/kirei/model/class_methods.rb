@@ -25,8 +25,13 @@ module Kirei
       end
 
       sig { override.returns(Sequel::Dataset) }
+      def query
+        db[table_name.to_sym]
+      end
+
+      sig { override.returns(Sequel::Database) }
       def db
-        App.raw_db_connection[table_name.to_sym]
+        App.raw_db_connection
       end
 
       sig do
@@ -35,12 +40,12 @@ module Kirei
         ).returns(T::Array[T.attached_class])
       end
       def where(hash)
-        resolve(db.where(hash))
+        resolve(query.where(hash))
       end
 
       sig { override.returns(T::Array[T.attached_class]) }
       def all
-        resolve(db.all)
+        resolve(query.all)
       end
 
       # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -67,7 +72,7 @@ module Kirei
           all_attributes["updated_at"] = Time.now.utc
         end
 
-        pkey = T.let(db.insert(all_attributes), String)
+        pkey = T.let(query.insert(all_attributes), String)
 
         T.must(find_by({ id: pkey }))
       end
@@ -92,7 +97,7 @@ module Kirei
         ).returns(T.nilable(T.attached_class))
       end
       def find_by(hash)
-        resolve_first(db.where(hash))
+        resolve_first(query.where(hash))
       end
 
       # Extra or unknown properties present in the Hash do not raise exceptions at

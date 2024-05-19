@@ -19,7 +19,7 @@ module Airports
       # FROM "airports"
       # WHERE (("name" ILIKE 'xx%') OR ("id" ILIKE 'xx%'))
       #
-      query = Airport.db.where(Sequel.ilike(:name, "#{search}%"))
+      query = Airport.query.where(Sequel.ilike(:name, "#{search}%"))
       query = query.or(Sequel.ilike(:id, "#{search}%"))
 
       Kirei::Services::Result.new(result: Airport.resolve(query))

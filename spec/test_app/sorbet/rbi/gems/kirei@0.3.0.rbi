@@ -357,7 +357,7 @@ module Kirei::Model::BaseClassInterface
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#38
+  # source://kirei//lib/kirei/model/base_class_interface.rb#41
   sig { abstract.returns(T.untyped) }
   def db; end
 
@@ -369,21 +369,27 @@ module Kirei::Model::BaseClassInterface
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#47
-  sig { abstract.returns(::String) }
+  # source://kirei//lib/kirei/model/base_class_interface.rb#50
+  sig { abstract.returns(T.untyped) }
   def generate_human_id; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#41
-  sig { abstract.returns(::Integer) }
+  # source://kirei//lib/kirei/model/base_class_interface.rb#44
+  sig { abstract.returns(T.untyped) }
   def human_id_length; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#44
-  sig { abstract.returns(::String) }
+  # source://kirei//lib/kirei/model/base_class_interface.rb#47
+  sig { abstract.returns(T.untyped) }
   def human_id_prefix; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model/base_class_interface.rb#38
+  sig { abstract.returns(T.untyped) }
+  def query; end
 
   # @abstract
   #
@@ -423,40 +429,40 @@ module Kirei::Model::ClassMethods
 
   has_attached_class!
 
-  # source://kirei//lib/kirei/model/class_methods.rb#42
+  # source://kirei//lib/kirei/model/class_methods.rb#47
   sig { override.returns(T::Array[T.attached_class]) }
   def all; end
 
   # default values defined in the model are used, if omitted in the hash
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#53
+  # source://kirei//lib/kirei/model/class_methods.rb#58
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.attached_class) }
   def create(hash); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#28
-  sig { override.returns(::Sequel::Dataset) }
+  # source://kirei//lib/kirei/model/class_methods.rb#33
+  sig { override.returns(::Sequel::Database) }
   def db; end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#94
+  # source://kirei//lib/kirei/model/class_methods.rb#99
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
   def find_by(hash); end
 
   # Generates a human-readable ID for the record.
   # The ID is prefixed with the table name and an underscore.
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#144
+  # source://kirei//lib/kirei/model/class_methods.rb#149
   sig { override.returns(::String) }
   def generate_human_id; end
 
   # defaults to 6
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#133
+  # source://kirei//lib/kirei/model/class_methods.rb#138
   sig { override.returns(::Integer) }
   def human_id_length; end
 
   # defaults to "model_name" (table_name without the trailing "s")
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#137
+  # source://kirei//lib/kirei/model/class_methods.rb#142
   sig { override.returns(::String) }
   def human_id_prefix; end
 
@@ -464,13 +470,17 @@ module Kirei::Model::ClassMethods
   sig { returns(::String) }
   def model_name; end
 
+  # source://kirei//lib/kirei/model/class_methods.rb#28
+  sig { override.returns(::Sequel::Dataset) }
+  def query; end
+
   # Extra or unknown properties present in the Hash do not raise exceptions at
   # runtime unless the optional strict argument to from_hash is passed
   #
   # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
   # "strict" defaults to "false".
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#109
+  # source://kirei//lib/kirei/model/class_methods.rb#114
   sig do
     override
       .params(
@@ -480,7 +490,7 @@ module Kirei::Model::ClassMethods
   end
   def resolve(query, strict = T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#125
+  # source://kirei//lib/kirei/model/class_methods.rb#130
   sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
   def resolve_first(query, strict = T.unsafe(nil)); end
 
@@ -490,11 +500,11 @@ module Kirei::Model::ClassMethods
   sig { override.returns(::String) }
   def table_name; end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#37
+  # source://kirei//lib/kirei/model/class_methods.rb#42
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T::Array[T.attached_class]) }
   def where(hash); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#77
+  # source://kirei//lib/kirei/model/class_methods.rb#82
   sig { override.params(attributes: T::Hash[T.any(::String, ::Symbol), T.untyped]).void }
   def wrap_jsonb_non_primivitives!(attributes); end
 end

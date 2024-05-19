@@ -18,7 +18,7 @@ module Kirei
     def update(hash)
       hash[:updated_at] = Time.now.utc if respond_to?(:updated_at) && hash[:updated_at].nil?
       self.class.wrap_jsonb_non_primivitives!(hash)
-      self.class.db.where({ id: id }).update(hash)
+      self.class.query.where({ id: id }).update(hash)
       self.class.find_by({ id: id })
     end
 
@@ -26,7 +26,7 @@ module Kirei
     # Calling delete multiple times will return false after the first (successful) call.
     sig { returns(T::Boolean) }
     def delete
-      count = self.class.db.where({ id: id }).delete
+      count = self.class.query.where({ id: id }).delete
       count == 1
     end
 
