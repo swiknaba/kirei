@@ -15,6 +15,9 @@ module Cli
               # frozen_string_literal: true
 
               require "rake"
+              require_relative "app"
+
+              Dir.glob("#{Kirei::GEM_ROOT}/lib/tasks/**/*.rake").each { import(_1) }
 
               Dir.glob("lib/tasks/**/*.rake").each { import(_1) }
 
