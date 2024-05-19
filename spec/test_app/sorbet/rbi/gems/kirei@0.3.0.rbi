@@ -339,89 +339,130 @@ end
 
 # @abstract Subclasses must implement the `abstract` methods below.
 #
-# source://kirei//lib/kirei/model.rb#50
+# source://kirei//lib/kirei/model/base_class_interface.rb#8
 module Kirei::Model::BaseClassInterface
   interface!
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#64
+  # source://kirei//lib/kirei/model/base_class_interface.rb#20
   sig { abstract.returns(T.untyped) }
   def all; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#68
+  # source://kirei//lib/kirei/model/base_class_interface.rb#23
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def create(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#88
+  # source://kirei//lib/kirei/model/base_class_interface.rb#38
   sig { abstract.returns(T.untyped) }
   def db; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#56
+  # source://kirei//lib/kirei/model/base_class_interface.rb#14
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def find_by(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#76
+  # source://kirei//lib/kirei/model/base_class_interface.rb#47
+  sig { abstract.returns(::String) }
+  def generate_human_id; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model/base_class_interface.rb#41
+  sig { abstract.returns(::Integer) }
+  def human_id_length; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model/base_class_interface.rb#44
+  sig { abstract.returns(::String) }
+  def human_id_prefix; end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/model/base_class_interface.rb#29
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def resolve(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#80
+  # source://kirei//lib/kirei/model/base_class_interface.rb#32
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def resolve_first(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#84
+  # source://kirei//lib/kirei/model/base_class_interface.rb#35
   sig { abstract.returns(T.untyped) }
   def table_name; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#60
+  # source://kirei//lib/kirei/model/base_class_interface.rb#17
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def where(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model.rb#72
+  # source://kirei//lib/kirei/model/base_class_interface.rb#26
   sig { abstract.params(attributes: T.untyped).void }
   def wrap_jsonb_non_primivitives!(attributes); end
 end
 
-# source://kirei//lib/kirei/model.rb#92
+# source://kirei//lib/kirei/model/class_methods.rb#6
 module Kirei::Model::ClassMethods
   extend T::Generic
   include ::Kirei::Model::BaseClassInterface
 
   has_attached_class!
 
-  # source://kirei//lib/kirei/model.rb#131
+  # source://kirei//lib/kirei/model/class_methods.rb#42
   sig { override.returns(T::Array[T.attached_class]) }
   def all; end
 
   # default values defined in the model are used, if omitted in the hash
   #
-  # source://kirei//lib/kirei/model.rb#142
+  # source://kirei//lib/kirei/model/class_methods.rb#53
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.attached_class) }
   def create(hash); end
 
-  # source://kirei//lib/kirei/model.rb#117
+  # source://kirei//lib/kirei/model/class_methods.rb#28
   sig { override.returns(::Sequel::Dataset) }
   def db; end
 
-  # source://kirei//lib/kirei/model.rb#183
+  # source://kirei//lib/kirei/model/class_methods.rb#94
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
   def find_by(hash); end
+
+  # Generates a human-readable ID for the record.
+  # The ID is prefixed with the table name and an underscore.
+  #
+  # source://kirei//lib/kirei/model/class_methods.rb#144
+  sig { override.returns(::String) }
+  def generate_human_id; end
+
+  # defaults to 6
+  #
+  # source://kirei//lib/kirei/model/class_methods.rb#133
+  sig { override.returns(::Integer) }
+  def human_id_length; end
+
+  # defaults to "model_name" (table_name without the trailing "s")
+  #
+  # source://kirei//lib/kirei/model/class_methods.rb#137
+  sig { override.returns(::String) }
+  def human_id_prefix; end
+
+  # source://kirei//lib/kirei/model/class_methods.rb#23
+  sig { returns(::String) }
+  def model_name; end
 
   # Extra or unknown properties present in the Hash do not raise exceptions at
   # runtime unless the optional strict argument to from_hash is passed
@@ -429,7 +470,7 @@ module Kirei::Model::ClassMethods
   # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
   # "strict" defaults to "false".
   #
-  # source://kirei//lib/kirei/model.rb#198
+  # source://kirei//lib/kirei/model/class_methods.rb#109
   sig do
     override
       .params(
@@ -439,24 +480,47 @@ module Kirei::Model::ClassMethods
   end
   def resolve(query, strict = T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/model.rb#214
+  # source://kirei//lib/kirei/model/class_methods.rb#125
   sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
   def resolve_first(query, strict = T.unsafe(nil)); end
 
   # defaults to a pluralized, underscored version of the class name
   #
-  # source://kirei//lib/kirei/model.rb#106
+  # source://kirei//lib/kirei/model/class_methods.rb#18
   sig { override.returns(::String) }
   def table_name; end
 
-  # source://kirei//lib/kirei/model.rb#126
+  # source://kirei//lib/kirei/model/class_methods.rb#37
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T::Array[T.attached_class]) }
   def where(hash); end
 
-  # source://kirei//lib/kirei/model.rb#166
+  # source://kirei//lib/kirei/model/class_methods.rb#77
   sig { override.params(attributes: T::Hash[T.any(::String, ::Symbol), T.untyped]).void }
   def wrap_jsonb_non_primivitives!(attributes); end
 end
+
+# source://kirei//lib/kirei/model/human_id_generator.rb#6
+class Kirei::Model::HumanIdGenerator
+  class << self
+    # source://kirei//lib/kirei/model/human_id_generator.rb#22
+    sig { params(length: ::Integer, prefix: ::String).returns(::String) }
+    def call(length:, prefix:); end
+
+    private
+
+    # source://kirei//lib/kirei/model/human_id_generator.rb#27
+    sig { params(key_length: ::Integer).returns(::String) }
+    def random_id(key_length); end
+  end
+end
+
+# Removed ambiguous characters 0, 1, O, I, l, 5, S
+#
+# source://kirei//lib/kirei/model/human_id_generator.rb#10
+Kirei::Model::HumanIdGenerator::ALLOWED_CHARS = T.let(T.unsafe(nil), String)
+
+# source://kirei//lib/kirei/model/human_id_generator.rb#13
+Kirei::Model::HumanIdGenerator::ALLOWED_CHARS_COUNT = T.let(T.unsafe(nil), Integer)
 
 # we don't know what Oj does under the hood with the options hash, so don't freeze it
 #

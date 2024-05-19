@@ -16,13 +16,12 @@ module Kirei
       # defaults to a pluralized, underscored version of the class name
       sig { override.returns(String) }
       def table_name
-        @table_name ||= T.let(
-          begin
-            table_name_ = Kirei::Helpers.underscore(T.must(name.split("::").last))
-            "#{table_name_}s"
-          end,
-          T.nilable(String),
-        )
+        @table_name ||= T.let("#{model_name}s", T.nilable(String))
+      end
+
+      sig { returns(String) }
+      def model_name
+        Kirei::Helpers.underscore(T.must(name.split("::").last))
       end
 
       sig { override.returns(Sequel::Dataset) }
@@ -127,6 +126,26 @@ module Kirei
         strict_loading = strict.nil? ? App.config.db_strict_type_resolving : strict
 
         resolve(query.limit(1), strict_loading).first
+      end
+
+      # defaults to 6
+      sig { override.returns(Integer) }
+      def human_id_length = 6
+
+      # defaults to "model_name" (table_name without the trailing "s")
+      sig { override.returns(String) }
+      def human_id_prefix = model_name
+
+      #
+      # Generates a human-readable ID for the record.
+      # The ID is prefixed with the table name and an underscore.
+      #
+      sig { override.returns(String) }
+      def generate_human_id
+        Kirei::Model::HumanIdGenerator.call(
+          length: human_id_length,
+          prefix: human_id_prefix,
+        )
       end
     end
   end

@@ -13,6 +13,9 @@ class Airport < T::Struct
   extend T::Sig
   include Kirei::Model
 
+  sig { override.returns(Integer) }
+  def self.human_id_length = 12
+
   const :id, String
   const :name, String
 end

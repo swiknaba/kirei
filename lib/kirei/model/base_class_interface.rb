@@ -36,6 +36,15 @@ module Kirei
 
       sig { abstract.returns(T.untyped) }
       def db; end
+
+      sig { abstract.returns(Integer) }
+      def human_id_length; end
+
+      sig { abstract.returns(String) }
+      def human_id_prefix; end
+
+      sig { abstract.returns(String) }
+      def generate_human_id; end
     end
   end
 end
