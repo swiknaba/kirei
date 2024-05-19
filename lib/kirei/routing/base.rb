@@ -66,7 +66,13 @@ module Kirei
         Kirei::Logging::Logger.call(
           level: Kirei::Logging::Level::INFO,
           label: "Request Started",
-          meta: params,
+          meta: {
+            "http.method" => route.verb.serialize,
+            "http.route" => route.path,
+            "http.host" => env.fetch("HTTP_HOST"),
+            "http.request_params" => params,
+            "http.client_ip" => env.fetch("CF-Connecting-IP", env.fetch("REMOTE_ADDR")),
+          },
         )
 
         statsd_timing_tags = {
