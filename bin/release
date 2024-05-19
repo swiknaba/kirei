@@ -61,7 +61,7 @@ LATEST_TAG=${LATEST_TAG#v} # remove the v prefix
 case $RELEASE_TYPE in
   "major")
     # split the tag into an array
-    IFS='.' read -r -A array <<< "$LATEST_TAG"
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
     # increment the major version
     ((array[0]++))
     # set minor and patch to 0
@@ -72,7 +72,7 @@ case $RELEASE_TYPE in
     ;;
   "minor")
     # split the tag into an array
-    IFS='.' read -r -A array <<< "$LATEST_TAG"
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
     # increment the minor version
     ((array[1]++))
     # set patch to 0
@@ -82,7 +82,7 @@ case $RELEASE_TYPE in
     ;;
   "patch")
     # split the tag into an array
-    IFS='.' read -r -A array <<< "$LATEST_TAG"
+    IFS='.' read -r -a array <<< "$LATEST_TAG"
     # increment the patch version
     ((array[2]++))
     # join the array back into a string
