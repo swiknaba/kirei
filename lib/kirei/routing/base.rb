@@ -107,7 +107,7 @@ module Kirei
           ::StatsD.measure("request", latency_in_ms, tags: statsd_timing_tags)
 
           Kirei::Logging::Logger.call(
-            level: Kirei::Logging::Level::INFO,
+            level: status >= 500 ? Kirei::Logging::Level::ERROR : Kirei::Logging::Level::INFO,
             label: "Request Finished",
             meta: { "response.body" => response_body, "response.latency_in_ms" => latency_in_ms },
           )
