@@ -8,6 +8,8 @@ module Kirei
     class Base
       extend T::Sig
 
+      NOT_FOUND = T.let([404, {}, ["Not Found"]], RackResponseType) # rubocop:disable Style/MutableConstant
+
       sig { params(params: T::Hash[String, T.untyped]).void }
       def initialize(params: {})
         @router = T.let(Router.instance, Router)
@@ -33,7 +35,7 @@ module Kirei
         #
 
         route = router.get(http_verb, req_path)
-        return [404, {}, ["Not Found"]] if route.nil?
+        return NOT_FOUND if route.nil?
 
         params = case route.verb
                  when Verb::GET
