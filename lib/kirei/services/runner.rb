@@ -10,12 +10,12 @@ module Kirei
       sig do
         type_parameters(:T)
           .params(
-            class_name: String,
+            class_name: T.untyped,
             log_tags: T::Hash[String, T.untyped],
-            _: T.proc.returns(T.type_parameter(:T)),
+            block: T.proc.returns(T.type_parameter(:T)),
           ).returns(T.type_parameter(:T))
       end
-      def self.call(class_name, log_tags: {}, &_)
+      def self.call(class_name, log_tags: {}, &block)
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         service = yield
 
@@ -35,12 +35,19 @@ module Kirei
         ::StatsD.measure(class_name, latency_in_ms, tags: metric_tags)
 
         logtags = {
-          "service.name" => class_name,
+          "service.name" => class_name.to_s,
           "service.latency_in_ms" => latency_in_ms,
           "service.result" => result,
+          "service.source_location" => source_location(block),
         }
         logtags.merge!(log_tags)
+
         Logging::Logger.call(level: Logging::Level::INFO, label: "Service Finished", meta: logtags)
+      end
+
+      sig { params(proc: T.proc.returns(T.untyped)).returns(String) }
+      private_class_method def self.source_location(proc)
+        proc.source_location.join(":").gsub(App.root.to_s, "")
       end
     end
   end
