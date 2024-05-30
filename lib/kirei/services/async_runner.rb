@@ -14,6 +14,7 @@ module Kirei
       def initialize
         @task_queue = T.let(Queue.new, Thread::Queue)
         @results = T.let({}, ResultType)
+        @task_channel = T.let(Ractor.new { loop { Ractor.yield Ractor.recv } }, Ractor)
         @result_ractor = T.let(process_services_async, Ractor)
       end
 
@@ -37,6 +38,8 @@ module Kirei
         @result_ractor.take
       rescue Ractor::ClosedError => e
         App.config.logger.error("Ractor error: #{e.message}")
+      ensure
+        T.unsafe(@task_channel).close
       end
 
       sig { returns(ResultType) }
@@ -71,7 +74,8 @@ module Kirei
           end
         end
 
-        ractor.send([@task_queue, @results])
+        # TODO: send task through channel, since we can't move the Thread Queue
+        ractor.send([@task_queue, @results], move: false)
 
         ractor
       end
