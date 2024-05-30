@@ -108,6 +108,10 @@ module Kirei
           latency_in_ms = stop - start
           ::StatsD.measure("request", latency_in_ms, tags: statsd_timing_tags)
 
+          # Hack: Sorbet thinks "status" can't be nil, but it can if an exception
+          #       is raised before a status is assigned.
+          status = T.unsafe(status) || 500
+
           Kirei::Logging::Logger.call(
             level: status >= 500 ? Kirei::Logging::Level::ERROR : Kirei::Logging::Level::INFO,
             label: "Request Finished",
