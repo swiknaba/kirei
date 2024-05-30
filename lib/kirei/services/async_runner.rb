@@ -39,10 +39,15 @@ module Kirei
         App.config.logger.error("Ractor error: #{e.message}")
       end
 
+      sig { returns(ResultType) }
+      def results
+        @results
+      end
+
       sig { returns(Ractor) }
       private def process_services_async
         ractor = Ractor.new do
-          set_scheduler
+          Fiber.set_scheduler(FiberScheduler.new)
 
           task_queue, results = T.let(
             Ractor.receive,
@@ -85,11 +90,6 @@ module Kirei
         rescue StandardError => e
           results[uuid] = { error: e.message, exception: e }
         end
-      end
-
-      sig { void }
-      private def set_scheduler
-        Fiber.set_scheduler(FiberScheduler.new)
       end
     end
   end
