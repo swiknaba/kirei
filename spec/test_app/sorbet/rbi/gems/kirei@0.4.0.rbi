@@ -554,7 +554,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#144
+  # source://kirei//lib/kirei/routing/base.rb#148
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -565,7 +565,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#135
+  # source://kirei//lib/kirei/routing/base.rb#139
   sig do
     params(
       body: ::String,
@@ -577,7 +577,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#174
+  # source://kirei//lib/kirei/routing/base.rb#178
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -590,7 +590,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#162
+  # source://kirei//lib/kirei/routing/base.rb#166
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
@@ -693,27 +693,27 @@ class Kirei::Services::AsyncRunner
   sig { params(block: T.proc.returns(T.untyped)).returns(::String) }
   def call(&block); end
 
+  # source://kirei//lib/kirei/services/async_runner.rb#43
+  sig { returns(T::Hash[::String, T.untyped]) }
+  def results; end
+
   # source://kirei//lib/kirei/services/async_runner.rb#34
   sig { void }
   def wait_until_finished; end
 
   private
 
-  # source://kirei//lib/kirei/services/async_runner.rb#43
+  # source://kirei//lib/kirei/services/async_runner.rb#48
   sig { returns(::Ractor) }
   def process_services_async; end
 
-  # source://kirei//lib/kirei/services/async_runner.rb#80
+  # source://kirei//lib/kirei/services/async_runner.rb#85
   sig { params(task: [::String, T.proc.returns(T.untyped)], results: T::Hash[::String, T.untyped]).returns(::Fiber) }
   def process_task(task, results); end
 
-  # source://kirei//lib/kirei/services/async_runner.rb#75
+  # source://kirei//lib/kirei/services/async_runner.rb#80
   sig { params(fibers: T::Array[::Fiber]).void }
   def resume_fibers(fibers); end
-
-  # source://kirei//lib/kirei/services/async_runner.rb#91
-  sig { void }
-  def set_scheduler; end
 end
 
 # maybe force people to use the "Result" class

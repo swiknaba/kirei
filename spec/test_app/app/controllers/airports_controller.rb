@@ -4,6 +4,24 @@
 module Controllers
   class AirportsController < Base
     sig { returns(T.anything) }
+    def all
+      async_runner = Kirei::Services::AsyncRunner.new
+
+      promise = async_runner.call { Airport.all }
+
+      async_runner.wait_until_finished
+      results = async_runner.results
+
+      airports = T.cast(results.fetch(promise), T::Array[Airport])
+
+      render(
+        Oj.dump(airports.map(&:serialize)),
+        status: 200,
+      )
+    end
+
+
+    sig { returns(T.anything) }
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
