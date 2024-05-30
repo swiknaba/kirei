@@ -89,7 +89,7 @@ module Kirei
 
       sig { void }
       private def set_scheduler
-        Fiber.set_scheduler(CustomScheduler.new)
+        Fiber.set_scheduler(FiberScheduler.new)
       end
     end
   end

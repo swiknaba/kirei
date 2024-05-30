@@ -542,11 +542,11 @@ module Kirei::Routing; end
 
 # source://kirei//lib/kirei/routing/base.rb#8
 class Kirei::Routing::Base
-  # source://kirei//lib/kirei/routing/base.rb#12
+  # source://kirei//lib/kirei/routing/base.rb#14
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#24
+  # source://kirei//lib/kirei/routing/base.rb#26
   sig do
     params(
       env: T::Hash[::String, T.any(::IO, ::Numeric, ::Puma::Client, ::Puma::Configuration, ::String, ::StringIO, ::TCPSocket, T::Array[T.untyped], T::Boolean)]
@@ -554,18 +554,18 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#136
+  # source://kirei//lib/kirei/routing/base.rb#144
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
-  # source://kirei//lib/kirei/routing/base.rb#18
+  # source://kirei//lib/kirei/routing/base.rb#20
   sig { returns(T::Hash[::String, T.untyped]) }
   def params; end
 
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#127
+  # source://kirei//lib/kirei/routing/base.rb#135
   sig do
     params(
       body: ::String,
@@ -577,7 +577,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#166
+  # source://kirei//lib/kirei/routing/base.rb#174
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -586,14 +586,17 @@ class Kirei::Routing::Base
   end
   def collect_hooks(controller, hooks_type); end
 
-  # source://kirei//lib/kirei/routing/base.rb#21
+  # source://kirei//lib/kirei/routing/base.rb#23
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#154
+  # source://kirei//lib/kirei/routing/base.rb#162
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
+
+# source://kirei//lib/kirei/routing/base.rb#11
+Kirei::Routing::Base::NOT_FOUND = T.let(T.unsafe(nil), Array)
 
 # source://kirei//lib/kirei/routing/nilable_hooks_type.rb#6
 Kirei::Routing::NilableHooksType = T.type_alias { T.nilable(T::Set[T.proc.void]) }
@@ -680,6 +683,88 @@ end
 # source://kirei//lib/kirei.rb#0
 module Kirei::Services; end
 
+# source://kirei//lib/kirei/services/async_runner.rb#6
+class Kirei::Services::AsyncRunner
+  # source://kirei//lib/kirei/services/async_runner.rb#14
+  sig { void }
+  def initialize; end
+
+  # source://kirei//lib/kirei/services/async_runner.rb#25
+  sig { params(block: T.proc.returns(T.untyped)).returns(::String) }
+  def call(&block); end
+
+  # source://kirei//lib/kirei/services/async_runner.rb#34
+  sig { void }
+  def wait_until_finished; end
+
+  private
+
+  # source://kirei//lib/kirei/services/async_runner.rb#43
+  sig { returns(::Ractor) }
+  def process_services_async; end
+
+  # source://kirei//lib/kirei/services/async_runner.rb#80
+  sig { params(task: [::String, T.proc.returns(T.untyped)], results: T::Hash[::String, T.untyped]).returns(::Fiber) }
+  def process_task(task, results); end
+
+  # source://kirei//lib/kirei/services/async_runner.rb#75
+  sig { params(fibers: T::Array[::Fiber]).void }
+  def resume_fibers(fibers); end
+
+  # source://kirei//lib/kirei/services/async_runner.rb#91
+  sig { void }
+  def set_scheduler; end
+end
+
+# maybe force people to use the "Result" class
+#
+# source://kirei//lib/kirei/services/async_runner.rb#11
+Kirei::Services::AsyncRunner::ResultType = T.type_alias { T::Hash[::String, T.untyped] }
+
+# source://kirei//lib/kirei/services/async_runner.rb#9
+Kirei::Services::AsyncRunner::TaskType = T.type_alias { T.proc.returns(T.untyped) }
+
+# https://ruby-doc.org/core-3.0.0/Fiber/SchedulerInterface.html
+#
+# source://kirei//lib/kirei/services/fiber_scheduler.rb#9
+class Kirei::Services::FiberScheduler
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#13
+  sig { void }
+  def initialize; end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#68
+  sig { params(blocker: T.untyped, timeout: T.nilable(::Float)).returns(T::Boolean) }
+  def block(blocker, timeout = T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#40
+  sig { void }
+  def close; end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#51
+  sig { params(_io: T.untyped, _events: T.untyped, _timeout: T.untyped).returns(T.untyped) }
+  def io_wait(_io, _events, _timeout); end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#63
+  sig { params(_duration: T.untyped).returns(T.untyped) }
+  def kernel_sleep(_duration); end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#56
+  sig { params(pid: ::Integer, flags: ::Integer).returns(::Object) }
+  def process_wait(pid, flags); end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#27
+  sig { void }
+  def run; end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#20
+  sig { params(block: T.proc.returns(T.untyped)).void }
+  def schedule(&block); end
+
+  # source://kirei//lib/kirei/services/fiber_scheduler.rb#86
+  sig { params(blocker: T.untyped, fiber: ::Fiber).void }
+  def unblock(blocker, fiber); end
+end
+
 # source://kirei//lib/kirei/services/result.rb#6
 class Kirei::Services::Result
   extend T::Generic
@@ -715,12 +800,18 @@ class Kirei::Services::Runner
     sig do
       type_parameters(:T)
         .params(
-          class_name: ::String,
+          class_name: T.untyped,
           log_tags: T::Hash[::String, T.untyped],
-          _: T.proc.returns(T.type_parameter(:T))
+          block: T.proc.returns(T.type_parameter(:T))
         ).returns(T.type_parameter(:T))
     end
-    def call(class_name, log_tags: T.unsafe(nil), &_); end
+    def call(class_name, log_tags: T.unsafe(nil), &block); end
+
+    private
+
+    # source://kirei//lib/kirei/services/runner.rb#49
+    sig { params(proc: T.proc.returns(T.untyped)).returns(::String) }
+    def source_location(proc); end
   end
 end
 

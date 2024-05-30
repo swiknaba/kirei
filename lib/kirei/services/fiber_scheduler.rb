@@ -6,7 +6,7 @@ module Kirei
     #
     # https://ruby-doc.org/core-3.0.0/Fiber/SchedulerInterface.html
     #
-    class CustomScheduler
+    class FiberScheduler
       extend T::Sig
 
       sig { void }
