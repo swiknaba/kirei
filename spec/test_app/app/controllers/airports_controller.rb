@@ -5,14 +5,27 @@ module Controllers
   class AirportsController < Base
     sig { returns(T.anything) }
     def all
-      async_runner = Kirei::Services::AsyncRunner.new
+      search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      promise = async_runner.call { Airport.all }
+      future = Kirei::Services::Runner.async do
+        Airports::Filter.call(search)
+      end
 
-      async_runner.wait_until_finished
-      results = async_runner.results
+      # we can start more async jobs here, or do other blocking stuff
+      # while the airports are being fetched
 
-      airports = T.cast(results.fetch(promise), T::Array[Airport])
+      # here we block/wait for the future to complete
+      service = T.let(
+        Kirei::Services::Runner.await(future),
+        Kirei::Services::Result[T::Array[Airport]],
+      )
+
+      if service.failed?
+        errs = { "errors" => service.errors.map(&:serialize)}
+        return render(Oj.dump(errs), status: 400)
+      end
+
+      airports = service.result
 
       render(
         Oj.dump(airports.map(&:serialize)),

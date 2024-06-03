@@ -17,6 +17,7 @@ require "statsd-instrument"
 require "sorbet-runtime"
 require "oj"
 require "rack"
+require "concurrent-ruby"
 require "pg"
 require "sequel" # "sequel_pg" is auto-required by "sequel"
 

@@ -2,6 +2,7 @@ PATH
   remote: ../..
   specs:
     kirei (0.4.0)
+      concurrent-ruby (~> 1.0)
       oj (~> 3.0)
       pg (~> 1.0)
       puma (~> 6.0)
