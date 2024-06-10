@@ -25,7 +25,7 @@ module Kirei
       sig { params(env: RackEnvType).returns(RackResponseType) }
       def call(env)
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
-        status = 418 # we use it in the "ensure" block, so we need to define early (Sorbet doesn't like `status ||= 418`)
+        status = 500 # we use it in the "ensure" block, so we need to define early (Sorbet doesn't like `status ||= 418`)
 
         http_verb = Verb.deserialize(env.fetch("REQUEST_METHOD"))
         req_path = T.cast(env.fetch("REQUEST_PATH"), String)
