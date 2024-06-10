@@ -542,11 +542,11 @@ module Kirei::Routing; end
 
 # source://kirei//lib/kirei/routing/base.rb#8
 class Kirei::Routing::Base
-  # source://kirei//lib/kirei/routing/base.rb#12
+  # source://kirei//lib/kirei/routing/base.rb#14
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#24
+  # source://kirei//lib/kirei/routing/base.rb#26
   sig do
     params(
       env: T::Hash[::String, T.any(::IO, ::Numeric, ::Puma::Client, ::Puma::Configuration, ::String, ::StringIO, ::TCPSocket, T::Array[T.untyped], T::Boolean)]
@@ -554,18 +554,18 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#136
+  # source://kirei//lib/kirei/routing/base.rb#144
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
-  # source://kirei//lib/kirei/routing/base.rb#18
+  # source://kirei//lib/kirei/routing/base.rb#20
   sig { returns(T::Hash[::String, T.untyped]) }
   def params; end
 
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#127
+  # source://kirei//lib/kirei/routing/base.rb#135
   sig do
     params(
       body: ::String,
@@ -577,7 +577,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#166
+  # source://kirei//lib/kirei/routing/base.rb#174
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -586,14 +586,17 @@ class Kirei::Routing::Base
   end
   def collect_hooks(controller, hooks_type); end
 
-  # source://kirei//lib/kirei/routing/base.rb#21
+  # source://kirei//lib/kirei/routing/base.rb#23
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#154
+  # source://kirei//lib/kirei/routing/base.rb#162
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
+
+# source://kirei//lib/kirei/routing/base.rb#11
+Kirei::Routing::Base::NOT_FOUND = T.let(T.unsafe(nil), Array)
 
 # source://kirei//lib/kirei/routing/nilable_hooks_type.rb#6
 Kirei::Routing::NilableHooksType = T.type_alias { T.nilable(T::Set[T.proc.void]) }
@@ -715,12 +718,18 @@ class Kirei::Services::Runner
     sig do
       type_parameters(:T)
         .params(
-          class_name: ::String,
+          class_name: T.untyped,
           log_tags: T::Hash[::String, T.untyped],
-          _: T.proc.returns(T.type_parameter(:T))
+          block: T.proc.returns(T.type_parameter(:T))
         ).returns(T.type_parameter(:T))
     end
-    def call(class_name, log_tags: T.unsafe(nil), &_); end
+    def call(class_name, log_tags: T.unsafe(nil), &block); end
+
+    private
+
+    # source://kirei//lib/kirei/services/runner.rb#49
+    sig { params(proc: T.proc.returns(T.untyped)).returns(::String) }
+    def source_location(proc); end
   end
 end
 
