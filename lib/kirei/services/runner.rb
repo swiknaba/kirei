@@ -24,12 +24,7 @@ module Kirei
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         latency_in_ms = stop - T.must(start)
 
-        result = case service
-                 when Services::Result
-                   service.success? ? "success" : "failure"
-                 else
-                   "unknown"
-        end
+        result = service_result(service)
 
         metric_tags = Logging::Metric.inject_defaults({ "service.result" => result })
         ::StatsD.measure(class_name, latency_in_ms, tags: metric_tags)
@@ -42,12 +37,30 @@ module Kirei
         }
         logtags.merge!(log_tags)
 
-        Logging::Logger.call(level: Logging::Level::INFO, label: "Service Finished", meta: logtags)
+        Logging::Logger.call(level: log_level(result), label: "Service Finished", meta: logtags)
       end
 
       sig { params(proc: T.proc.returns(T.untyped)).returns(String) }
       private_class_method def self.source_location(proc)
         proc.source_location.join(":").gsub(App.root.to_s, "")
+      end
+
+      sig { params(service: T.untyped).returns(String) }
+      def self.service_result(service)
+        case service
+        when Services::Result
+          service.success? ? "success" : "failure"
+        else
+          "unknown"
+        end
+      end
+
+      sig { params(result: String).returns(Logging::Level) }
+      private_class_method def self.log_level(result)
+        return Logging::Level::INFO if result == "success"
+        return Logging::Level::WARN if result == "failure"
+
+        Logging::Level::UNKNOWN
       end
     end
   end
