@@ -13,7 +13,7 @@ TL;DR:
 * **zero magic**
 * **strict typing**
 * **very few low level dependencies**
-* ultra low memory footprint
+* low memory footprint
 * high performance
 * simple to understand
 
