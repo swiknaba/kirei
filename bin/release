@@ -19,6 +19,7 @@ then
 fi
 
 if [[ `git status --porcelain` ]]; then
+  bundle install # ensure that the gem version is up-to-date
   echo "You have uncommitted changes."
   exit
 fi
