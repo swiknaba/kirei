@@ -102,7 +102,7 @@ module Kirei
       def vector_column?(column_name)
         _col_name, col_info = T.let(
           db.schema(table_name.to_sym).find { _1[0] == column_name.to_sym },
-          [Symbol, T::Hash[Symbol, T.untyped]]
+          [Symbol, T::Hash[Symbol, T.untyped]],
         )
         col_info.fetch(:db_type).match?(/vector\(\d+\)/)
       end
@@ -111,6 +111,7 @@ module Kirei
       sig { params(value: T.any(T::Array[Numeric], Sequel::SQL::Expression)).returns(Sequel::SQL::Expression) }
       def cast_to_vector(value)
         return value if value.is_a?(Sequel::SQL::Expression) || value.is_a?(Sequel::SQL::PlaceholderLiteralString)
+
         Kernel.raise("'pg_array' extension is not enabled") unless db.extension(:pg_array)
 
         pg_array = T.unsafe(Sequel).pg_array(value)
