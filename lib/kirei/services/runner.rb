@@ -10,7 +10,7 @@ module Kirei
       sig do
         type_parameters(:T)
           .params(
-            class_name: T.untyped,
+            class_name: T.untyped, # @TODO(lud, 17.08.2024): replace all non-word characters with `.`?
             log_tags: T::Hash[String, T.untyped],
             block: T.proc.returns(T.type_parameter(:T)),
           ).returns(T.type_parameter(:T))
