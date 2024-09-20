@@ -13,9 +13,9 @@ module Kirei
           String,
           Numeric,
           TCPSocket,
-          Puma::Client,
+          ::Puma::Client,
           StringIO,
-          Puma::Configuration,
+          ::Puma::Configuration,
         )
       ]
     end
