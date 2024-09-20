@@ -85,10 +85,38 @@ module Kirei
         return unless App.config.db_extensions.include?(:pg_json)
 
         attributes.each_pair do |key, value|
-          next unless value.is_a?(Hash) || value.is_a?(Array)
-
-          attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
+          if vector_column?(key.to_s)
+            attributes[key] = cast_to_vector(value)
+          elsif value.is_a?(Hash) || value.is_a?(Array)
+            attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
+          end
         end
+      end
+
+      #
+      # install the gem "pgvector" if you need to use vector columns
+      # also add `:pgvector` to the `App.config.db_extensions` array
+      # and enable the vector extension on the database.
+      #
+      sig { params(column_name: String).returns(T::Boolean) }
+      def vector_column?(column_name)
+        _col_name, col_info = T.let(
+          db.schema(table_name.to_sym).find { _1[0] == column_name.to_sym },
+          [Symbol, T::Hash[Symbol, T.untyped]],
+        )
+        col_info.fetch(:db_type).match?(/vector\(\d+\)/)
+      end
+
+      # New method to cast an array to a vector
+      sig { params(value: T.any(T::Array[Numeric], Sequel::SQL::Expression)).returns(Sequel::SQL::Expression) }
+      def cast_to_vector(value)
+        return value if value.is_a?(Sequel::SQL::Expression) || value.is_a?(Sequel::SQL::PlaceholderLiteralString)
+
+        Kernel.raise("'pg_array' extension is not enabled") unless db.extension(:pg_array)
+
+        pg_array = T.unsafe(Sequel).pg_array(value)
+
+        Sequel.lit("?::vector", pg_array)
       end
 
       sig do
