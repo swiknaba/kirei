@@ -86,9 +86,20 @@ module Kirei
 
         attributes.each_pair do |key, value|
           next unless value.is_a?(Hash) || value.is_a?(Array)
+          next if vector_column?(key.to_s)
 
           attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
         end
+      end
+
+      # New method to check if a column is a vector type
+      sig { params(column_name: String).returns(T::Boolean) }
+      def vector_column?(column_name)
+        _col_name, col_info = T.let(
+          db.schema(table_name.to_sym).find { _1[0] == column_name.to_sym },
+          [Symbol, T::Hash[Symbol, T.untyped]]
+        )
+        col_info.fetch(:db_type).match?(/vector\(\d+\)/)
       end
 
       sig do
