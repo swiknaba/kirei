@@ -168,12 +168,13 @@ module Cli
 
                   models_dir = #{app_name}.root
 
-                  Dir.glob("app/models/*.rb").each do |model_file|
+                  Dir.glob("app/models/**/*.rb").each do |model_file|
                     next if !model_file_name.nil? && model_file == model_file_name
 
                     model_path = File.expand_path(model_file, models_dir)
-                    model_name = Zeitwerk::Inflector.new.camelize(File.basename(model_file, ".rb"), model_path)
-                    model_klass = Object.const_get(model_name)
+                    modules = model_file.gsub("app/models/", "").gsub(".rb", "").split("/").map { |mod| Zeitwerk::Inflector.new.camelize(mod, model_path) }
+                    const_name = modules.join("::")
+                    model_klass = Object.const_get(const_name)
                     table_name = model_klass.table_name
                     schema = db.schema(table_name)
 
@@ -184,8 +185,10 @@ module Cli
                     # Remove existing schema info comments if present
                     updated_contents = file_contents.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*class)/m, "")
 
-                    # Insert the new schema comments before the class definition
-                    modified_contents = updated_contents.sub(/(\A|\\n)(class \#{model_name})/m, "\\\\1\#{schema_comments}\\n\\n\\\\2")
+                    # Insert the new schema comments before the module/class definition
+                    first_const = modules.first
+                    first_module_or_class = modules.count == 1 ? "class #{first_const}" : "module #{first_const}"
+                    modified_contents = updated_contents.sub(/(A|\n)(#{first_module_or_class})/m, "\\1#{schema_comments}\n\n\\2")
 
                     File.write(model_path, modified_contents)
                   end
