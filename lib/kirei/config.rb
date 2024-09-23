@@ -37,5 +37,7 @@ module Kirei
     #
     # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
     prop :db_strict_type_resolving, T.nilable(T::Boolean), default: nil
+
+    prop :allowed_origins, T::Array[String], default: []
   end
 end

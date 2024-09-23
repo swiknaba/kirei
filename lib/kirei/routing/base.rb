@@ -98,6 +98,8 @@ module Kirei
           headers[header_name] ||= default_value
         end
 
+        add_cors_headers(headers, env)
+
         [
           status,
           headers,
@@ -143,7 +145,6 @@ module Kirei
 
       sig { returns(T::Hash[String, String]) }
       def default_headers
-        # "Access-Control-Allow-Origin": the user should set that, see comment about "cors" above
         {
           # security relevant headers
           "X-Frame-Options" => "DENY",
@@ -157,6 +158,18 @@ module Kirei
           # other headers
           "Content-Type" => "application/json; charset=utf-8",
         }
+      end
+
+      sig { params(headers: T::Hash[String, String], env: RackEnvType).void }
+      def add_cors_headers(headers, env)
+        origin = T.cast(env.fetch("HTTP_ORIGIN"), String)
+        allowed_origins = Kirei::App.config.allowed_origins
+        return unless allowed_origins.include?(origin)
+
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+        headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, Referer"
+        headers["Access-Control-Allow-Credentials"] = "true"
       end
 
       sig { params(hooks: NilableHooksType).void }

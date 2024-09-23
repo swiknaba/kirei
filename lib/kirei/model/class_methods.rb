@@ -113,7 +113,6 @@ module Kirei
         col_info.fetch(:db_type).match?(/vector\(\d+\)/)
       end
 
-      # New method to cast an array to a vector
       sig { params(value: T.any(T::Array[Numeric], Sequel::SQL::Expression)).returns(Sequel::SQL::Expression) }
       def cast_to_vector(value)
         return value if value.is_a?(Sequel::SQL::Expression) || value.is_a?(Sequel::SQL::PlaceholderLiteralString)
