@@ -40,6 +40,9 @@ module Kirei
       sig { abstract.returns(T.untyped) }
       def db; end
 
+      sig { abstract.params(sql: T.untyped, params: T.untyped).returns(T.untyped) }
+      def exec_sql(sql, params); end
+
       sig { abstract.returns(T.untyped) }
       def human_id_length; end
 
