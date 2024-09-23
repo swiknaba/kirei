@@ -162,7 +162,9 @@ module Kirei
 
       sig { params(headers: T::Hash[String, String], env: RackEnvType).void }
       def add_cors_headers(headers, env)
-        origin = T.cast(env.fetch("HTTP_ORIGIN"), String)
+        origin = T.cast(env.fetch("HTTP_ORIGIN", nil), T.nilable(String))
+        return if origin.nil?
+
         allowed_origins = Kirei::App.config.allowed_origins
         return unless allowed_origins.include?(origin)
 
