@@ -40,7 +40,7 @@ module Kirei
       sig { abstract.returns(T.untyped) }
       def db; end
 
-      sig { abstract.params(sql: String).returns(T.untyped) }
+      sig { abstract.params(sql: T.untyped).returns(T.untyped) }
       def exec_sql(sql); end
 
       sig { abstract.returns(T.untyped) }
