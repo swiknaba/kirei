@@ -175,6 +175,8 @@ module Cli
                     modules = model_file.gsub("app/models/", "").gsub(".rb", "").split("/").map { |mod| Zeitwerk::Inflector.new.camelize(mod, model_path) }
                     const_name = modules.join("::")
                     model_klass = Object.const_get(const_name)
+                    next unless model_klass.ancestors.include?(Kirei::Model)
+
                     table_name = model_klass.table_name
                     schema = db.schema(table_name)
 
@@ -183,7 +185,7 @@ module Cli
                     file_contents = File.read(model_path)
 
                     # Remove existing schema info comments if present
-                    updated_contents = file_contents.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*class)/m, "")
+                    updated_contents = file_contents.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*(?:class|module))/m, "")
 
                     # Insert the new schema comments before the module/class definition
                     first_const = modules.first
