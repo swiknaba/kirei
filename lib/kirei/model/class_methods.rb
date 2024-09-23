@@ -34,6 +34,11 @@ module Kirei
         App.raw_db_connection
       end
 
+      sig { override.params(sql: String).returns(T::Array[T.attached_class]) }
+      def exec_sql(sql)
+        db.fetch(sql).all
+      end
+
       sig do
         override.params(
           hash: T::Hash[Symbol, T.untyped],
