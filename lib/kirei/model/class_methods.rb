@@ -34,6 +34,12 @@ module Kirei
         App.raw_db_connection
       end
 
+      sig { override.params(sql: String, params: T::Array[T.untyped]).returns(T::Array[T::Hash[Symbol, T.untyped]]) }
+      def exec_sql(sql, params)
+        # Splats aren't supported in Sorbet, see: https://sorbet.org/docs/error-reference#7019
+        T.unsafe(db).fetch(sql, *params).all
+      end
+
       sig do
         override.params(
           hash: T::Hash[Symbol, T.untyped],
