@@ -13,8 +13,8 @@ module Kirei
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
       def find_by(hash); end
 
-      sig { abstract.params(hash: T.untyped, limit: T.untyped).returns(T.untyped) }
-      def where(hash, limit: nil); end
+      sig { abstract.params(hash: T.untyped).returns(T.untyped) }
+      def where(hash); end
 
       sig { abstract.returns(T.untyped) }
       def all; end

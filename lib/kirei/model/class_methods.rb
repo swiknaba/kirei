@@ -43,12 +43,10 @@ module Kirei
       sig do
         override.params(
           hash: T::Hash[Symbol, T.untyped],
-          limit: T.nilable(Integer),
         ).returns(T::Array[T.attached_class])
       end
-      def where(hash, limit: nil)
-        q = limit ? query.where(hash).limit(limit) : query.where(hash)
-        resolve(q)
+      def where(hash)
+        resolve(query.where(hash))
       end
 
       sig { override.returns(T::Array[T.attached_class]) }
