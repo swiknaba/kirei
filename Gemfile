@@ -12,3 +12,4 @@ gem "rubocop-dbl", "~> 2"
 gem "sorbet"
 gem "spoom"
 gem "tapioca"
+gem "benchmark" # for Ruby 2.5+
