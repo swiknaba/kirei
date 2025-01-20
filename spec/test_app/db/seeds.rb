@@ -1,29 +1,37 @@
 # typed: strict
 # frozen_string_literal: true
 
-Airport.query.delete
+Aviation::Models::Airport.query.delete
 
-test = Airport.new(
-  id: Airport.generate_human_id,
+test = Aviation::Models::Airport.new(
+  id: Aviation::Models::Airport.generate_human_id,
   name: "A test airport with a human ID",
+  latitude: 0.0,
+  longitude: 0.0
 )
 
-muc = Airport.new(
+muc = Aviation::Models::Airport.new(
   id: "MUC",
-  name: "Munich Airport"
+  name: "Munich Airport",
+  latitude: 48.3537,
+  longitude: 11.7750
 )
 
-ber = Airport.new(
+ber = Aviation::Models::Airport.new(
   id: "BER",
-  name: "Berlin Brandenburg Airport"
+  name: "Berlin Brandenburg Airport",
+  latitude: 52.3667,
+  longitude: 13.5033
 )
 
-sfo = Airport.new(
+sfo = Aviation::Models::Airport.new(
   id: "SFO",
-  name: "San Francisco International Airport"
+  name: "San Francisco International Airport",
+  latitude: 37.6188,
+  longitude: -122.3750
 )
 
-Airport.db.transaction do
+Aviation::Models::Airport.db.transaction do
   test.save
   muc.save
   ber.save

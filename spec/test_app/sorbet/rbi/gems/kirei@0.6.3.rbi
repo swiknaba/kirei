@@ -87,6 +87,7 @@ class Kirei::Config < ::T::Struct
   prop :db_extensions, T::Array[::Symbol], default: T.unsafe(nil)
   prop :db_url, T.nilable(::String)
   prop :db_strict_type_resolving, T.nilable(T::Boolean), default: T.unsafe(nil)
+  prop :allowed_origins, T::Array[::String], default: T.unsafe(nil)
 
   class << self
     # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
@@ -124,6 +125,31 @@ class Kirei::Controller < ::Kirei::Routing::Base
     sig { returns(T.nilable(T::Set[T.proc.void])) }
     def before_hooks; end
   end
+end
+
+# source://kirei//lib/kirei.rb#0
+module Kirei::Domain; end
+
+# source://kirei//lib/kirei/domain/entity.rb#6
+module Kirei::Domain::Entity
+  # source://kirei//lib/kirei/domain/entity.rb#14
+  sig { params(other: T.nilable(::Kirei::Domain::Entity)).returns(T::Boolean) }
+  def ==(other); end
+
+  # source://kirei//lib/kirei/domain/entity.rb#11
+  sig { returns(T.class_of(T::Struct)) }
+  def class; end
+end
+
+# source://kirei//lib/kirei/domain/value_object.rb#6
+module Kirei::Domain::ValueObject
+  # source://kirei//lib/kirei/domain/value_object.rb#14
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def ==(other); end
+
+  # source://kirei//lib/kirei/domain/value_object.rb#11
+  sig { returns(T.class_of(T::Struct)) }
+  def class; end
 end
 
 # source://kirei//lib/kirei.rb#0
@@ -363,25 +389,31 @@ module Kirei::Model::BaseClassInterface
 
   # @abstract
   #
+  # source://kirei//lib/kirei/model/base_class_interface.rb#44
+  sig { abstract.params(sql: T.untyped, params: T.untyped).returns(T.untyped) }
+  def exec_sql(sql, params); end
+
+  # @abstract
+  #
   # source://kirei//lib/kirei/model/base_class_interface.rb#14
   sig { abstract.params(hash: T.untyped).returns(T.untyped) }
   def find_by(hash); end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#50
+  # source://kirei//lib/kirei/model/base_class_interface.rb#53
   sig { abstract.returns(T.untyped) }
   def generate_human_id; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#44
+  # source://kirei//lib/kirei/model/base_class_interface.rb#47
   sig { abstract.returns(T.untyped) }
   def human_id_length; end
 
   # @abstract
   #
-  # source://kirei//lib/kirei/model/base_class_interface.rb#47
+  # source://kirei//lib/kirei/model/base_class_interface.rb#50
   sig { abstract.returns(T.untyped) }
   def human_id_prefix; end
 
@@ -429,13 +461,17 @@ module Kirei::Model::ClassMethods
 
   has_attached_class!
 
-  # source://kirei//lib/kirei/model/class_methods.rb#47
+  # source://kirei//lib/kirei/model/class_methods.rb#53
   sig { override.returns(T::Array[T.attached_class]) }
   def all; end
 
+  # source://kirei//lib/kirei/model/class_methods.rb#117
+  sig { params(value: T.any(::Sequel::SQL::Expression, T::Array[::Numeric])).returns(::Sequel::SQL::Expression) }
+  def cast_to_vector(value); end
+
   # default values defined in the model are used, if omitted in the hash
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#58
+  # source://kirei//lib/kirei/model/class_methods.rb#64
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.attached_class) }
   def create(hash); end
 
@@ -443,26 +479,30 @@ module Kirei::Model::ClassMethods
   sig { override.returns(::Sequel::Database) }
   def db; end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#99
+  # source://kirei//lib/kirei/model/class_methods.rb#38
+  sig { override.params(sql: ::String, params: T::Array[T.untyped]).returns(T::Array[T::Hash[::Symbol, T.untyped]]) }
+  def exec_sql(sql, params); end
+
+  # source://kirei//lib/kirei/model/class_methods.rb#132
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
   def find_by(hash); end
 
   # Generates a human-readable ID for the record.
   # The ID is prefixed with the table name and an underscore.
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#149
+  # source://kirei//lib/kirei/model/class_methods.rb#182
   sig { override.returns(::String) }
   def generate_human_id; end
 
   # defaults to 6
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#138
+  # source://kirei//lib/kirei/model/class_methods.rb#171
   sig { override.returns(::Integer) }
   def human_id_length; end
 
   # defaults to "model_name" (table_name without the trailing "s")
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#142
+  # source://kirei//lib/kirei/model/class_methods.rb#175
   sig { override.returns(::String) }
   def human_id_prefix; end
 
@@ -480,7 +520,7 @@ module Kirei::Model::ClassMethods
   # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
   # "strict" defaults to "false".
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#114
+  # source://kirei//lib/kirei/model/class_methods.rb#147
   sig do
     override
       .params(
@@ -490,7 +530,7 @@ module Kirei::Model::ClassMethods
   end
   def resolve(query, strict = T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#130
+  # source://kirei//lib/kirei/model/class_methods.rb#163
   sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
   def resolve_first(query, strict = T.unsafe(nil)); end
 
@@ -500,11 +540,19 @@ module Kirei::Model::ClassMethods
   sig { override.returns(::String) }
   def table_name; end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#42
+  # install the gem "pgvector" if you need to use vector columns
+  # also add `:pgvector` to the `App.config.db_extensions` array
+  # and enable the vector extension on the database.
+  #
+  # source://kirei//lib/kirei/model/class_methods.rb#108
+  sig { params(column_name: ::String).returns(T::Boolean) }
+  def vector_column?(column_name); end
+
+  # source://kirei//lib/kirei/model/class_methods.rb#48
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T::Array[T.attached_class]) }
   def where(hash); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#82
+  # source://kirei//lib/kirei/model/class_methods.rb#88
   sig { override.params(attributes: T::Hash[T.any(::String, ::Symbol), T.untyped]).void }
   def wrap_jsonb_non_primivitives!(attributes); end
 end
@@ -546,15 +594,19 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
+  # source://kirei//lib/kirei/routing/base.rb#164
+  sig { params(headers: T::Hash[::String, ::String], env: T::Hash[::String, T.untyped]).void }
+  def add_cors_headers(headers, env); end
+
   # source://kirei//lib/kirei/routing/base.rb#26
   sig do
     params(
-      env: T::Hash[::String, T.any(::IO, ::Numeric, ::Puma::Client, ::Puma::Configuration, ::String, ::StringIO, ::TCPSocket, T::Array[T.untyped], T::Boolean)]
+      env: T::Hash[::String, T.untyped]
     ).returns([::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])])
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#145
+  # source://kirei//lib/kirei/routing/base.rb#147
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -565,7 +617,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#136
+  # source://kirei//lib/kirei/routing/base.rb#138
   sig do
     params(
       body: ::String,
@@ -577,7 +629,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#175
+  # source://kirei//lib/kirei/routing/base.rb#190
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -590,7 +642,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#163
+  # source://kirei//lib/kirei/routing/base.rb#178
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
@@ -602,7 +654,7 @@ Kirei::Routing::Base::NOT_FOUND = T.let(T.unsafe(nil), Array)
 Kirei::Routing::NilableHooksType = T.type_alias { T.nilable(T::Set[T.proc.void]) }
 
 # source://kirei//lib/kirei/routing/rack_env_type.rb#6
-Kirei::Routing::RackEnvType = T.type_alias { T::Hash[::String, T.any(::IO, ::Numeric, ::Puma::Client, ::Puma::Configuration, ::String, ::StringIO, ::TCPSocket, T::Array[T.untyped], T::Boolean)] }
+Kirei::Routing::RackEnvType = T.type_alias { T::Hash[::String, T.untyped] }
 
 # https://github.com/rack/rack/blob/main/UPGRADE-GUIDE.md#rack-3-upgrade-guide
 #
@@ -725,9 +777,17 @@ class Kirei::Services::Runner
     end
     def call(class_name, log_tags: T.unsafe(nil), &block); end
 
+    # source://kirei//lib/kirei/services/runner.rb#49
+    sig { params(service: T.untyped).returns(::String) }
+    def service_result(service); end
+
     private
 
-    # source://kirei//lib/kirei/services/runner.rb#49
+    # source://kirei//lib/kirei/services/runner.rb#59
+    sig { params(result: ::String).returns(::Kirei::Logging::Level) }
+    def log_level(result); end
+
+    # source://kirei//lib/kirei/services/runner.rb#44
     sig { params(proc: T.proc.returns(T.untyped)).returns(::String) }
     def source_location(proc); end
   end

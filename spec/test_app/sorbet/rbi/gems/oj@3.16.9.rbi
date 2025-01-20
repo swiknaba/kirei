@@ -54,7 +54,7 @@ module Oj
     #
     # @param mimic_paths [Array] additional paths to add to the Ruby loaded features.
     #
-    # source://oj//lib/oj/mimic.rb#84
+    # source://oj//lib/oj/mimic.rb#80
     def mimic_loaded(mimic_paths = T.unsafe(nil)); end
 
     def object_load(*_arg0); end
@@ -149,7 +149,7 @@ class Oj::CStack; end
 # differences. These are the options that setup the custom mode to be like
 # the compat mode.
 #
-# source://oj//lib/oj/mimic.rb#16
+# source://oj//lib/oj/mimic.rb#12
 Oj::CUSTOM_MIMIC_JSON_OPTIONS = T.let(T.unsafe(nil), Hash)
 
 class Oj::Cache; end
@@ -229,14 +229,14 @@ class Oj::LoadError < ::Oj::Error; end
 # but in mimic we use a C struct to store defaults. This class creates a view
 # onto that struct.
 #
-# source://oj//lib/oj/mimic.rb#61
+# source://oj//lib/oj/mimic.rb#57
 class Oj::MimicDumpOption < ::Hash
   # @return [MimicDumpOption] a new instance of MimicDumpOption
   #
-  # source://oj//lib/oj/mimic.rb#62
+  # source://oj//lib/oj/mimic.rb#58
   def initialize; end
 
-  # source://oj//lib/oj/mimic.rb#72
+  # source://oj//lib/oj/mimic.rb#68
   def []=(key, value); end
 end
 
@@ -420,13 +420,14 @@ end
 #
 #    hash_end
 #
-# When a hash key is encountered the hash_key method is called with the parsed
-# hash value key. The return value from the call is then used as the key in
-# the key-value pair that follows.
+#  At the end of a JSON object element the hash_end() callback is called if
+#  public.
 #
 #    hash_key
 #
-# At the end of a JSON object element the hash_end() callback is called if public.
+# When a hash key is encountered the hash_key() method is called with the
+# parsed hash value key. The return value from the call is then used as the
+# key in the key-value pair that follows.
 #
 #    hash_set
 #
@@ -493,39 +494,39 @@ end
 #   Oj.sc_parse(MyHandler.new, f)
 #   end
 #
-# source://oj//lib/oj/schandler.rb#106
+# source://oj//lib/oj/schandler.rb#107
 class Oj::ScHandler
   # Create a new instance of the ScHandler class.
   #
   # @return [ScHandler] a new instance of ScHandler
   #
-  # source://oj//lib/oj/schandler.rb#108
+  # source://oj//lib/oj/schandler.rb#109
   def initialize; end
 
   private
 
-  # source://oj//lib/oj/schandler.rb#135
+  # source://oj//lib/oj/schandler.rb#136
   def add_value(value); end
 
-  # source://oj//lib/oj/schandler.rb#138
+  # source://oj//lib/oj/schandler.rb#139
   def array_append(a, value); end
 
-  # source://oj//lib/oj/schandler.rb#132
+  # source://oj//lib/oj/schandler.rb#133
   def array_end; end
 
-  # source://oj//lib/oj/schandler.rb#129
+  # source://oj//lib/oj/schandler.rb#130
   def array_start; end
 
-  # source://oj//lib/oj/schandler.rb#119
+  # source://oj//lib/oj/schandler.rb#120
   def hash_end; end
 
-  # source://oj//lib/oj/schandler.rb#122
+  # source://oj//lib/oj/schandler.rb#123
   def hash_key(key); end
 
-  # source://oj//lib/oj/schandler.rb#126
+  # source://oj//lib/oj/schandler.rb#127
   def hash_set(h, key, value); end
 
-  # source://oj//lib/oj/schandler.rb#116
+  # source://oj//lib/oj/schandler.rb#117
   def hash_start; end
 end
 
@@ -549,7 +550,7 @@ class Oj::StreamWriter
 end
 
 class Oj::StringWriter
-  def as_json; end
+  def as_json(*_arg0); end
   def pop; end
   def pop_all; end
   def push_array(*_arg0); end
@@ -577,18 +578,18 @@ Oj::VERSION = T.let(T.unsafe(nil), String)
 
 # More monkey patches.
 #
-# source://oj//lib/oj/mimic.rb#286
+# source://oj//lib/oj/mimic.rb#282
 class String
   include ::Comparable
 
-  # source://oj//lib/oj/mimic.rb#293
+  # source://oj//lib/oj/mimic.rb#289
   def to_json_raw(*_arg0); end
 
-  # source://oj//lib/oj/mimic.rb#287
+  # source://oj//lib/oj/mimic.rb#283
   def to_json_raw_object; end
 
   class << self
-    # source://oj//lib/oj/mimic.rb#296
+    # source://oj//lib/oj/mimic.rb#292
     def json_create(obj); end
   end
 end
