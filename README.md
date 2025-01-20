@@ -55,6 +55,10 @@ Find a test app in the [spec/test_app](spec/test_app) directory. It is a fully f
 
 All models must inherit from `T::Struct` and include `Kirei::Model`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
 
+Kirei models are immutable by convention - all properties are defined using `const` and updating a record returns a new instance rather than mutating the original. This immutability, combined with strict typing, makes them naturally suitable for both traditional data-centric applications and domain-driven design approaches.
+
+In a domain-driven design, `Kirei::Model` serves as the persistence layer, while domain concepts are expressed through `Entity` and `ValueObject`. The domain layer might combine or transform data from multiple models to match the domain's understanding, keeping the internal data structure separate from the public interface.
+
 ```ruby
 class User < T::Struct
   extend T::Sig
@@ -97,6 +101,61 @@ first_user = User.resolve_first(query) # T.nilable(User)
 
 # you can also cast the raw result manually
 first_user = User.from_hash(query.first.stringify_keys)
+```
+
+#### Domain Objects
+
+Kirei provides support for Domain-Driven Design patterns through `Kirei::Domain::Entity` and `Kirei::Domain::ValueObject`. Here's how to use them:
+
+```ruby
+# An Entity is identified by its ID
+class Flight < T::Struct
+  include Kirei::Domain::Entity
+
+  const :id, Integer
+
+  const :flight_number, String
+  const :departure_airport_id, Integer
+  const :arrival_airport_id, Integer
+  const :scheduled_departure_at, Time
+  const :status, String
+
+  sig { returns(T::Boolean) }
+  def can_board?
+    Time.now.utc <= scheduled_departure_at && status == 'on_time'
+  end
+end
+
+# A Value Object is identified by its attributes
+# I.e. two Coordinates with the same lat/long will be equal
+# regardless of object identity
+class Coordinates < T::Struct
+  include Kirei::Domain::ValueObject
+
+  const :latitude, Float
+  const :longitude, Float
+
+  sig { returns(String) }
+  def to_s
+    "#{latitude},#{longitude}"
+  end
+
+  sig { params(other_coords: Coordinates).returns(Float) }
+  def distance_to(other_coords)
+    # Implement e.g. Haversine here.
+  end
+end
+
+# Usage example
+coords = Coordinates.new(latitude: 37.6188, longitude: -122.3750)
+coords2 = Coordinates.new(latitude: 37.6188, longitude: -122.3750)
+
+coords == coords2 # true
+
+flight = Flight.new(id: 123, flight_number: 'UA123', status: 'on_time', scheduled_departure_at: Time.now.utc)
+flight2 = Flight.new(id: 123, flight_number: 'UA123', status: 'delayed', scheduled_departure_at: Time.now.utc)
+
+flight == flight2 # true - same entity even with different status
 ```
 
 #### Database Migrations
