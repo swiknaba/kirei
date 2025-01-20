@@ -51,7 +51,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "zeitwerk", "~> 2.5"
 
   # Web server & routing
-  spec.add_dependency "puma", "~> 6.0"
   spec.add_dependency "rack", "~> 3.0"
 
   # Database (Postgres)

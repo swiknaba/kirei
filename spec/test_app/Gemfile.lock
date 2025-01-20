@@ -1,10 +1,9 @@
 PATH
   remote: ../..
   specs:
-    kirei (0.4.1)
+    kirei (0.6.2)
       oj (~> 3.0)
       pg (~> 1.0)
-      puma (~> 6.0)
       rack (~> 3.0)
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
@@ -88,6 +87,7 @@ DEPENDENCIES
   bundler
   byebug
   kirei!
+  puma
   rake
   sorbet
   spoom
