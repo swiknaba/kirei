@@ -1,6 +1,11 @@
 # typed: strict
 # frozen_string_literal: true
 
+#
+# in a strict DDD app, likely move this to "app/domain/aviation/services/airport_filter.rb"
+# This is just a test app though, testing different application designs, and mostly caring about
+# functioning code rather than some pattern.
+#
 module Airports
   class Filter < T::Struct
     extend T::Sig
