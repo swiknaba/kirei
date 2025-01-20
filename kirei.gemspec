@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.description = <<~TXT
     Kirei is a Ruby micro/REST-framework for building scalable and performant microservices.
     It is built from the ground up to be clean and easy to use.
-    It is a Rack app, and uses Sorbet for typing, Sequel as an ORM, Zeitwerk for autoloading, and Puma as a web server.
+    It is a Rack app, and uses Sorbet for typing, Sequel as an ORM, and Zeitwerk for autoloading.
     It strives to have zero magic and to be as explicit as possible.
   TXT
   spec.homepage = "https://github.com/swiknaba/kirei"

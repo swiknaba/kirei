@@ -20,6 +20,7 @@ loader.tag = File.basename(__FILE__, ".rb")
   "/app",
   "/app/models",
   "/app/services",
+  "/app/domain",
 ].each do |root_namespace|
   # a root namespace skips the auto-infered module for this folder
   # so we don't have to write e.g. `Models::` or `Services::`

@@ -108,7 +108,7 @@ module StatsD
     # @return [Logger]
     # @see StatsD::Instrument::LogSink
     #
-    # source://statsd-instrument//lib/statsd/instrument.rb#329
+    # source://statsd-instrument//lib/statsd/instrument.rb#332
     def logger; end
 
     # The logger to use in case of any errors.
@@ -116,7 +116,7 @@ module StatsD
     # @return [Logger]
     # @see StatsD::Instrument::LogSink
     #
-    # source://statsd-instrument//lib/statsd/instrument.rb#329
+    # source://statsd-instrument//lib/statsd/instrument.rb#332
     def logger=(_arg0); end
 
     # Emits a timing metric.
@@ -155,7 +155,7 @@ module StatsD
     #
     # @return [StatsD::Instrument::Client]
     #
-    # source://statsd-instrument//lib/statsd/instrument.rb#340
+    # source://statsd-instrument//lib/statsd/instrument.rb#343
     def singleton_client; end
 
     # The StatsD client that handles method calls on the StatsD singleton.
@@ -164,14 +164,14 @@ module StatsD
     #
     # @return [StatsD::Instrument::Client]
     #
-    # source://statsd-instrument//lib/statsd/instrument.rb#336
+    # source://statsd-instrument//lib/statsd/instrument.rb#339
     def singleton_client=(_arg0); end
 
     private
 
     # @private
     #
-    # source://statsd-instrument//lib/statsd/instrument.rb#380
+    # source://statsd-instrument//lib/statsd/instrument.rb#383
     def extended(klass); end
   end
 end
@@ -187,12 +187,16 @@ module StatsD::Instrument
   # The metric will be incremented for every call of the instrumented method, no matter
   # whether what the method returns, or whether it raises an exception.
   #
+  # @param sample_rate
+  # @param tags
+  # @param no_prefix
+  # @param client
   # @param method [Symbol] The name of the method to instrument.
   # @param name [String, #call] The name of the metric to use. You can also pass in a
   #   callable to dynamically generate a metric name
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#206
+  # source://statsd-instrument//lib/statsd/instrument.rb#209
   def statsd_count(method, name, sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil), client: T.unsafe(nil)); end
 
   # Adds success counter instrumentation to a method.
@@ -268,7 +272,7 @@ module StatsD::Instrument
   # @return [void]
   # @see #statsd_count
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#223
+  # source://statsd-instrument//lib/statsd/instrument.rb#226
   def statsd_remove_count(method, name); end
 
   # Removes StatsD conditional counter instrumentation from a method
@@ -278,7 +282,7 @@ module StatsD::Instrument
   # @return [void]
   # @see #statsd_count_if
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#232
+  # source://statsd-instrument//lib/statsd/instrument.rb#235
   def statsd_remove_count_if(method, name); end
 
   # Removes StatsD success counter instrumentation from a method
@@ -288,7 +292,7 @@ module StatsD::Instrument
   # @return [void]
   # @see #statsd_count_success
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#241
+  # source://statsd-instrument//lib/statsd/instrument.rb#244
   def statsd_remove_count_success(method, name); end
 
   # Removes StatsD distribution instrumentation from a method
@@ -298,7 +302,7 @@ module StatsD::Instrument
   # @return [void]
   # @see #statsd_measure
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#259
+  # source://statsd-instrument//lib/statsd/instrument.rb#262
   def statsd_remove_distribution(method, name); end
 
   # Removes StatsD measure instrumentation from a method
@@ -308,21 +312,21 @@ module StatsD::Instrument
   # @return [void]
   # @see #statsd_measure
   #
-  # source://statsd-instrument//lib/statsd/instrument.rb#250
+  # source://statsd-instrument//lib/statsd/instrument.rb#253
   def statsd_remove_measure(method, name); end
 
   private
 
-  # source://statsd-instrument//lib/statsd/instrument.rb#281
+  # source://statsd-instrument//lib/statsd/instrument.rb#284
   def add_to_method(method, name, action, &block); end
 
-  # source://statsd-instrument//lib/statsd/instrument.rb#311
+  # source://statsd-instrument//lib/statsd/instrument.rb#314
   def method_visibility(method); end
 
-  # source://statsd-instrument//lib/statsd/instrument.rb#307
+  # source://statsd-instrument//lib/statsd/instrument.rb#310
   def remove_from_method(method, name, action); end
 
-  # source://statsd-instrument//lib/statsd/instrument.rb#269
+  # source://statsd-instrument//lib/statsd/instrument.rb#272
   def statsd_instrumentation_for(method, name, action); end
 
   class << self
@@ -363,6 +367,137 @@ module StatsD::Instrument
     def generate_tags(tags, callee, *args); end
   end
 end
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#5
+class StatsD::Instrument::AggregationKey
+  # @return [AggregationKey] a new instance of AggregationKey
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#8
+  def initialize(name, tags, no_prefix, type, sample_rate: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#17
+  def ==(other); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#17
+  def eql?(other); end
+
+  # Returns the value of attribute hash.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def hash; end
+
+  # Returns the value of attribute name.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def name; end
+
+  # Returns the value of attribute no_prefix.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def no_prefix; end
+
+  # Returns the value of attribute sample_rate.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def sample_rate; end
+
+  # Returns the value of attribute tags.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def tags; end
+
+  # Returns the value of attribute type.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#6
+  def type; end
+end
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#27
+class StatsD::Instrument::Aggregator
+  # @param sink [#<<] The sink to write the aggregated metrics to.
+  # @param datagram_builder_class [Class] The class to use for building datagrams.
+  # @param prefix [String] The prefix to add to all metrics.
+  # @param default_tags [Array<String>] The tags to add to all metrics.
+  # @param flush_interval [Float] The interval at which to flush the aggregated metrics.
+  # @param max_values [Integer] The maximum number of values to aggregate before flushing.
+  # @return [Aggregator] a new instance of Aggregator
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#85
+  def initialize(sink, datagram_builder_class, prefix, default_tags, flush_interval: T.unsafe(nil), max_values: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#138
+  def aggregate_timing(name, value, tags: T.unsafe(nil), no_prefix: T.unsafe(nil), type: T.unsafe(nil), sample_rate: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#172
+  def flush; end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#158
+  def gauge(name, value, tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
+
+  # Increment a counter by a given value and save it for later flushing.
+  #
+  # @param name [String] The name of the counter.
+  # @param value [Integer] The value to increment the counter by.
+  # @param tags [Hash{String, Symbol => String}, Array<String>] The tags to attach to the counter.
+  # @param no_prefix [Boolean] If true, the metric will not be prefixed.
+  # @return [void]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#123
+  def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
+
+  private
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#236
+  def datagram_builder(no_prefix:); end
+
+  # Flushes the aggregated metrics to the sink.
+  # Iterates over the aggregation state and sends each metric to the sink.
+  # If you change this function, you need to update the logic in the finalizer as well.
+  #
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#183
+  def do_flush; end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#226
+  def packet_key(name, tags = T.unsafe(nil), no_prefix = T.unsafe(nil), type = T.unsafe(nil), sample_rate: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#243
+  def start_flush_thread; end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#215
+  def tags_sorted(tags); end
+
+  # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#257
+  def thread_healthcheck; end
+
+  class << self
+    # source://statsd-instrument//lib/statsd/instrument/aggregator.rb#39
+    def finalize(aggregation_state, sink, datagram_builders, datagram_builder_class, default_tags); end
+  end
+end
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#30
+StatsD::Instrument::Aggregator::CONST_SAMPLE_RATE = T.let(T.unsafe(nil), Float)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#31
+StatsD::Instrument::Aggregator::COUNT = T.let(T.unsafe(nil), Symbol)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#28
+StatsD::Instrument::Aggregator::DEFAULT_MAX_CONTEXT_SIZE = T.let(T.unsafe(nil), Integer)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#32
+StatsD::Instrument::Aggregator::DISTRIBUTION = T.let(T.unsafe(nil), Symbol)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#178
+StatsD::Instrument::Aggregator::EMPTY_ARRAY = T.let(T.unsafe(nil), Array)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#35
+StatsD::Instrument::Aggregator::GAUGE = T.let(T.unsafe(nil), Symbol)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#34
+StatsD::Instrument::Aggregator::HISTOGRAM = T.let(T.unsafe(nil), Symbol)
+
+# source://statsd-instrument//lib/statsd/instrument/aggregator.rb#33
+StatsD::Instrument::Aggregator::MEASURE = T.let(T.unsafe(nil), Symbol)
 
 # This module defines several assertion methods that can be used to verify that
 # your application is emitting the right StatsD metrics.
@@ -562,102 +697,122 @@ module StatsD::Instrument::Assertions
   def capture_statsd_datagrams_with_exception_handling(client:, &block); end
 end
 
-# @note This class is part of the new Client implementation that is intended
-#   to become the new default in the next major release of this library.
-#
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#7
-class StatsD::Instrument::BatchedUDPSink
-  # @return [BatchedUDPSink] a new instance of BatchedUDPSink
-  #
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#26
-  def initialize(host, port, thread_priority: T.unsafe(nil), buffer_capacity: T.unsafe(nil), max_packet_size: T.unsafe(nil)); end
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#7
+class StatsD::Instrument::BatchedSink
+  extend ::Forwardable
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#49
+  # @return [BatchedSink] a new instance of BatchedSink
+  #
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#30
+  def initialize(sink, thread_priority: T.unsafe(nil), buffer_capacity: T.unsafe(nil), max_packet_size: T.unsafe(nil), statistics_interval: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#52
   def <<(datagram); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#58
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#65
+  def connection; end
+
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#61
   def flush(blocking:); end
 
-  # Returns the value of attribute host.
-  #
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#13
-  def host; end
+  # source://forwardable/1.3.3/forwardable.rb#231
+  def host(*args, **_arg1, &block); end
 
-  # Returns the value of attribute port.
-  #
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#13
-  def port; end
+  # source://forwardable/1.3.3/forwardable.rb#231
+  def port(*args, **_arg1, &block); end
 
   # @return [Boolean]
   #
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#45
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#48
   def sample?(sample_rate); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#54
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#57
   def shutdown(*args); end
 
   class << self
-    # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#21
+    # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#25
     def finalize(dispatcher); end
 
-    # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#16
+    # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#20
     def for_addr(addr, **kwargs); end
   end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#62
-class StatsD::Instrument::BatchedUDPSink::Buffer < ::Thread::SizedQueue
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#69
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#69
+class StatsD::Instrument::BatchedSink::Buffer < ::Thread::SizedQueue
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#76
   def inspect; end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#73
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#80
   def pop_nonblock; end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#63
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#70
   def push_nonblock(item); end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#9
-StatsD::Instrument::BatchedUDPSink::DEFAULT_BUFFER_CAPACITY = T.let(T.unsafe(nil), Integer)
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#14
+StatsD::Instrument::BatchedSink::DEFAULT_BUFFER_CAPACITY = T.let(T.unsafe(nil), Integer)
 
 # https://docs.datadoghq.com/developers/dogstatsd/high_throughput/?code-lang=ruby#ensure-proper-packet-sizes
 #
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#11
-StatsD::Instrument::BatchedUDPSink::DEFAULT_MAX_PACKET_SIZE = T.let(T.unsafe(nil), Integer)
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#16
+StatsD::Instrument::BatchedSink::DEFAULT_MAX_PACKET_SIZE = T.let(T.unsafe(nil), Integer)
 
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#8
-StatsD::Instrument::BatchedUDPSink::DEFAULT_THREAD_PRIORITY = T.let(T.unsafe(nil), Integer)
+# in seconds, and 0 implies disabled-by-default.
+#
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#17
+StatsD::Instrument::BatchedSink::DEFAULT_STATISTICS_INTERVAL = T.let(T.unsafe(nil), Integer)
 
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#80
-class StatsD::Instrument::BatchedUDPSink::Dispatcher
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#13
+StatsD::Instrument::BatchedSink::DEFAULT_THREAD_PRIORITY = T.let(T.unsafe(nil), Integer)
+
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#155
+class StatsD::Instrument::BatchedSink::Dispatcher
   # @return [Dispatcher] a new instance of Dispatcher
   #
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#81
-  def initialize(host, port, buffer_capacity, thread_priority, max_packet_size); end
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#156
+  def initialize(sink, buffer_capacity, thread_priority, max_packet_size, statistics_interval); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#92
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#171
   def <<(datagram); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#111
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#192
   def flush(blocking:); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#102
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#183
   def shutdown(wait = T.unsafe(nil)); end
 
   private
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#167
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#255
   def dispatch; end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#179
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#267
   def report_error(error); end
 
-  # source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#144
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#232
   def thread_healthcheck; end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/batched_udp_sink.rb#142
-StatsD::Instrument::BatchedUDPSink::Dispatcher::NEWLINE = T.let(T.unsafe(nil), String)
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#230
+StatsD::Instrument::BatchedSink::Dispatcher::NEWLINE = T.let(T.unsafe(nil), String)
+
+# source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#87
+class StatsD::Instrument::BatchedSink::DispatcherStats
+  # @return [DispatcherStats] a new instance of DispatcherStats
+  #
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#88
+  def initialize(interval, type); end
+
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#145
+  def increment_batched_sends(buffer_len, packet_size, batch_len); end
+
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#141
+  def increment_synchronous_sends; end
+
+  # source://statsd-instrument//lib/statsd/instrument/batched_sink.rb#117
+  def maybe_flush!(force: T.unsafe(nil)); end
+end
 
 # @note This class is part of the new Client implementation that is intended
 #   to become the new default in the next major release of this library.
@@ -723,8 +878,8 @@ class StatsD::Instrument::Client
   # @return [Client] a new instance of Client
   # @see .from_env to instantiate a client using environment variables.
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#149
-  def initialize(prefix: T.unsafe(nil), default_sample_rate: T.unsafe(nil), default_tags: T.unsafe(nil), implementation: T.unsafe(nil), sink: T.unsafe(nil), datagram_builder_class: T.unsafe(nil)); end
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#151
+  def initialize(prefix: T.unsafe(nil), default_sample_rate: T.unsafe(nil), default_tags: T.unsafe(nil), implementation: T.unsafe(nil), sink: T.unsafe(nil), datagram_builder_class: T.unsafe(nil), enable_aggregation: T.unsafe(nil), aggregation_flush_interval: T.unsafe(nil), aggregation_max_context_size: T.unsafe(nil)); end
 
   # Captures metrics that were emitted during the provided block.
   #
@@ -732,13 +887,13 @@ class StatsD::Instrument::Client
   #   emitted during the block, in the same order in which they were emitted.
   # @yield During the execution of the provided block, metrics will be captured.
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#452
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#552
   def capture(&block); end
 
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#433
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#533
   def capture_sink; end
 
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#416
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#514
   def clone_with_options(sink: T.unsafe(nil), prefix: T.unsafe(nil), default_sample_rate: T.unsafe(nil), default_tags: T.unsafe(nil), datagram_builder_class: T.unsafe(nil)); end
 
   # The class to use to build StatsD datagrams. To build the actual datagrams,
@@ -747,7 +902,7 @@ class StatsD::Instrument::Client
   # @return [Class] A subclass of {StatsD::Instrument::DatagramBuilder}
   # @see .datagram_builder_class_for_implementation
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#71
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#73
   def datagram_builder_class; end
 
   # The default sample rate to use for metrics that are emitted without a
@@ -759,7 +914,7 @@ class StatsD::Instrument::Client
   #
   # @return [Float] (default: 1.0) A value between 0.0 and 1.0.
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#143
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#145
   def default_sample_rate; end
 
   # The tags to apply to all the metrics emitted through this client.
@@ -778,7 +933,7 @@ class StatsD::Instrument::Client
   #
   # @return [Array<String>, Hash, nil]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#133
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#135
   def default_tags; end
 
   # Emits a distribution metric, which builds a histogram of the reported
@@ -805,7 +960,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#277
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#320
   def distribution(name, value = T.unsafe(nil), sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil), &block); end
 
   # Emits an event. An event represents any record of activity noteworthy for engineers.
@@ -823,8 +978,16 @@ class StatsD::Instrument::Client
   # @param aggregation_key [String] An aggregation key to group events with the same key.
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#373
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#460
   def event(title, text, timestamp: T.unsafe(nil), hostname: T.unsafe(nil), aggregation_key: T.unsafe(nil), priority: T.unsafe(nil), source_type_name: T.unsafe(nil), alert_type: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
+
+  # Forces the client to flush all metrics that are currently buffered, first flushes the aggregation
+  # if enabled.
+  #
+  # @return [void]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#479
+  def force_flush; end
 
   # Emits a gauge metric.
   #
@@ -851,7 +1014,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#242
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#280
   def gauge(name, value, sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # Emits a histogram metric, which builds a histogram of the reported values.
@@ -877,7 +1040,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#300
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#360
   def histogram(name, value, sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # Emits a counter metric.
@@ -911,7 +1074,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#202
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#220
   def increment(name, value = T.unsafe(nil), sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # Measures the latency of the given block in milliseconds, and emits it as a metric.
@@ -937,7 +1100,7 @@ class StatsD::Instrument::Client
   # @return The return value of the provided block will be passed through.
   # @yield The latency (execution time) of the block
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#320
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#390
   def latency(name, sample_rate: T.unsafe(nil), tags: T.unsafe(nil), metric_type: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # Emits a timing metric.
@@ -960,7 +1123,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#217
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#241
   def measure(name, value = T.unsafe(nil), sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil), &block); end
 
   # The prefix to prepend to the metric names that are emitted through this
@@ -984,7 +1147,7 @@ class StatsD::Instrument::Client
   #   to emit the metric.
   # @return [String, nil]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#116
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#118
   def prefix; end
 
   # Emits a service check. Services Checks allow you to characterize the status
@@ -1000,7 +1163,7 @@ class StatsD::Instrument::Client
   # @param hostname [String] A hostname to associate with the check.
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#348
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#435
   def service_check(name, status, timestamp: T.unsafe(nil), hostname: T.unsafe(nil), tags: T.unsafe(nil), message: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # Emits a set metric, which counts distinct values.
@@ -1023,7 +1186,7 @@ class StatsD::Instrument::Client
   # @param tags [Hash<Symbol, String>, Array<String>] (default: nil)
   # @return [void]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#257
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#300
   def set(name, value, sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil)); end
 
   # The sink to send UDP datagrams to.
@@ -1038,7 +1201,7 @@ class StatsD::Instrument::Client
   # Generally, you should use an instance of one of the following classes that
   # ship with this library:
   #
-  # - {StatsD::Instrument::UDPSink} A sink that will actually emit the provided
+  # - {StatsD::Instrument::Sink} A sink that will actually emit the provided
   #   datagrams over UDP.
   # - {StatsD::Instrument::NullSink} A sink that will simply swallow every
   #   datagram. This sink is for use when testing your application.
@@ -1047,10 +1210,10 @@ class StatsD::Instrument::Client
   #
   # @return [#sample?, #<<]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#93
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#95
   def sink; end
 
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#440
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#540
   def with_capture_sink(capture_sink); end
 
   # Instantiates a new StatsD client that uses the settings of the current client,
@@ -1061,20 +1224,20 @@ class StatsD::Instrument::Client
   #   yielded to the block. The original client will not be affected. The new client
   #   will be disposed after the block returns
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#398
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#496
   def with_options(sink: T.unsafe(nil), prefix: T.unsafe(nil), default_sample_rate: T.unsafe(nil), default_tags: T.unsafe(nil), datagram_builder_class: T.unsafe(nil)); end
 
   protected
 
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#460
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#560
   def datagram_builder(no_prefix:); end
 
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#471
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#571
   def emit(datagram); end
 
   # @return [Boolean]
   #
-  # source://statsd-instrument//lib/statsd/instrument/client.rb#467
+  # source://statsd-instrument//lib/statsd/instrument/client.rb#567
   def sample?(sample_rate); end
 
   class << self
@@ -1088,7 +1251,7 @@ class StatsD::Instrument::Client
     # @return [Class] The subclass of {StatsD::Instrument::DatagramBuilder}
     #   builder to use to generate UDP datagrams for the given implementation.
     #
-    # source://statsd-instrument//lib/statsd/instrument/client.rb#54
+    # source://statsd-instrument//lib/statsd/instrument/client.rb#56
     def datagram_builder_class_for_implementation(implementation); end
 
     # Instantiates a StatsD::Instrument::Client using configuration values provided in
@@ -1101,8 +1264,30 @@ class StatsD::Instrument::Client
   end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/client.rb#389
+# source://statsd-instrument//lib/statsd/instrument/client.rb#487
 StatsD::Instrument::Client::NO_CHANGE = T.let(T.unsafe(nil), Object)
+
+# source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#5
+module StatsD::Instrument::ConnectionBehavior
+  # source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#6
+  def close; end
+
+  # source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#16
+  def send_buffer_size; end
+
+  # @raise [NotImplementedError]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#24
+  def type; end
+
+  private
+
+  # source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#30
+  def send_buffer_size_from_socket(original_socket); end
+
+  # source://statsd-instrument//lib/statsd/instrument/connection_behavior.rb#34
+  def setup_socket(original_socket); end
+end
 
 # The Datagram class parses and inspects a StatsD datagrams
 #
@@ -1118,18 +1303,18 @@ class StatsD::Instrument::Datagram
 
   # @return [Boolean]
   #
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#54
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#58
   def ==(other); end
 
   # @return [Boolean]
   #
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#54
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#58
   def eql?(other); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#50
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#54
   def hash; end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#46
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#50
   def inspect; end
 
   # source://statsd-instrument//lib/statsd/instrument/datagram.rb#25
@@ -1145,7 +1330,7 @@ class StatsD::Instrument::Datagram
   # source://statsd-instrument//lib/statsd/instrument/datagram.rb#10
   def source; end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#42
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#46
   def tags; end
 
   # source://statsd-instrument//lib/statsd/instrument/datagram.rb#21
@@ -1156,11 +1341,11 @@ class StatsD::Instrument::Datagram
 
   private
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#78
+  # source://statsd-instrument//lib/statsd/instrument/datagram.rb#82
   def parsed_datagram; end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/datagram.rb#69
+# source://statsd-instrument//lib/statsd/instrument/datagram.rb#73
 StatsD::Instrument::Datagram::PARSER = T.let(T.unsafe(nil), Regexp)
 
 # @note This class is part of the new Client implementation that is intended
@@ -1168,53 +1353,64 @@ StatsD::Instrument::Datagram::PARSER = T.let(T.unsafe(nil), Regexp)
 #
 # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#7
 class StatsD::Instrument::DatagramBuilder
+  extend ::Forwardable
+
   # @return [DatagramBuilder] a new instance of DatagramBuilder
   #
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#22
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#28
   def initialize(prefix: T.unsafe(nil), default_tags: T.unsafe(nil)); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#27
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#33
   def c(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#47
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#53
   def d(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#31
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#37
   def g(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#43
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#49
   def h(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#51
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#63
   def kv(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#55
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#67
   def latency_metric_type; end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#35
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#41
   def ms(name, value, sample_rate, tags); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#39
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#71
+  def normalize_tags(tags, buffer = T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#45
   def s(name, value, sample_rate, tags); end
+
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#57
+  def timing_value_packed(name, type, values, sample_rate, tags); end
 
   protected
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#90
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#106
   def compile_tags(tags, buffer = T.unsafe(nil)); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#69
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#85
   def generate_generic_datagram(name, value, type, sample_rate, tags); end
 
   # Utility function to remove invalid characters from a StatsD metric name
   #
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#62
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#78
   def normalize_name(name); end
 
   class << self
-    # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#17
+    # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#18
     def datagram_class; end
 
-    # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#9
+    # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#22
+    def normalize_string(string); end
+
+    # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#10
     def unsupported_datagram_types(*types); end
   end
 end
@@ -1305,10 +1501,10 @@ class StatsD::Instrument::DogStatsDDatagramBuilder < ::StatsD::Instrument::Datag
   # @return [String] The correctly formatted service check datagram
   # @see https://docs.datadoghq.com/developers/dogstatsd/datagram_shell/#service-checks
   #
-  # source://statsd-instrument//lib/statsd/instrument/dogstatsd_datagram_builder.rb#72
+  # source://statsd-instrument//lib/statsd/instrument/dogstatsd_datagram_builder.rb#71
   def _sc(name, status, timestamp: T.unsafe(nil), hostname: T.unsafe(nil), tags: T.unsafe(nil), message: T.unsafe(nil)); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#11
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#12
   def kv(_, _, _, _); end
 
   # source://statsd-instrument//lib/statsd/instrument/dogstatsd_datagram_builder.rb#15
@@ -1320,7 +1516,7 @@ class StatsD::Instrument::DogStatsDDatagramBuilder < ::StatsD::Instrument::Datag
   end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/dogstatsd_datagram_builder.rb#92
+# source://statsd-instrument//lib/statsd/instrument/dogstatsd_datagram_builder.rb#91
 StatsD::Instrument::DogStatsDDatagramBuilder::SERVICE_CHECK_STATUS_VALUES = T.let(T.unsafe(nil), Hash)
 
 # The environment module is used to detect, and initialize the environment in
@@ -1333,10 +1529,16 @@ class StatsD::Instrument::Environment
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#36
   def initialize(env); end
 
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#101
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#124
+  def aggregation_interval; end
+
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#128
+  def aggregation_max_context_size; end
+
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#135
   def client; end
 
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#105
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#139
   def default_sink_for_environment; end
 
   # Returns the value of attribute env.
@@ -1359,24 +1561,32 @@ class StatsD::Instrument::Environment
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#59
   def environment; end
 
+  # @return [Boolean]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#120
+  def experimental_aggregation_enabled?; end
+
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#81
   def statsd_addr; end
 
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#113
+  def statsd_batch_statistics_interval; end
+
   # @return [Boolean]
   #
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#93
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#97
   def statsd_batching?; end
 
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#89
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#93
   def statsd_buffer_capacity; end
 
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#85
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#89
   def statsd_default_tags; end
 
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#69
   def statsd_implementation; end
 
-  # source://statsd-instrument//lib/statsd/instrument/environment.rb#97
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#105
   def statsd_max_packet_size; end
 
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#77
@@ -1384,6 +1594,14 @@ class StatsD::Instrument::Environment
 
   # source://statsd-instrument//lib/statsd/instrument/environment.rb#73
   def statsd_sample_rate; end
+
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#85
+  def statsd_socket_path; end
+
+  # @return [Boolean]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/environment.rb#101
+  def statsd_uds_send?; end
 
   class << self
     # source://statsd-instrument//lib/statsd/instrument/environment.rb#9
@@ -1420,10 +1638,10 @@ class StatsD::Instrument::Expectation
   # source://statsd-instrument//lib/statsd/instrument/expectation.rb#37
   def initialize(type:, name:, client: T.unsafe(nil), value: T.unsafe(nil), sample_rate: T.unsafe(nil), tags: T.unsafe(nil), no_prefix: T.unsafe(nil), times: T.unsafe(nil)); end
 
-  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#77
+  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#76
   def inspect; end
 
-  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#57
+  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#56
   def matches(actual_metric); end
 
   # Returns the value of attribute name.
@@ -1438,7 +1656,7 @@ class StatsD::Instrument::Expectation
   # source://statsd-instrument//lib/statsd/instrument/expectation.rb#35
   def name=(_arg0); end
 
-  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#48
+  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#47
   def normalized_value_for_type(type, value); end
 
   # Returns the value of attribute sample_rate.
@@ -1477,7 +1695,7 @@ class StatsD::Instrument::Expectation
   # source://statsd-instrument//lib/statsd/instrument/expectation.rb#35
   def times=(_arg0); end
 
-  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#69
+  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#68
   def to_s; end
 
   # Returns the value of attribute type.
@@ -1517,7 +1735,7 @@ class StatsD::Instrument::Expectation
   # @todo We should delegate this to thje datagram builder of the current client,
   #   to ensure that this logic matches the logic of the active datagram builder.
   #
-  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#95
+  # source://statsd-instrument//lib/statsd/instrument/expectation.rb#94
   def normalize_tags(tags); end
 
   class << self
@@ -1599,7 +1817,7 @@ end
 
 # For backwards compatibility
 #
-# source://statsd-instrument//lib/statsd/instrument/expectation.rb#108
+# source://statsd-instrument//lib/statsd/instrument/expectation.rb#107
 StatsD::Instrument::MetricExpectation = StatsD::Instrument::Expectation
 
 # @note This class is part of the new Client implementation that is intended
@@ -1619,18 +1837,65 @@ class StatsD::Instrument::NullSink
   def sample?(_sample_rate); end
 end
 
+# source://statsd-instrument//lib/statsd/instrument/sink.rb#5
+class StatsD::Instrument::Sink
+  # @return [Sink] a new instance of Sink
+  #
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#28
+  def initialize(connection = T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#37
+  def <<(datagram); end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#69
+  def connection; end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#65
+  def connection_type; end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#61
+  def flush(blocking: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#73
+  def host; end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#77
+  def port; end
+
+  # @return [Boolean]
+  #
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#33
+  def sample?(sample_rate); end
+
+  private
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#83
+  def invalidate_connection; end
+
+  # source://statsd-instrument//lib/statsd/instrument/sink.rb#87
+  def thread_store; end
+
+  class << self
+    # source://statsd-instrument//lib/statsd/instrument/sink.rb#7
+    def for_addr(addr); end
+  end
+end
+
+# source://statsd-instrument//lib/statsd/instrument/sink.rb#20
+StatsD::Instrument::Sink::FINALIZER = T.let(T.unsafe(nil), Proc)
+
 # @note This class is part of the new Client implementation that is intended
 #   to become the new default in the next major release of this library.
 #
 # source://statsd-instrument//lib/statsd/instrument/statsd_datagram_builder.rb#7
 class StatsD::Instrument::StatsDDatagramBuilder < ::StatsD::Instrument::DatagramBuilder
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#11
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#12
   def d(_, _, _, _); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#11
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#12
   def h(_, _, _, _); end
 
-  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#11
+  # source://statsd-instrument//lib/statsd/instrument/datagram_builder.rb#12
   def kv(_, _, _, _); end
 
   protected
@@ -1641,62 +1906,78 @@ class StatsD::Instrument::StatsDDatagramBuilder < ::StatsD::Instrument::Datagram
   def compile_tags(*_arg0); end
 end
 
-# @note This class is part of the new Client implementation that is intended
-#   to become the new default in the next major release of this library.
-#
-# source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#7
-class StatsD::Instrument::UDPSink
-  # @return [UDPSink] a new instance of UDPSink
+# source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#5
+class StatsD::Instrument::UdpConnection
+  include ::StatsD::Instrument::ConnectionBehavior
+
+  # @return [UdpConnection] a new instance of UdpConnection
   #
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#25
-  def initialize(host, port); end
-
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#35
-  def <<(datagram); end
-
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#56
-  def flush(blocking:); end
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#12
+  def initialize(host, port, max_packet_size: T.unsafe(nil)); end
 
   # Returns the value of attribute host.
   #
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#15
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#10
   def host; end
 
   # Returns the value of attribute port.
   #
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#15
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#10
   def port; end
 
-  # @return [Boolean]
-  #
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#31
-  def sample?(sample_rate); end
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#18
+  def send_datagram(message); end
+
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#22
+  def type; end
 
   private
 
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#62
-  def invalidate_socket; end
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#28
+  def setup_socket(original_socket); end
 
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#67
+  # source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#32
   def socket; end
-
-  # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#75
-  def thread_store; end
-
-  class << self
-    # source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#9
-    def for_addr(addr); end
-  end
 end
 
-# source://statsd-instrument//lib/statsd/instrument/udp_sink.rb#17
-StatsD::Instrument::UDPSink::FINALIZER = T.let(T.unsafe(nil), Proc)
+# source://statsd-instrument//lib/statsd/instrument/udp_connection.rb#8
+StatsD::Instrument::UdpConnection::DEFAULT_MAX_PACKET_SIZE = T.let(T.unsafe(nil), Integer)
+
+# source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#5
+class StatsD::Instrument::UdsConnection
+  include ::StatsD::Instrument::ConnectionBehavior
+
+  # @return [UdsConnection] a new instance of UdsConnection
+  #
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#10
+  def initialize(socket_path, max_packet_size: T.unsafe(nil)); end
+
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#25
+  def host; end
+
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#29
+  def port; end
+
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#21
+  def send_datagram(message); end
+
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#33
+  def type; end
+
+  private
+
+  # source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#39
+  def socket; end
+end
+
+# source://statsd-instrument//lib/statsd/instrument/uds_connection.rb#8
+StatsD::Instrument::UdsConnection::DEFAULT_MAX_PACKET_SIZE = T.let(T.unsafe(nil), Integer)
 
 # source://statsd-instrument//lib/statsd/instrument/version.rb#5
 StatsD::Instrument::VERSION = T.let(T.unsafe(nil), String)
 
-# source://statsd-instrument//lib/statsd/instrument.rb#265
+# source://statsd-instrument//lib/statsd/instrument.rb#268
 StatsD::Instrument::VOID = T.let(T.unsafe(nil), StatsD::Instrument::VoidClass)
 
-# source://statsd-instrument//lib/statsd/instrument.rb#263
+# source://statsd-instrument//lib/statsd/instrument.rb#266
 class StatsD::Instrument::VoidClass; end
