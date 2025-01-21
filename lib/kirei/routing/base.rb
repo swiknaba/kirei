@@ -38,6 +38,8 @@ module Kirei
         route = router.get(http_verb, req_path)
         return NOT_FOUND if route.nil?
 
+        router.current_env = env # expose the env to the controller
+
         params = case route.verb
                  when Verb::GET
                    query = T.cast(env.fetch("QUERY_STRING"), String)

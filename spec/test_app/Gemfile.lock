@@ -2,6 +2,7 @@ PATH
   remote: ../..
   specs:
     kirei (0.6.3)
+      logger (~> 1.5)
       oj (~> 3.0)
       pg (~> 1.0)
       rack (~> 3.0)

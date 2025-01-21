@@ -40,5 +40,38 @@ module Kirei
       @after_hooks ||= T.let(Set.new, Routing::NilableHooksType)
       @after_hooks.add(block) if block
     end
+
+    sig { returns(String) }
+    def req_host
+      env.fetch("HTTP_HOST")
+    end
+
+    sig { returns(String) }
+    def req_domain
+      T.must(req_host.split(":").first).split(".").last(2).join(".")
+    end
+
+    sig { returns(T.nilable(String)) }
+    def req_subdomain
+      parts = T.must(req_host.split(":").first).split(".")
+      return if parts.size <= 2
+
+      T.must(parts[0..-3]).join(".")
+    end
+
+    sig { returns(Integer) }
+    def req_port
+      env.fetch("SERVER_PORT")&.to_i
+    end
+
+    sig { returns(T::Boolean) }
+    def req_ssl?
+      env.fetch("HTTPS", env.fetch("rack.url_scheme", "http")) == "https"
+    end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    private def env
+      T.cast(@router.current_env, T::Hash[String, T.untyped])
+    end
   end
 end

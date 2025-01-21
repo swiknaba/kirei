@@ -25,6 +25,9 @@ module Kirei
         T::Hash[String, Route]
       end
 
+      sig { returns(T.nilable(T::Hash[String, T.untyped])) }
+      attr_accessor :current_env
+
       sig { void }
       def initialize
         @routes = T.let({}, RoutesHash)
