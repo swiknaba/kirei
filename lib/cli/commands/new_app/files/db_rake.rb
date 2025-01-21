@@ -166,33 +166,51 @@ module Cli
                   db = #{app_name}.raw_db_connection
                   model_file_name = args[:model_file_name]&.to_s
 
-                  models_dir = #{app_name}.root
+                  app_root_dir = TestApp.root
+                  app_dir = File.join(TestApp.root, "app")
 
-                  Dir.glob("app/models/**/*.rb").each do |model_file|
+                  Dir.glob("app/**/*.rb").each do |model_file|
                     next if !model_file_name.nil? && model_file == model_file_name
 
-                    model_path = File.expand_path(model_file, models_dir)
-                    modules = model_file.gsub("app/models/", "").gsub(".rb", "").split("/").map { |mod| Zeitwerk::Inflector.new.camelize(mod, model_path) }
-                    const_name = modules.join("::")
-                    model_klass = Object.const_get(const_name)
-                    next unless model_klass.ancestors.include?(Kirei::Model)
+                    model_path = File.expand_path(model_file, app_root_dir)
+                    loader = Zeitwerk::Registry.loaders.find { |l| l.tag == "app" }
+
+                    full_path = File.expand_path(model_file, app_root_dir)
+                    klass_constant_name = loader.inflector.camelize(File.basename(model_file, ".rb"), full_path)
+
+                    #
+                    # root namespaces in Zeitwerk are flattend, e.g. if "app/models" is a root namespace
+                    # then a file "app/models/airport.rb" is loaded as "::Airport".
+                    # if it weren't a root namespace, it would be "::Models::Airport".
+                    #
+                    root_dir_namespaces = loader.dirs.filter_map { |dir| dir == app_dir ? nil : Pathname.new(dir).relative_path_from(Pathname.new(app_dir)).to_s }
+                    relative_path = Pathname.new(full_path).relative_path_from(Pathname.new(app_dir)).to_s
+                    root_dir_of_model = root_dir_namespaces.find { |root_dir| relative_path.start_with?(root_dir) }
+                    relative_path.sub!("\#{root_dir_of_model}/", "") unless root_dir_of_model.nil? || root_dir_of_model.empty?
+
+                    namespace_parts = relative_path.split("/")
+                    namespace_parts.pop
+                    namespace_parts.map! { |part| loader.inflector.camelize(part, full_path) }
+
+                    constant_name = "\#{namespace_parts.join('::')}::\#{klass_constant_name}"
+
+                    model_klass = Object.const_get(constant_name)
+                    next unless model_klass.respond_to?(:table_name)
 
                     table_name = model_klass.table_name
                     schema = db.schema(table_name)
 
                     schema_comments = format_schema_comments(table_name, schema)
+                    file_content = File.read(model_path)
 
-                    file_contents = File.read(model_path)
-
-                    # Remove existing schema info comments if present
-                    updated_contents = file_contents.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*(?:class|module))/m, "")
+                    file_content_without_schema_info = file_content.sub(/# == Schema Info\\n(.*?)(\\n#\\n)?\\n(?=\\s*(?:class|module))/m, "")
 
                     # Insert the new schema comments before the module/class definition
-                    first_const = modules.first
-                    first_module_or_class = modules.count == 1 ? "class #{first_const}" : "module #{first_const}"
-                    modified_contents = updated_contents.sub(/(A|\n)(#{first_module_or_class})/m, "\\1#{schema_comments}\n\n\\2")
+                    first_module = namespace_parts.first
+                    first_module_or_class = first_module.nil? ? "class \#{klass_constant_name}" : "module \#{first_module}"
+                    modified_content = file_content_without_schema_info.sub(/(A|\\n)(\#{first_module_or_class})/m, "\\\\1\#{schema_comments}\\n\\n\\\\2")
 
-                    File.write(model_path, modified_contents)
+                    File.write(model_path, modified_content)
                   end
                 end
               end
@@ -215,7 +233,7 @@ module Cli
                   type ||= info[:db_type]
                   null = info[:allow_null] ? 'null' : 'not null'
                   primary_key = info[:primary_key] ? ', primary key' : ''
-                  lines << "#  \#{name.to_s.ljust(20)}:\#{type}    \#{null}\#{primary_key}"
+                  lines << "#  \#{name.to_s.ljust(20)}:\#{type.to_s.ljust(20)}\#{null}\#{primary_key}"
                 end
                 lines.join("\\n") + "\\n#"
               end

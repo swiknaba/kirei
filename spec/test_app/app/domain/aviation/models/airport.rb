@@ -5,10 +5,10 @@
 #
 # Table name: airports
 #
-#  id                  :text    not null, primary key
-#  name                :text    not null
-#  latitude            :float   not null
-#  longitude           :float   not null
+#  id                  :text                not null, primary key
+#  name                :text                not null
+#  latitude            :double precision    not null
+#  longitude           :double precision    not null
 #
 
 module Aviation
