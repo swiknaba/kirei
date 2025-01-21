@@ -44,6 +44,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Utilities
+  spec.add_dependency "logger", "~> 1.5" # for Ruby 3.5+
   spec.add_dependency "oj", "~> 3.0"
   spec.add_dependency "sorbet-runtime", "~> 0.5"
   spec.add_dependency "statsd-instrument", "~> 3.0"
