@@ -43,7 +43,9 @@ module Cli
               loader.setup
 
               # Fifth: load configs
-              Dir[File.join(__dir__, "config", "*.rb")].each { require(_1) }
+              Dir[File.join(__dir__, "config", "**", "*.rb")].each do |cnf|
+                require(cnf) unless cnf.split("/").include?("initializers")
+              end
 
               class #{app_name} < Kirei::App
                 # Kirei configuration

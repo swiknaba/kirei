@@ -30,7 +30,7 @@ module Kirei
     # must use "pg_json" to parse jsonb columns to hashes
     #
     # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb
-    prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array]
+    prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array] # add "fiber_concurrency" by default, too?
     prop :db_url, T.nilable(String)
     # Extra or unknown properties present in the Hash do not raise exceptions at runtime
     # unless the optional strict argument to from_hash is passed

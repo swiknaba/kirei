@@ -285,6 +285,31 @@ module Airports
 end
 ```
 
+### Goes well with these gems
+
+* [pagy](https://github.com/ddnexus/pagy) for pagination
+* [argon2](https://github.com/technion/ruby-argon2) for password hashing
+* [rack-session](https://github.com/rack/rack-session) for session management
+
+### Middlewares
+
+If you place custom middlewares under `config/middleware/*.rb`, they will be automatically loaded, see [app.rb](spec/test_app/app.rb) "load configs".
+
+However, you still need to `use` them in the `config.ru` file, see the generated [config.ru](spec/test_app/config.ru) file, this gives you full control over the order in which middlewares are executed:
+
+```ruby
+# Load middlewares here
+use(Rack::Reloader, 0) if TestApp.environment == "development"
+
+# add more custom middlewares here, e.g.
+use(Middleware::Example)
+
+# Launch the app
+run(TestApp.new)
+```
+
+Middleware provided by a gem like [rack-session](https://github.com/rack/rack-session) must be added to the `config.ru` file as well if you want to use it.
+
 ## Contributions
 
 We welcome contributions from the community. Before starting work on a major feature, please get in touch with us either via email or by opening an issue on GitHub. "Major feature" means anything that changes user-facing features or significant changes to the codebase itself.

@@ -6,6 +6,9 @@ require_relative("app")
 # Load middlewares here
 use(Rack::Reloader, 0) if TestApp.environment == "development"
 
+# add more custom middlewares here, e.g.
+use(Middleware::Example)
+
 # Launch the app
 run(TestApp.new)
 
