@@ -13,7 +13,7 @@ module Kirei
       sig { params(other: T.nilable(Kirei::Domain::Entity)).returns(T::Boolean) }
       def ==(other)
         return false unless other.is_a?(Kirei::Domain::Entity)
-        return false unless other.class == self.class
+        return false unless instance_of?(other.class)
 
         id == other.id
       end
