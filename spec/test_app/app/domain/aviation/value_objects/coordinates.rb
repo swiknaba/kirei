@@ -5,13 +5,13 @@
 # a = Aviation::ValueObjects::Coordinates.new(latitude: 123.314, longitude: 113.24, locations: ["Munich", "Berlin"])
 # b = Aviation::ValueObjects::Coordinates.new(latitude: 123.314, longitude: 113.24, locations: ["Berlin", "Munich", "Berlin"])
 #
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::CompareArray::Mode::STRICT)
+# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::STRICT)
 #   => false
 #
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::CompareArray::Mode::IGNORE_ORDER)
+# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::IGNORE_ORDER)
 #   => false
 #
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::CompareArray::Mode::IGNORE_ORDER_AND_DUPLICATES)
+# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::IGNORE_ORDER_AND_DUPLICATES)
 #   => true
 #
 
