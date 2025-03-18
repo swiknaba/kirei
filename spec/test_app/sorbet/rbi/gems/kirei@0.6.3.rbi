@@ -176,6 +176,10 @@ module Kirei::Domain::ValueObject
   # source://kirei//lib/kirei/domain/value_object.rb#11
   sig { returns(T.class_of(T::Struct)) }
   def class; end
+
+  # source://kirei//lib/kirei/domain/value_object.rb#28
+  sig { params(other: T.untyped, array_mode: ::Kirei::Services::ArrayComparison::Mode).returns(T::Boolean) }
+  def equal_with_array_mode?(other, array_mode: T.unsafe(nil)); end
 end
 
 # source://kirei//lib/kirei.rb#0
@@ -769,6 +773,30 @@ end
 
 # source://kirei//lib/kirei.rb#0
 module Kirei::Services; end
+
+# source://kirei//lib/kirei/services/array_comparison.rb#6
+class Kirei::Services::ArrayComparison
+  class << self
+    # source://kirei//lib/kirei/services/array_comparison.rb#24
+    sig do
+      params(
+        array_one: T::Array[T.untyped],
+        array_two: T::Array[T.untyped],
+        mode: ::Kirei::Services::ArrayComparison::Mode
+      ).returns(T::Boolean)
+    end
+    def call(array_one, array_two, mode: T.unsafe(nil)); end
+  end
+end
+
+# source://kirei//lib/kirei/services/array_comparison.rb#9
+class Kirei::Services::ArrayComparison::Mode < ::T::Enum
+  enums do
+    STRICT = new
+    IGNORE_ORDER = new
+    IGNORE_ORDER_AND_DUPLICATES = new
+  end
+end
 
 # source://kirei//lib/kirei/services/result.rb#6
 class Kirei::Services::Result
