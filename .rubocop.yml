@@ -41,3 +41,6 @@ Metrics/ModuleLength:
     - 'array'
     - 'heredoc'
     - 'method_call'
+
+RSpec/MultipleExpectations:
+  Enabled: false
