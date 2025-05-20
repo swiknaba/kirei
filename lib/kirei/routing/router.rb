@@ -44,7 +44,14 @@ module Kirei
       end
       def get(verb, path)
         key = "#{verb.serialize} #{path}"
-        routes[key]
+        route = routes[key]
+
+        if route.nil? && verb == Verb::HEAD
+          key = "#{Verb::GET.serialize} #{path}"
+          route = routes[key]
+        end
+
+        route
       end
 
       sig { params(routes: T::Array[Route]).void }

@@ -91,6 +91,8 @@ module Kirei
           RackResponseType,
         )
 
+        response_body = [] if http_verb == Verb::HEAD
+
         after_hooks = collect_hooks(controller, :after_hooks)
         run_hooks(after_hooks)
 
