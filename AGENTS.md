@@ -26,6 +26,8 @@ Kirei is a Ruby micro-framework specifically designed for building JSON REST API
   - Demonstrates framework usage
   - Serves as living documentation
 
+Note: For code style fixes, use `bundle exec rubocop -A` to automatically correct Rubocop offenses. This is more efficient than manually addressing each linting error.
+
 ## Framework Structure
 
 ### Core Components and Their Responsibilities
