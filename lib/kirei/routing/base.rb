@@ -35,7 +35,8 @@ module Kirei
         # -> use https://github.com/cyu/rack-cors ?
         #
 
-        route = router.get(http_verb, req_path)
+        lookup_verb = http_verb == Verb::HEAD ? Verb::GET : http_verb
+        route = router.get(lookup_verb, req_path)
         return NOT_FOUND if route.nil?
 
         router.current_env = env # expose the env to the controller
@@ -72,7 +73,7 @@ module Kirei
           level: Kirei::Logging::Level::INFO,
           label: "Request Started",
           meta: {
-            "http.method" => route.verb.serialize,
+            "http.method" => http_verb.serialize,
             "http.route" => route.path,
             "http.host" => env.fetch("HTTP_HOST"),
             "http.request_params" => params,
@@ -86,10 +87,14 @@ module Kirei
         }
         Logging::Metric.inject_defaults(statsd_timing_tags)
 
-        status, headers, response_body = T.cast(
-          controller.new(params: params).public_send(route.action),
-          RackResponseType,
-        )
+        status, headers, response_body = if http_verb == Verb::HEAD
+          [200, {}, []]
+        else
+          T.cast(
+            controller.new(params: params).public_send(route.action),
+            RackResponseType,
+          )
+        end
 
         after_hooks = collect_hooks(controller, :after_hooks)
         run_hooks(after_hooks)
