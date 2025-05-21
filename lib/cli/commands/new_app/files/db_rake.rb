@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 
 # rubocop:disable Metrics/ClassLength
 
