@@ -32,7 +32,10 @@ jobs:
       run: bundle install --gemfile spec/test_app/Gemfile
     - name: Lint with RuboCop
       run: bundle exec rubocop --parallel --ignore-unrecognized-cops
+      continue-on-error: ${{ matrix.ruby == 'head' }}
     - name: Type check with Sorbet
       run: bundle exec spoom srb tc
+      continue-on-error: ${{ matrix.ruby == 'head' }}
     - name: Run tests with RSpec
       run: bundle exec rspec
+      continue-on-error: ${{ matrix.ruby == 'head' }}
