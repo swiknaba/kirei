@@ -14,3 +14,4 @@
 .byebug_history
 .irb_history
 kirei-*.gem
+spec/test_app/puma.log

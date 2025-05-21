@@ -11,10 +11,12 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
 
   before(:all) do # rubocop:disable RSpec/BeforeAfterAll
     env = { "BUNDLE_GEMFILE" => gemfile, "RACK_ENV" => "test" }
-    @pid = Process.spawn(env, "bundle", "exec", "puma", "-b", "tcp://0.0.0.0:9292", chdir: app_dir, out: File::NULL, err: File::NULL)
+    log_file = File.join(app_dir, "puma.log")
+    @pid = Process.spawn(env, "bundle", "exec", "puma", "-b", "tcp://127.0.0.1:9292", chdir: app_dir, out: log_file, err: log_file)
 
-    10.times do
-      TCPSocket.new("0.0.0.0", 9292).close
+    # Wait for server to be ready with increased timeout
+    30.times do
+      TCPSocket.new("127.0.0.1", 9292).close
       break
     rescue Errno::ECONNREFUSED
       sleep 1
@@ -29,7 +31,7 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
   end
 
   it "responds with version key" do # rubocop:disable RSpec/ExampleLength
-    uri = URI("http://0.0.0.0:9292/livez")
+    uri = URI("http://127.0.0.1:9292/livez")
     ENV["http_proxy"] = nil
     ENV["https_proxy"] = nil
     ENV["HTTP_PROXY"] = nil
