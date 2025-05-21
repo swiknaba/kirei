@@ -41,7 +41,7 @@ module Kirei
 
         router.current_env = env # expose the env to the controller
 
-        params = case route.verb
+        params = case http_verb
                  when Verb::GET
                    query = T.cast(env.fetch("QUERY_STRING"), String)
                    query.split("&").to_h do |p|
@@ -56,9 +56,10 @@ module Kirei
                    res = Oj.load(body.read, Kirei::OJ_OPTIONS)
                    body.rewind # TODO: maybe don't rewind if we don't need to?
                    T.cast(res, T::Hash[String, T.untyped])
-                 else
-                   Logging::Logger.logger.warn("Unsupported HTTP verb: #{http_verb.serialize} send to #{req_path}")
+                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
                    {}
+                 else
+                   T.absurd(http_verb)
         end
 
         req_id = T.cast(env["HTTP_X_REQUEST_ID"], T.nilable(String))
@@ -73,7 +74,7 @@ module Kirei
           level: Kirei::Logging::Level::INFO,
           label: "Request Started",
           meta: {
-            "http.method" => http_verb.serialize,
+            "http.method" => route.verb.serialize,
             "http.route" => route.path,
             "http.host" => env.fetch("HTTP_HOST"),
             "http.request_params" => params,
