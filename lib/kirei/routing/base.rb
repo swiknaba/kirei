@@ -35,12 +35,13 @@ module Kirei
         # -> use https://github.com/cyu/rack-cors ?
         #
 
-        route = router.get(http_verb, req_path)
+        lookup_verb = http_verb == Verb::HEAD ? Verb::GET : http_verb
+        route = router.get(lookup_verb, req_path)
         return NOT_FOUND if route.nil?
 
         router.current_env = env # expose the env to the controller
 
-        params = case route.verb
+        params = case http_verb
                  when Verb::GET
                    query = T.cast(env.fetch("QUERY_STRING"), String)
                    query.split("&").to_h do |p|
@@ -55,9 +56,10 @@ module Kirei
                    res = Oj.load(body.read, Kirei::OJ_OPTIONS)
                    body.rewind # TODO: maybe don't rewind if we don't need to?
                    T.cast(res, T::Hash[String, T.untyped])
-                 else
-                   Logging::Logger.logger.warn("Unsupported HTTP verb: #{http_verb.serialize} send to #{req_path}")
+                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
                    {}
+                 else
+                   T.absurd(http_verb)
         end
 
         req_id = T.cast(env["HTTP_X_REQUEST_ID"], T.nilable(String))
@@ -86,10 +88,14 @@ module Kirei
         }
         Logging::Metric.inject_defaults(statsd_timing_tags)
 
-        status, headers, response_body = T.cast(
-          controller.new(params: params).public_send(route.action),
-          RackResponseType,
-        )
+        status, headers, response_body = if http_verb == Verb::HEAD
+          [200, {}, []]
+        else
+          T.cast(
+            controller.new(params: params).public_send(route.action),
+            RackResponseType,
+          )
+        end
 
         after_hooks = collect_hooks(controller, :after_hooks)
         run_hooks(after_hooks)
