@@ -10,17 +10,32 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
   gemfile = File.join(app_dir, "Gemfile")
 
   before(:all) do # rubocop:disable RSpec/BeforeAfterAll
-    env = { "BUNDLE_GEMFILE" => gemfile, "RACK_ENV" => "test" }
+    env = {
+      "BUNDLE_GEMFILE" => gemfile,
+      "RACK_ENV" => "test",
+      "PORT" => "9292"  # Explicitly set port
+    }
     log_file = File.join(app_dir, "puma.log")
     @pid = Process.spawn(env, "bundle", "exec", "puma", "-b", "tcp://127.0.0.1:9292", chdir: app_dir, out: log_file, err: log_file)
 
-    # Wait for server to be ready with increased timeout
-    30.times do
-      TCPSocket.new("127.0.0.1", 9292).close
-      break
-    rescue Errno::ECONNREFUSED
-      sleep 1
+    # Wait for server to be ready with increased timeout and better error handling
+    server_started = false
+    30.times do |i|
+      begin
+        TCPSocket.new("127.0.0.1", 9292).close
+        server_started = true
+        break
+      rescue Errno::ECONNREFUSED
+        if i == 29 # Last attempt
+          puts "Server failed to start. Check #{log_file} for details:"
+          puts File.read(log_file) if File.exist?(log_file)
+          raise "Server failed to start after 30 seconds"
+        end
+        sleep 1
+      end
     end
+
+    raise "Server failed to start" unless server_started
   end
 
   after(:all) do # rubocop:disable RSpec/BeforeAfterAll
@@ -36,8 +51,20 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
     ENV["https_proxy"] = nil
     ENV["HTTP_PROXY"] = nil
     ENV["HTTPS_PROXY"] = nil
-    res = Net::HTTP.get(uri)
-    data = JSON.parse(res)
-    expect(data).to include("version")
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.read_timeout = 5
+    http.open_timeout = 5
+
+    begin
+      response = http.get(uri.path)
+      expect(response.code).to eq("200")
+      data = JSON.parse(response.body)
+      expect(data).to include("version")
+    rescue => e
+      puts "Request failed. Server logs:"
+      puts File.read(File.join(app_dir, "puma.log")) if File.exist?(File.join(app_dir, "puma.log"))
+      raise e
+    end
   end
 end
