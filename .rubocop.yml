@@ -44,3 +44,6 @@ Metrics/ModuleLength:
 
 RSpec/MultipleExpectations:
   Enabled: false
+
+RSpec/ExampleLength:
+  Max: 20
