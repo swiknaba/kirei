@@ -7,18 +7,8 @@ require "json"
 RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
   include Rack::Test::Methods
 
-  app_dir = File.expand_path("test_app", __dir__)
-  File.join(app_dir, "Gemfile")
-
   def app
-    # Ensure we're in the right environment
-    # ENV["BUNDLE_GEMFILE"] = gemfile
-    # ENV["RACK_ENV"] = "test"
-
-    # Load the test app directly
-    require_relative "test_app/app"
-
-    # The app is already configured in app.rb, we just need to return it
+    require_relative("test_app/app")
     TestApp
   end
 
