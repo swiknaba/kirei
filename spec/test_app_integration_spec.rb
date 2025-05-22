@@ -14,28 +14,25 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
     @pid = Process.spawn(
       env,
       "bundle", "exec", "puma",
-      "-b", "tcp://0.0.0.0:9292",
+      "-b", "tcp://127.0.0.1:9292",
       chdir: app_dir,
-      out: $stdout,  # Let's see the output for debugging
-      err: $stderr
+      out: File::NULL,
+      err: File::NULL
     )
 
     # Wait for server to be ready
     start_time = Time.now
     while Time.now - start_time < 10
       begin
-        TCPSocket.new("0.0.0.0", 9292).close
-        puts "Server is ready on port 9292"
+        TCPSocket.new("127.0.0.1", 9292).close
         break
       rescue Errno::ECONNREFUSED
-        puts "Waiting for server..."
         sleep 0.1
       end
     end
   end
 
   after(:all) do # rubocop:disable RSpec/BeforeAfterAll
-    puts "Cleaning up server process #{@pid}"
     Process.kill("TERM", @pid) # rubocop:disable RSpec/InstanceVariable
     Process.wait(@pid) # rubocop:disable RSpec/InstanceVariable
   rescue StandardError
@@ -43,7 +40,7 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
   end
 
   it "server boots and health check is successful" do
-    uri = URI("http://0.0.0.0:9292/livez")
+    uri = URI("http://127.0.0.1:9292/livez")
     # Clear any proxy settings that might interfere
     ENV["http_proxy"] = nil
     ENV["https_proxy"] = nil
