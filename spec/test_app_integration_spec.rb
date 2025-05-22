@@ -9,7 +9,7 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
 
   def app
     require_relative("test_app/app")
-    TestApp
+    TestApp.new
   end
 
   it "server boots and health check is successful" do
