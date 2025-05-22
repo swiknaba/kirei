@@ -8,6 +8,7 @@ gem:
   - erubi
   - parallel
   - prettier_print
+  - rack-test
   - rbi
   - rspec
   - rspec-core
