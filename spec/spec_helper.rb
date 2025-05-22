@@ -4,7 +4,6 @@
 APP_ROOT = File.expand_path("..", __dir__)
 require "kirei"
 require "byebug"
-require "rack/test"
 require "json"
 
 RSpec.configure do |config|

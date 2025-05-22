@@ -8,7 +8,6 @@ gem "benchmark" # for Ruby 3.5+
 gem "bundler"
 gem "byebug"
 gem "dotenv", require: "dotenv/load"
-gem "rack-test" # For integration tests
 gem "rspec"
 gem "rubocop-dbl", "~> 2"
 gem "sorbet"
