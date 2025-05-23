@@ -88,13 +88,16 @@ module Kirei
         }
         Logging::Metric.inject_defaults(statsd_timing_tags)
 
-        status, headers, response_body = if http_verb == Verb::HEAD
-          [200, {}, []]
-        else
-          T.cast(
-            controller.new(params: params).public_send(route.action),
-            RackResponseType,
-          )
+        status, headers, response_body = case http_verb
+                                         when Verb::HEAD, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
+                                           [200, {}, []]
+                                         when Verb::GET, Verb::POST, Verb::PUT, Verb::PATCH, Verb::DELETE
+                                           T.cast(
+                                             controller.new(params: params).public_send(route.action),
+                                             RackResponseType,
+                                           )
+                                         else
+                                           T.absurd(http_verb)
         end
 
         after_hooks = collect_hooks(controller, :after_hooks)
