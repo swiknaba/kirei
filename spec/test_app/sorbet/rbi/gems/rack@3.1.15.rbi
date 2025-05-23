@@ -525,7 +525,7 @@ class Rack::CommonLogger
   # Attempt to determine the content length for the response to
   # include it in the logged data.
   #
-  # source://rack//lib/rack/common_logger.rb#83
+  # source://rack//lib/rack/common_logger.rb#84
   def extract_content_length(headers); end
 
   # Log the request to the configured logger.
@@ -876,17 +876,17 @@ class Rack::ETag
 
   private
 
-  # source://rack//lib/rack/etag.rb#58
+  # source://rack//lib/rack/etag.rb#61
   def digest_body(body); end
 
   # @return [Boolean]
   #
-  # source://rack//lib/rack/etag.rb#50
+  # source://rack//lib/rack/etag.rb#53
   def etag_status?(status); end
 
   # @return [Boolean]
   #
-  # source://rack//lib/rack/etag.rb#54
+  # source://rack//lib/rack/etag.rb#57
   def skip_caching?(headers); end
 end
 
@@ -1716,7 +1716,12 @@ class Rack::MediaType
     # this method responds with the following Hash:
     #   { 'charset' => 'utf-8' }
     #
-    # source://rack//lib/rack/media_type.rb#30
+    # This will pass back parameters with empty strings in the hash if they
+    # lack a value (e.g., "text/plain;charset=" will return { 'charset' => '' },
+    # and "text/plain;charset" will return { 'charset' => '' }, similarly to
+    # the query params parser (barring the latter case, which returns nil instead)).
+    #
+    # source://rack//lib/rack/media_type.rb#35
     def params(content_type); end
 
     # The media type (type/subtype) portion of the CONTENT_TYPE header
@@ -1731,7 +1736,7 @@ class Rack::MediaType
 
     private
 
-    # source://rack//lib/rack/media_type.rb#43
+    # source://rack//lib/rack/media_type.rb#48
     def strip_doublequotes(str); end
   end
 end
@@ -1962,62 +1967,65 @@ class Rack::MockRequest::FatalWarning < ::RuntimeError; end
 # Usually, you don't create the MockResponse on your own, but use
 # MockRequest.
 #
-# source://rack//lib/rack/mock_response.rb#13
+# source://rack//lib/rack/mock_response.rb#12
 class Rack::MockResponse < ::Rack::Response
   # @return [MockResponse] a new instance of MockResponse
   #
-  # source://rack//lib/rack/mock_response.rb#24
+  # source://rack//lib/rack/mock_response.rb#53
   def initialize(status, headers, body, errors = T.unsafe(nil)); end
 
-  # source://rack//lib/rack/mock_response.rb#39
+  # source://rack//lib/rack/mock_response.rb#68
   def =~(other); end
 
-  # source://rack//lib/rack/mock_response.rb#47
+  # source://rack//lib/rack/mock_response.rb#76
   def body; end
 
-  # source://rack//lib/rack/mock_response.rb#73
+  # source://rack//lib/rack/mock_response.rb#102
   def cookie(name); end
 
   # Headers
   #
-  # source://rack//lib/rack/mock_response.rb#19
+  # source://rack//lib/rack/mock_response.rb#48
   def cookies; end
 
   # @return [Boolean]
   #
-  # source://rack//lib/rack/mock_response.rb#69
+  # source://rack//lib/rack/mock_response.rb#98
   def empty?; end
 
   # Errors
   #
-  # source://rack//lib/rack/mock_response.rb#22
+  # source://rack//lib/rack/mock_response.rb#51
   def errors; end
 
   # Errors
   #
-  # source://rack//lib/rack/mock_response.rb#22
+  # source://rack//lib/rack/mock_response.rb#51
   def errors=(_arg0); end
 
-  # source://rack//lib/rack/mock_response.rb#43
+  # source://rack//lib/rack/mock_response.rb#72
   def match(other); end
 
   # Headers
   #
-  # source://rack//lib/rack/mock_response.rb#19
+  # source://rack//lib/rack/mock_response.rb#48
   def original_headers; end
 
   private
 
-  # source://rack//lib/rack/mock_response.rb#100
+  # source://rack//lib/rack/mock_response.rb#129
   def identify_cookie_attributes(cookie_filling); end
 
-  # source://rack//lib/rack/mock_response.rb#79
+  # source://rack//lib/rack/mock_response.rb#108
   def parse_cookies_from_header; end
 
   class << self
     def [](*_arg0); end
   end
 end
+
+# source://rack//lib/rack/mock_response.rb#16
+Rack::MockResponse::Cookie = CGI::Cookie
 
 # A multipart form data parser, adapted from IOWA.
 #
@@ -2520,13 +2528,13 @@ Rack::QUERY_STRING = T.let(T.unsafe(nil), String)
 class Rack::QueryParser
   # @return [QueryParser] a new instance of QueryParser
   #
-  # source://rack//lib/rack/query_parser.rb#36
-  def initialize(params_class, param_depth_limit); end
+  # source://rack//lib/rack/query_parser.rb#60
+  def initialize(params_class, param_depth_limit, bytesize_limit: T.unsafe(nil), params_limit: T.unsafe(nil)); end
 
-  # source://rack//lib/rack/query_parser.rb#166
+  # source://rack//lib/rack/query_parser.rb#192
   def make_params; end
 
-  # source://rack//lib/rack/query_parser.rb#170
+  # source://rack//lib/rack/query_parser.rb#196
   def new_depth_limit(param_depth_limit); end
 
   # normalize_params recursively expands parameters into structural types. If
@@ -2535,12 +2543,12 @@ class Rack::QueryParser
   # and should no longer be used, it is kept for backwards compatibility with
   # earlier versions of rack.
   #
-  # source://rack//lib/rack/query_parser.rb#94
+  # source://rack//lib/rack/query_parser.rb#120
   def normalize_params(params, name, v, _depth = T.unsafe(nil)); end
 
   # Returns the value of attribute param_depth_limit.
   #
-  # source://rack//lib/rack/query_parser.rb#34
+  # source://rack//lib/rack/query_parser.rb#40
   def param_depth_limit; end
 
   # parse_nested_query expands a query string into structural types. Supported
@@ -2549,7 +2557,7 @@ class Rack::QueryParser
   # ParameterTypeError is raised. Users are encouraged to return a 400 in this
   # case.
   #
-  # source://rack//lib/rack/query_parser.rb#73
+  # source://rack//lib/rack/query_parser.rb#99
   def parse_nested_query(qs, separator = T.unsafe(nil)); end
 
   # Stolen from Mongrel, with some small modifications:
@@ -2557,34 +2565,40 @@ class Rack::QueryParser
   # to parse cookies by changing the characters used in the second parameter
   # (which defaults to '&').
   #
-  # source://rack//lib/rack/query_parser.rb#45
+  # source://rack//lib/rack/query_parser.rb#71
   def parse_query(qs, separator = T.unsafe(nil), &unescaper); end
 
   private
 
   # @raise [ParamsTooDeepError]
   #
-  # source://rack//lib/rack/query_parser.rb#98
+  # source://rack//lib/rack/query_parser.rb#124
   def _normalize_params(params, name, v, depth); end
+
+  # source://rack//lib/rack/query_parser.rb#218
+  def check_query_string(qs, sep); end
 
   # @return [Boolean]
   #
-  # source://rack//lib/rack/query_parser.rb#180
+  # source://rack//lib/rack/query_parser.rb#206
   def params_hash_has_key?(hash, key); end
 
   # @return [Boolean]
   #
-  # source://rack//lib/rack/query_parser.rb#176
+  # source://rack//lib/rack/query_parser.rb#202
   def params_hash_type?(obj); end
 
-  # source://rack//lib/rack/query_parser.rb#192
+  # source://rack//lib/rack/query_parser.rb#234
   def unescape(string, encoding = T.unsafe(nil)); end
 
   class << self
-    # source://rack//lib/rack/query_parser.rb#30
-    def make_default(param_depth_limit); end
+    # source://rack//lib/rack/query_parser.rb#36
+    def make_default(param_depth_limit, **options); end
   end
 end
+
+# source://rack//lib/rack/query_parser.rb#54
+Rack::QueryParser::BYTESIZE_LIMIT = T.let(T.unsafe(nil), Integer)
 
 # source://rack//lib/rack/query_parser.rb#9
 Rack::QueryParser::COMMON_SEP = T.let(T.unsafe(nil), Hash)
@@ -2601,6 +2615,9 @@ class Rack::QueryParser::InvalidParameterError < ::ArgumentError
   include ::Rack::BadRequest
 end
 
+# source://rack//lib/rack/query_parser.rb#57
+Rack::QueryParser::PARAMS_LIMIT = T.let(T.unsafe(nil), Integer)
+
 # ParameterTypeError is the error that is raised when incoming structural
 # parameters (parsed by parse_nested_query) contain conflicting types.
 #
@@ -2609,16 +2626,24 @@ class Rack::QueryParser::ParameterTypeError < ::TypeError
   include ::Rack::BadRequest
 end
 
-# source://rack//lib/rack/query_parser.rb#196
+# source://rack//lib/rack/query_parser.rb#238
 class Rack::QueryParser::Params < ::Hash
   def to_params_hash; end
 end
 
-# ParamsTooDeepError is the error that is raised when params are recursively
-# nested over the specified limit.
+# ParamsTooDeepError is the old name for the error that is raised when params
+# are recursively nested over the specified limit. Make it the same as
+# as QueryLimitError, so that code that rescues ParamsTooDeepError error
+# to handle bad query strings also now handles other limits.
+#
+# source://rack//lib/rack/query_parser.rb#34
+Rack::QueryParser::ParamsTooDeepError = Rack::QueryParser::QueryLimitError
+
+# QueryLimitError is for errors raised when the query provided exceeds one
+# of the query parser limits.
 #
 # source://rack//lib/rack/query_parser.rb#26
-class Rack::QueryParser::ParamsTooDeepError < ::RangeError
+class Rack::QueryParser::QueryLimitError < ::RangeError
   include ::Rack::BadRequest
 end
 
@@ -4277,7 +4302,7 @@ class Rack::Static
 
   # Convert HTTP header rules to HTTP headers
   #
-  # source://rack//lib/rack/static.rb#166
+  # source://rack//lib/rack/static.rb#167
   def applicable_rules(path); end
 
   # source://rack//lib/rack/static.rb#125
@@ -4872,7 +4897,7 @@ Rack::Utils::PATH_SEPS = T.let(T.unsafe(nil), Regexp)
 Rack::Utils::ParameterTypeError = Rack::QueryParser::ParameterTypeError
 
 # source://rack//lib/rack/utils.rb#23
-Rack::Utils::ParamsTooDeepError = Rack::QueryParser::ParamsTooDeepError
+Rack::Utils::ParamsTooDeepError = Rack::QueryParser::QueryLimitError
 
 # Responses with HTTP status codes that should not have an entity body
 #

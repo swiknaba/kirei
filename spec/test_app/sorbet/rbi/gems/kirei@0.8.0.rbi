@@ -624,7 +624,7 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#166
+  # source://kirei//lib/kirei/routing/base.rb#175
   sig { params(headers: T::Hash[::String, ::String], env: T::Hash[::String, T.untyped]).void }
   def add_cors_headers(headers, env); end
 
@@ -636,7 +636,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#149
+  # source://kirei//lib/kirei/routing/base.rb#158
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -647,7 +647,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#140
+  # source://kirei//lib/kirei/routing/base.rb#149
   sig do
     params(
       body: ::String,
@@ -659,7 +659,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#192
+  # source://kirei//lib/kirei/routing/base.rb#201
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -672,7 +672,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#180
+  # source://kirei//lib/kirei/routing/base.rb#189
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
@@ -717,6 +717,7 @@ end
 #
 # source://kirei//lib/kirei/routing/router.rb#20
 class Kirei::Routing::Router
+  include ::Singleton::SingletonInstanceMethods
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 
