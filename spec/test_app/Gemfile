@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 # Use the current runtime Ruby version so the test app works across
 # multiple Ruby versions in CI.
-ruby RUBY_VERSION
+ruby "~> #{RUBY_VERSION.split('.')[0..1].join('.')}.0" # Accept any patch version including .dev
 
 gem "kirei", path: "../../"
 
