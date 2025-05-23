@@ -28,12 +28,23 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Install TestApp gems
+      if: matrix.ruby != 'head'
+      run: bundle install --gemfile spec/test_app/Gemfile
     - name: Lint with RuboCop
       run: bundle exec rubocop --parallel --ignore-unrecognized-cops
       continue-on-error: ${{ matrix.ruby == 'head' }}
     - name: Type check with Sorbet
       run: bundle exec spoom srb tc
       continue-on-error: ${{ matrix.ruby == 'head' }}
-    - name: Run tests with RSpec
-      run: bundle exec rspec
+    - name: Run tests with RSpec (excluding integration test)
+      run: bundle exec rspec --tag ~integration
       continue-on-error: ${{ matrix.ruby == 'head' }}
+    - name: Verify the dummy app boots & responds to health check
+      if: matrix.ruby != 'head'
+      run: |
+        cd spec/test_app
+        bundle exec puma -b tcp://127.0.0.1:9292 &
+        sleep 5  # Give the server time to start
+        curl -f http://127.0.0.1:9292/livez
+        kill %1

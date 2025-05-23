@@ -28,7 +28,7 @@ RSpec.describe Kirei::Routing::Base do
     original_routes.each { |k, v| router.routes[k] = v }
   end
 
-  it "handles HEAD without invoking the controller", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+  it "handles HEAD without invoking the controller", :aggregate_failures do
     app = DummyApp.new
 
     req_id = "req_test"
