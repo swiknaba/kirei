@@ -5,7 +5,7 @@ require "net/http"
 require "uri"
 require "socket"
 
-RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
+RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/DescribeClass
   app_dir = File.expand_path("test_app", __dir__)
   gemfile = File.join(app_dir, "Gemfile")
 
@@ -20,7 +20,6 @@ RSpec.describe "TestApp integration" do # rubocop:disable RSpec/DescribeClass
       err: File::NULL
     )
 
-    # Wait for server to be ready
     start_time = Time.now
     while Time.now - start_time < 10
       begin
