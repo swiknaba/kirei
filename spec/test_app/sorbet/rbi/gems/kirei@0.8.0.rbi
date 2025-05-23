@@ -100,29 +100,13 @@ Kirei::Config::SENSITIVE_KEYS = T.let(T.unsafe(nil), Array)
 
 # source://kirei//lib/kirei/controller.rb#5
 class Kirei::Controller < ::Kirei::Routing::Base
-  # source://kirei//lib/kirei/controller.rb#50
-  sig { returns(::String) }
-  def req_domain; end
-
   # source://kirei//lib/kirei/controller.rb#45
-  sig { returns(::String) }
-  def req_host; end
-
-  # source://kirei//lib/kirei/controller.rb#63
-  sig { returns(::Integer) }
-  def req_port; end
-
-  # source://kirei//lib/kirei/controller.rb#68
-  sig { returns(T::Boolean) }
-  def req_ssl?; end
-
-  # source://kirei//lib/kirei/controller.rb#55
-  sig { returns(T.nilable(::String)) }
-  def req_subdomain; end
+  sig { returns(::Kirei::Routing::Request) }
+  def request; end
 
   private
 
-  # source://kirei//lib/kirei/controller.rb#73
+  # source://kirei//lib/kirei/controller.rb#50
   sig { returns(T::Hash[::String, T.untyped]) }
   def env; end
 
@@ -691,6 +675,36 @@ Kirei::Routing::RackEnvType = T.type_alias { T::Hash[::String, T.untyped] }
 # source://kirei//lib/kirei/routing/rack_response_type.rb#7
 Kirei::Routing::RackResponseType = T.type_alias { [::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])] }
 
+# source://kirei//lib/kirei/routing/request.rb#6
+class Kirei::Routing::Request < ::T::Struct
+  const :env, T::Hash[::String, T.untyped]
+
+  # source://kirei//lib/kirei/routing/request.rb#17
+  sig { returns(::String) }
+  def domain; end
+
+  # source://kirei//lib/kirei/routing/request.rb#12
+  sig { returns(::String) }
+  def host; end
+
+  # source://kirei//lib/kirei/routing/request.rb#30
+  sig { returns(::Integer) }
+  def port; end
+
+  # source://kirei//lib/kirei/routing/request.rb#35
+  sig { returns(T::Boolean) }
+  def ssl?; end
+
+  # source://kirei//lib/kirei/routing/request.rb#22
+  sig { returns(T.nilable(::String)) }
+  def subdomain; end
+
+  class << self
+    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    def inherited(s); end
+  end
+end
+
 # source://kirei//lib/kirei/routing/route.rb#6
 class Kirei::Routing::Route < ::T::Struct
   const :verb, ::Kirei::Routing::Verb
@@ -717,7 +731,6 @@ end
 #
 # source://kirei//lib/kirei/routing/router.rb#20
 class Kirei::Routing::Router
-  include ::Singleton::SingletonInstanceMethods
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 

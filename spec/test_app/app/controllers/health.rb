@@ -10,11 +10,11 @@ module Controllers
 
       info = {
         "version" => TestApp.version,
-        "req_host" => req_host,
-        "req_domain" => req_domain,
-        "req_subdomain" => req_subdomain,
-        "req_port" => req_port,
-        "req_ssl" => req_ssl?,
+        "req_host" => request.host,
+        "req_domain" => request.domain,
+        "req_subdomain" => request.subdomain,
+        "req_port" => request.port,
+        "req_ssl" => request.ssl?,
       }
 
       render(Oj.dump(info), status: 200)
