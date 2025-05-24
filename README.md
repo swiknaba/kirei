@@ -21,7 +21,7 @@ TL;DR:
 
 This gem follows SemVer, however only after a stable release 1.0.0 is made.
 
-A changelog is maintained in the [CHANGELOG.md](CHANGELOG.md) file and/or the GitHub Releases page.
+A changelog is maintained via the [GitHub Releases page](https://github.com/swiknaba/kirei/releases).
 
 ## Installation
 

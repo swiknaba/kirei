@@ -36,7 +36,6 @@ Gem::Specification.new do |spec|
     "sorbet/rbi/shims/**/*.rbi",
     "LICENSE",
     "README.md",
-    "CHANGELOG.md",
   ]
 
   spec.bindir = "bin"
