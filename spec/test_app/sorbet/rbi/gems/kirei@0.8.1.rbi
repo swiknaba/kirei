@@ -90,7 +90,7 @@ class Kirei::Config < ::T::Struct
   prop :allowed_origins, T::Array[::String], default: T.unsafe(nil)
 
   class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.12124/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -179,7 +179,7 @@ class Kirei::Errors::JsonApiError < ::T::Struct
   const :source, T.nilable(::Kirei::Errors::JsonApiErrorSource)
 
   class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.12124/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -191,7 +191,7 @@ class Kirei::Errors::JsonApiErrorSource < ::T::Struct
   const :id, T.nilable(::String)
 
   class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.12124/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -700,7 +700,7 @@ class Kirei::Routing::Request < ::T::Struct
   def subdomain; end
 
   class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.12124/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -713,7 +713,7 @@ class Kirei::Routing::Route < ::T::Struct
   const :action, ::String
 
   class << self
-    # source://sorbet-runtime/0.5.11287/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.12124/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -731,6 +731,7 @@ end
 #
 # source://kirei//lib/kirei/routing/router.rb#20
 class Kirei::Routing::Router
+  include ::Singleton::SingletonInstanceMethods
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 
