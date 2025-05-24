@@ -106,10 +106,12 @@ module Kirei
       #
       sig { params(column_name: String).returns(T::Boolean) }
       def vector_column?(column_name)
-        _col_name, col_info = T.let(
-          db.schema(table_name.to_sym).find { _1[0] == column_name.to_sym },
-          [Symbol, T::Hash[Symbol, T.untyped]],
+        col_info = T.let(
+          db.schema(table_name.to_sym).find { _1[0] == column_name.to_sym }&.last,
+          T.nilable(T::Hash[Symbol, T.untyped]),
         )
+        return false if col_info.nil?
+
         col_info.fetch(:db_type).match?(/vector\(\d+\)/)
       end
 
