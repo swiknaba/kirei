@@ -213,6 +213,7 @@ def format_schema_comments(table_name, schema)
     name, info = column
     type = "#{info[:db_type]}(#{info[:max_length]})" if info[:max_length]
     type ||= info[:db_type]
+    type = "#{type}, " if type.size >= 20
     null = info[:allow_null] ? 'null' : 'not null'
     primary_key = info[:primary_key] ? ', primary key' : ''
     lines << "#  #{name.to_s.ljust(20)}:#{type.to_s.ljust(20)}#{null}#{primary_key}"
