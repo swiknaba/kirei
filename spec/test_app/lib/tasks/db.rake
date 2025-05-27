@@ -156,24 +156,23 @@ namespace :db do
       next if !model_file_name.nil? && model_file == model_file_name
 
       model_path = File.expand_path(model_file, app_root_dir)
-      loader = Zeitwerk::Registry.loaders.find { |l| l.tag == "app" }
 
       full_path = File.expand_path(model_file, app_root_dir)
-      klass_constant_name = loader.inflector.camelize(File.basename(model_file, ".rb"), full_path)
+      klass_constant_name = APP_LOADER.inflector.camelize(File.basename(model_file, ".rb"), full_path)
 
       #
       # root namespaces in Zeitwerk are flattend, e.g. if "app/models" is a root namespace
       # then a file "app/models/airport.rb" is loaded as "::Airport".
       # if it weren't a root namespace, it would be "::Models::Airport".
       #
-      root_dir_namespaces = loader.dirs.filter_map { |dir| dir == app_dir ? nil : Pathname.new(dir).relative_path_from(Pathname.new(app_dir)).to_s }
+      root_dir_namespaces = APP_LOADER.dirs.filter_map { |dir| dir == app_dir ? nil : Pathname.new(dir).relative_path_from(Pathname.new(app_dir)).to_s }
       relative_path = Pathname.new(full_path).relative_path_from(Pathname.new(app_dir)).to_s
       root_dir_of_model = root_dir_namespaces.find { |root_dir| relative_path.start_with?(root_dir) }
       relative_path.sub!("#{root_dir_of_model}/", "") unless root_dir_of_model.nil? || root_dir_of_model.empty?
 
       namespace_parts = relative_path.split("/")
       namespace_parts.pop
-      namespace_parts.map! { |part| loader.inflector.camelize(part, full_path) }
+      namespace_parts.map! { |part| APP_LOADER.inflector.camelize(part, full_path) }
 
       constant_name = "#{namespace_parts.join('::')}::#{klass_constant_name}"
 

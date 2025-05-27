@@ -14,8 +14,8 @@ Bundler.require(:test) if ENV["RACK_ENV"] == "test"
 Dir[File.join(__dir__, "config/initializers", "*.rb")].each { require(_1) }
 
 # Fourth: load all application code
-loader = Zeitwerk::Loader.new
-loader.tag = File.basename(__FILE__, ".rb")
+APP_LOADER = Zeitwerk::Loader.new
+APP_LOADER.tag = File.basename(__FILE__, ".rb")
 [
   "/app",
   "/app/models",
@@ -24,9 +24,9 @@ loader.tag = File.basename(__FILE__, ".rb")
 ].each do |root_namespace|
   # a root namespace skips the auto-infered module for this folder
   # so we don't have to write e.g. `Models::` or `Services::`
-  loader.push_dir("#{File.dirname(__FILE__)}#{root_namespace}")
+  APP_LOADER.push_dir("#{File.dirname(__FILE__)}#{root_namespace}")
 end
-loader.setup
+APP_LOADER.setup
 
 # Fifth: load configs
 Dir[File.join(__dir__, "config", "**", "*.rb")].each do |cnf|
@@ -47,4 +47,4 @@ class TestApp < Kirei::App
   }
 end
 
-loader.eager_load
+APP_LOADER.eager_load
