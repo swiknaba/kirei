@@ -32,7 +32,7 @@ GEM
     pg (1.5.9)
     prettier_print (1.2.1)
     prism (0.24.0)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     rack (3.1.15)
     rake (13.1.0)
