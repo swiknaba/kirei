@@ -6,3 +6,8 @@
 
 # THIS IS AN EMPTY RBI FILE.
 # see https://github.com/Shopify/tapioca#manually-requiring-parts-of-a-gem
+
+class Sequel::Postgres::JSONBHash
+  sig { returns(T::Hash[String, T.untyped]) }
+  def to_hash; end
+end

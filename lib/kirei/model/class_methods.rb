@@ -150,6 +150,14 @@ module Kirei
         query.map do |row|
           row = T.cast(row, T::Hash[Symbol, T.untyped])
           row.transform_keys!(&:to_s) # sequel returns symbolized keys
+          row.transform_values! do |value|
+            # T::Struct.from_hash fails on JSONBHash
+            if value.is_a?(Sequel::Postgres::JSONBHash)
+              value.to_hash
+            else
+              value
+            end
+          end
           from_hash(row, strict_loading)
         end
       end
