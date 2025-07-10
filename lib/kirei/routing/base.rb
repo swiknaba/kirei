@@ -54,7 +54,7 @@ module Kirei
 
                    if content_type.include?("multipart/form-data")
                      rack_request = Rack::Request.new(env)
-                     T.cast(rack_request.params, T::Hash[String, T.untyped])
+                     process_multipart_params(rack_request.params)
                    elsif content_type.include?("application/json")
                      body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
                      res = Oj.load(body.read, Kirei::OJ_OPTIONS)
@@ -231,6 +231,21 @@ module Kirei
         end
 
         result
+      end
+
+      sig { params(params: T::Hash[String, T.untyped]).returns(T::Hash[String, T.untyped]) }
+      private def process_multipart_params(params)
+        raise "Unexpected params format" unless params["file"].key?("tempfile")
+
+        file_param = T.cast(params["file"], T::Hash[String, T.untyped])
+
+        file = Rack::Multipart::UploadedFile.new(
+          io: file_param.fetch("tempfile"),
+          content_type: file_param.fetch("type", "application/octet-stream"),
+          filename: file_param.fetch("filename"),
+        )
+
+        { "file" => file }
       end
     end
   end
