@@ -504,19 +504,19 @@ module Kirei::Model::ClassMethods
   # Generates a human-readable ID for the record.
   # The ID is prefixed with the table name and an underscore.
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#182
+  # source://kirei//lib/kirei/model/class_methods.rb#190
   sig { override.returns(::String) }
   def generate_human_id; end
 
   # defaults to 6
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#171
+  # source://kirei//lib/kirei/model/class_methods.rb#179
   sig { override.returns(::Integer) }
   def human_id_length; end
 
   # defaults to "model_name" (table_name without the trailing "s")
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#175
+  # source://kirei//lib/kirei/model/class_methods.rb#183
   sig { override.returns(::String) }
   def human_id_prefix; end
 
@@ -544,7 +544,7 @@ module Kirei::Model::ClassMethods
   end
   def resolve(query, strict = T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#163
+  # source://kirei//lib/kirei/model/class_methods.rb#171
   sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
   def resolve_first(query, strict = T.unsafe(nil)); end
 
@@ -731,7 +731,6 @@ end
 #
 # source://kirei//lib/kirei/routing/router.rb#20
 class Kirei::Routing::Router
-  include ::Singleton::SingletonInstanceMethods
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 
