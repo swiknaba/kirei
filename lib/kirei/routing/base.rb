@@ -50,12 +50,29 @@ module Kirei
                      [k, v]
                    end
                  when Verb::POST, Verb::PUT, Verb::PATCH
-                   # TODO: based on content-type, parse the body differently
-                   #       built-in support for JSON & XML
-                   body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-                   res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                   body.rewind # TODO: maybe don't rewind if we don't need to?
-                   T.cast(res, T::Hash[String, T.untyped])
+                   content_type = T.cast(env.fetch("CONTENT_TYPE", ""), String)
+
+                   if content_type.include?("multipart/form-data")
+                     rack_request = Rack::Request.new(env)
+                     process_multipart_params(rack_request.params.fetch("file"))
+                   elsif content_type.include?("application/json")
+                     body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
+                     res = Oj.load(body.read, Kirei::OJ_OPTIONS)
+                     body.rewind # TODO: maybe don't rewind if we don't need to?
+                     T.cast(res, T::Hash[String, T.untyped])
+                   else
+                     body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
+                     begin
+                       res = Oj.load(body.read, Kirei::OJ_OPTIONS)
+                       body.rewind
+                       T.cast(res, T::Hash[String, T.untyped])
+                     rescue Oj::ParseError
+                       # If JSON parsing fails, use form data parsing
+                       body.rewind
+                       rack_request = Rack::Request.new(env)
+                       T.cast(rack_request.params, T::Hash[String, T.untyped])
+                     end
+                   end
                  when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
                    {}
                  else
@@ -214,6 +231,19 @@ module Kirei
         end
 
         result
+      end
+
+      sig { params(params: T::Hash[Symbol, T.untyped]).returns(T::Hash[String, T.untyped]) }
+      private def process_multipart_params(params)
+        raise "Unexpected params format" unless params.key?(:tempfile)
+
+        file = Rack::Multipart::UploadedFile.new(
+          io: params.fetch(:tempfile),
+          content_type: params.fetch(:type, "application/octet-stream"),
+          filename: params.fetch(:filename),
+        )
+
+        { "file" => file }
       end
     end
   end
