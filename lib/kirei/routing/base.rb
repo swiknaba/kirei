@@ -50,12 +50,17 @@ module Kirei
                      [k, v]
                    end
                  when Verb::POST, Verb::PUT, Verb::PATCH
-                   # TODO: based on content-type, parse the body differently
-                   #       built-in support for JSON & XML
-                   body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-                   res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                   body.rewind # TODO: maybe don't rewind if we don't need to?
-                   T.cast(res, T::Hash[String, T.untyped])
+                  # TODO: based on content-type, parse the body differently
+                  #       built-in support for JSON & XML
+                   body = env.fetch("rack.input")
+                   if body.nil? || !body.respond_to?(:read) || (body.respond_to?(:size) && body.size == 0)
+                     {}
+                   else
+                     body = T.cast(body, T.any(IO, StringIO))
+                     res = Oj.load(body.read, Kirei::OJ_OPTIONS)
+                     body.rewind # TODO: maybe don't rewind if we don't need to?
+                     T.cast(res, T::Hash[String, T.untyped])
+                   end
                  when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
                    {}
                  else
