@@ -25,7 +25,7 @@ GEM
     diff-lcs (1.5.1)
     dotenv (3.1.2)
     erubi (1.13.1)
-    json (2.7.2)
+    json (2.18.0)
     language_server-protocol (3.17.0.3)
     logger (1.7.0)
     netrc (0.11.0)
@@ -39,7 +39,7 @@ GEM
       racc
     pg (1.5.6)
     prism (1.9.0)
-    racc (1.7.3)
+    racc (1.8.1)
     rack (3.1.15)
     rainbow (3.1.1)
     rbi (0.3.9)
@@ -171,4 +171,4 @@ DEPENDENCIES
   tapioca
 
 BUNDLED WITH
-  4.0.4
+  4.0.6
