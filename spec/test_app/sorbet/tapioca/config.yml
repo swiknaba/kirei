@@ -3,23 +3,24 @@ gem:
   #
   exclude:
   - amazing_print
+  - bigdecimal
   - byebug
+  - concurrent-ruby
   - erubi
+  - nio4r
   - parallel
   - prettier_print
   - rbi
+  - rbs
+  - sequel_pg
   - spoom
   - syntax_tree
   - tapioca
   - thor
+  - tzinfo
+  - tzinfo-data
   - yard
   - yard-sorbet
-  - sequel_pg
-  - tzinfo-data
-  - tzinfo
-  - bigdecimal
-  - concurrent-ruby
-  - nio4r
 dsl:
   # Add your `dsl` command parameters here:
   #

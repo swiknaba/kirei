@@ -17,6 +17,7 @@ gem "spoom"
 gem "tapioca"
 
 gem "logger" # for Ruby 2.5+
+gem 'rbs', '4.0.0.dev.5' # https://github.com/Shopify/tapioca/issues/2336#issuecomment-3476622788
 
 # prompt user "IO or CPU heavy?"
 # gem "puma"    # CPU heavy
