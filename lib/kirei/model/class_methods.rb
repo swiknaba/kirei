@@ -9,7 +9,7 @@ module Kirei
 
       # the attached class is the class that extends this module
       # e.g. "User", "Airport", ..
-      has_attached_class!
+      has_attached_class!(:out)
 
       include Kirei::Model::BaseClassInterface
 
