@@ -50,10 +50,10 @@ module Kirei
                      [k, v]
                    end
                  when Verb::POST, Verb::PUT, Verb::PATCH
-                  # TODO: based on content-type, parse the body differently
-                  #       built-in support for JSON & XML
+                   # TODO: based on content-type, parse the body differently
+                   #       built-in support for JSON & XML
                    body = env.fetch("rack.input")
-                   if body.nil? || !body.respond_to?(:read) || (body.respond_to?(:size) && body.size == 0)
+                   if body.nil? || !body.respond_to?(:read) || (body.respond_to?(:empty?) && body.empty?)
                      {}
                    else
                      body = T.cast(body, T.any(IO, StringIO))
