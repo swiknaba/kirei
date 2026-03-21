@@ -94,7 +94,7 @@ module Kirei
         ).returns(ResolveResult)
       end
       private def match_dynamic(verb, path)
-        request_segments = path.split("/", -1)
+        request_segments = path.split("/")
 
         dynamic_routes.each do |route|
           next unless route.verb == verb

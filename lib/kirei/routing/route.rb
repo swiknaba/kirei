@@ -13,7 +13,7 @@ module Kirei
 
       sig { returns(T::Array[String]) }
       def segments
-        @segments ||= T.let(path.split("/", -1), T.nilable(T::Array[String]))
+        @segments ||= T.let(path.split("/"), T.nilable(T::Array[String]))
       end
 
       sig { returns(T::Boolean) }
