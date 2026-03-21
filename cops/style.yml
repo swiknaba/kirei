@@ -1,0 +1,77 @@
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# enforces to use 'name'.to_sym over 'name'.intern and so on
+Style/StringMethods:
+  Enabled: true
+
+# @NOTE: changed from "compact" to "expanded"
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+  SupportedStyles:
+    - compact
+    - expanded
+
+# @NOTE: allowed AllowMultipleReturnValues
+Style/RedundantReturn:
+  Enabled: true
+  AllowMultipleReturnValues: true
+
+# @NOTE: allowed AllowAsExpressionSeparator
+Style/Semicolon:
+  Enabled: true
+  AllowAsExpressionSeparator: true
+
+Style/CollectionMethods:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+# @NOTE: changed EnforcedStyleForMultiline from "no_comma" to "comma"
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+# @NOTE: changed EnforcedStyleForMultiline from "no_comma" to "comma"
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+# @NOTE: changed EnforcedStyleForMultiline from "no_comma" to "comma"
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+#
+# @NOTE: the following cops are "pending" by default
+#
+Style/ArgumentsForwarding:
+  Enabled: false
+
+Style/CollectionCompact:
+  Enabled: true
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: true
+
+Style/NegatedIfElseCondition:
+  Enabled: true
+
+Style/NilLambda:
+  Enabled: true
+
+Style/RedundantArgument:
+  Enabled: true
+
+Style/SwapValues:
+  Enabled: true
+
+# "private_class_method" must always be inlined, no need for a cop
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
