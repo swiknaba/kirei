@@ -17,7 +17,7 @@ module Controllers
         "req_ssl" => request.ssl?,
       }
 
-      render(Oj.dump(info), status: 200)
+      render_json(info, status: 200)
     end
   end
 end

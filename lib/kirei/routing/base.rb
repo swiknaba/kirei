@@ -162,6 +162,56 @@ module Kirei
         ]
       end
 
+      #
+      # Renders a JSON response. Accepts:
+      #   - String: treated as pre-serialized JSON (pass-through)
+      #   - Hash / Array: serialized via Oj.dump
+      #   - Object responding to #serialize (e.g. T::Struct): calls #serialize,
+      #     then Oj.dump if the result is not already a String
+      #   - Anything else: raises ArgumentError
+      #
+      sig do
+        params(
+          data: T.untyped,
+          status: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_json(data, status: 200, headers: {})
+        body = case data
+               when String
+                 data
+               when Hash, Array
+                 Oj.dump(data, Kirei::OJ_OPTIONS)
+               else
+                 unless data.respond_to?(:serialize)
+                   raise ArgumentError,
+                         "render_json expects a String, Hash, Array, or an object responding to #serialize, " \
+                         "got #{data.class}"
+                 end
+
+                 result = data.serialize
+                 result.is_a?(String) ? result : Oj.dump(result, Kirei::OJ_OPTIONS)
+        end
+
+        render(body, status: status, headers: headers)
+      end
+
+      #
+      # Renders a JSON:API-compliant error response.
+      # Wraps an array of JsonApiError structs into { "errors": [...] }.
+      #
+      sig do
+        params(
+          errors: T::Array[Errors::JsonApiError],
+          status: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_error(errors, status: 422, headers: {})
+        render_json({ "errors" => errors.map(&:serialize) }, status: status, headers: headers)
+      end
+
       sig { returns(T::Hash[String, String]) }
       def default_headers
         {
