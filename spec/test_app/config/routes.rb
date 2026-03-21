@@ -16,6 +16,12 @@ module Kirei::Routing
         controller: Controllers::AirportsController,
         action: "index",
       ),
+      Route.new(
+        verb: Verb::GET,
+        path: "/airports/:code",
+        controller: Controllers::AirportsController,
+        action: "show",
+      ),
     ],
   )
 end

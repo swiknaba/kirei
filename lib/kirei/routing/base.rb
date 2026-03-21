@@ -35,8 +35,10 @@ module Kirei
         #
 
         lookup_verb = http_verb == Verb::HEAD ? Verb::GET : http_verb
-        route = router.get(lookup_verb, req_path)
-        return NOT_FOUND if route.nil?
+        result = router.resolve(lookup_verb, req_path)
+        return NOT_FOUND if result.nil?
+
+        route, path_params = result
 
         router.current_env = env # expose the env to the controller
 
@@ -65,6 +67,8 @@ module Kirei
                  else
                    T.absurd(http_verb)
         end
+
+        params.merge!(path_params)
 
         req_id = T.cast(env["HTTP_X_REQUEST_ID"], T.nilable(String))
         req_id ||= "req_#{App.environment}_#{SecureRandom.uuid}"
