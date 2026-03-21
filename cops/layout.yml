@@ -1,0 +1,17 @@
+Layout/EndAlignment:
+  Enabled: true
+  EnforcedStyleAlignWith: variable
+  AutoCorrect: true
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation
+
+Layout/LineLength:
+  Max: 120
+  IgnoreCopDirectives: true
+  AllowedPatterns: ['\s#\s|^#\s'] # allows comments to overflow the line length. E.g. for URLs
+  Exclude:
+    - "spec/**/*"
