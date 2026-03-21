@@ -241,6 +241,12 @@ class Sequel::ConnectionPool
 
   private
 
+  # Only for use by extension that need to disconnect a connection inside acquire.
+  # Takes the connection and any arguments accepted by acquire.
+  #
+  # source://sequel//lib/sequel/connection_pool.rb#136
+  def disconnect_acquired_connection(conn, *_arg1); end
+
   # Remove the connection from the pool.  For threaded connections, this should be
   # called without the mutex, because the disconnection may block.
   #
@@ -251,13 +257,13 @@ class Sequel::ConnectionPool
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/connection_pool.rb#135
+  # source://sequel//lib/sequel/connection_pool.rb#141
   def disconnect_error?(exception); end
 
   # Return a new connection by calling the connection proc with the given server name,
   # and checking for connection errors.
   #
-  # source://sequel//lib/sequel/connection_pool.rb#141
+  # source://sequel//lib/sequel/connection_pool.rb#147
   def make_new(server); end
 end
 

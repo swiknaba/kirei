@@ -1,19 +1,6 @@
 # typed: strict
 # frozen_string_literal: true
 
-#
-# a = Aviation::ValueObjects::Coordinates.new(latitude: 123.314, longitude: 113.24, locations: ["Munich", "Berlin"])
-# b = Aviation::ValueObjects::Coordinates.new(latitude: 123.314, longitude: 113.24, locations: ["Berlin", "Munich", "Berlin"])
-#
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::STRICT)
-#   => false
-#
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::IGNORE_ORDER)
-#   => false
-#
-# a.equal_with_array_mode?(b, array_mode: Kirei::Services::ArrayComparison::Mode::IGNORE_ORDER_AND_DUPLICATES)
-#   => true
-#
 
 module Aviation
   module ValueObjects
