@@ -25,7 +25,7 @@ module Kirei
     # Delete keeps the original object intact. Returns true if the record was deleted.
     # Calling delete multiple times will return false after the first (successful) call.
     sig { returns(T::Boolean) }
-    def delete
+    def delete # rubocop:disable Naming/PredicateMethod
       count = self.class.query.where({ id: id }).delete
       count == 1
     end

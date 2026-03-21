@@ -6,8 +6,8 @@ require "uri"
 require "socket"
 
 RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/DescribeClass
-  app_dir = File.expand_path("test_app", __dir__)
-  gemfile = File.join(app_dir, "Gemfile")
+  app_dir = File.expand_path("test_app", __dir__) # rubocop:disable RSpec/LeakyLocalVariable
+  gemfile = File.join(app_dir, "Gemfile") # rubocop:disable RSpec/LeakyLocalVariable
 
   before(:all) do # rubocop:disable RSpec/BeforeAfterAll
     env = { "BUNDLE_GEMFILE" => gemfile, "RACK_ENV" => "test" }
