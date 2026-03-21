@@ -17,12 +17,6 @@ module Kirei
         string
       end
 
-      # Simplified version from Rails' ActiveSupport
-      sig { params(string: T.any(String, Symbol)).returns(T::Boolean) }
-      def blank?(string)
-        string.nil? || string.to_s.empty?
-      end
-
       sig { params(object: T.untyped).returns(T.untyped) }
       def deep_stringify_keys(object)
         deep_transform_keys(object) { _1.to_s rescue _1 } # rubocop:disable Style/RescueModifier

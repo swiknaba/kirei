@@ -156,7 +156,7 @@ module Kirei
         hash = T.cast(hash, T::Hash[String, T.untyped])
 
         hash.each do |key, value|
-          new_prefix = Kirei::Helpers.blank?(prefix) ? key : "#{prefix}.#{key}"
+          new_prefix = prefix.empty? ? key : "#{prefix}.#{key}"
 
           case value
           when Hash
