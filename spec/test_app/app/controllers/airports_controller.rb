@@ -34,5 +34,10 @@ module Controllers
         status: 200,
       )
     end
+
+    sig { returns(T.anything) }
+    def show
+      render(Oj.dump({ "code" => params.fetch("code") }))
+    end
   end
 end
