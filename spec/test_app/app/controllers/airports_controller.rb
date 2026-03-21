@@ -10,11 +10,7 @@ module Controllers
       service = Kirei::Services::Runner.call("Airports::Filter") do
         Airports::Filter.call(search)
       end
-
-      if service.failed?
-        errs = { "errors" => service.errors.map(&:serialize)}
-        return render(Oj.dump(errs), status: 400)
-      end
+      return render_error(service.errors, status: 400) if service.failed?
 
       airports = service.result
 
@@ -27,17 +23,12 @@ module Controllers
         }
       )
 
-      data = Oj.dump(airports.map(&:serialize))
-
-      render(
-        data,
-        status: 200,
-      )
+      render_json(airports.map(&:serialize))
     end
 
     sig { returns(T.anything) }
     def show
-      render(Oj.dump({ "code" => params.fetch("code") }))
+      render_json({ "code" => params.fetch("code") })
     end
   end
 end

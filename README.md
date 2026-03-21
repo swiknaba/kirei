@@ -240,7 +240,24 @@ end
 
 #### Controllers
 
-Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory:
+Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory.
+
+Three render helpers are available:
+
+| Method | Use case |
+|---|---|
+| `render(body, status:, headers:)` | Raw string responses (plain text, pre-serialized data) |
+| `render_json(data, status:, headers:)` | JSON responses with automatic serialization |
+| `render_error(errors, status:, headers:)` | JSON:API-compliant error responses |
+
+`render_json` accepts multiple data types:
+
+| `data` type | Behavior |
+|---|---|
+| `String` | Pass-through (assumed to be pre-serialized JSON) |
+| `Hash` / `Array` | Serialized via `Oj.dump` |
+| Object responding to `#serialize` (e.g. `T::Struct`) | Calls `.serialize`, then `Oj.dump` if the result is not a String |
+| Anything else | Raises `ArgumentError` |
 
 ```ruby
 module Controllers
@@ -251,14 +268,12 @@ module Controllers
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      airports = Kirei::Services::Runner.call("Airports::Filter") do
-        Airports::Filter.call(search) # T::Array[Airport]
+      service = Kirei::Services::Runner.call("Airports::Filter") do
+        Airports::Filter.call(search)
       end
+      return render_error(service.errors, status: 400) if service.failed?
 
-      # or use a serializer
-      data = Oj.dump(airports.map(&:serialize))
-
-      render(status: 200, body: data)
+      render_json(service.result.map(&:serialize))
     end
 
     sig { returns(T.anything) }
@@ -270,7 +285,7 @@ module Controllers
       end
       return render(status: 204) if airport.nil?
 
-      render(status: 200, body: Oj.dump(airport.serialize))
+      render_json(airport) # T::Struct — calls .serialize automatically
     end
   end
 end
