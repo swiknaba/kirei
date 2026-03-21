@@ -227,6 +227,12 @@ module Kirei::Routing
         controller: Controllers::Airports,
         action: "index",
       ),
+      Route.new(
+        verb: Verb::GET,
+        path: "/airports/:iata",
+        controller: Controllers::Airports,
+        action: "show",
+      ),
     ],
   )
 end
@@ -253,6 +259,18 @@ module Controllers
       data = Oj.dump(airports.map(&:serialize))
 
       render(status: 200, body: data)
+    end
+
+    sig { returns(T.anything) }
+    def show
+      iata = T.must(params.fetch("iata", nil)) # named param from dynamic route
+
+      airport = Kirei::Services::Runner.call("Airports::Find") do
+        Airports::Find.call(iata) # T.nilable(Airport)
+      end
+      return render(status: 204) if airport.nil?
+
+      render(status: 200, body: Oj.dump(airport.serialize))
     end
   end
 end
