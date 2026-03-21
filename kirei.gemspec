@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
     # do not include RBIs for gems, because users might use different versions
     "sorbet/rbi/dsl/**/*.rbi",
     "sorbet/rbi/shims/**/*.rbi",
+    "cops/**/*",
     "LICENSE",
     "README.md",
   ]

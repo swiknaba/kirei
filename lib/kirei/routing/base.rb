@@ -1,8 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/all
-
+# rubocop:disable Metrics
 module Kirei
   module Routing
     class Base
@@ -223,5 +222,4 @@ module Kirei
     end
   end
 end
-
-# rubocop:enable Metrics/all
+# rubocop:enable Metrics

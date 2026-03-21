@@ -8,6 +8,7 @@ module Kirei
     module BaseClassInterface
       extend T::Sig
       extend T::Helpers
+
       interface!
 
       sig { abstract.params(hash: T.untyped).returns(T.untyped) }
