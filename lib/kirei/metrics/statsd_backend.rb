@@ -1,6 +1,5 @@
-# typed: ignore
+# typed: strict
 # frozen_string_literal: true
-# we need to ignore this for Sorbet's type checks, since we don't have "StatsD" defined
 
 module Kirei
   module Metrics
