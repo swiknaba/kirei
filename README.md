@@ -359,6 +359,7 @@ To build a custom backend (e.g. Prometheus, OpenTelemetry), subclass `Kirei::Met
 * [pagy](https://github.com/ddnexus/pagy) for pagination
 * [argon2](https://github.com/technion/ruby-argon2) for password hashing
 * [rack-session](https://github.com/rack/rack-session) for session management
+* [pgvector](https://github.com/pgvector/pgvector-ruby) for vector columns — add `:pgvector` to `App.config.db_extensions`
 
 ### Middlewares
 

@@ -85,13 +85,15 @@ module Kirei
       # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
       sig { override.params(attributes: T::Hash[T.any(Symbol, String), T.untyped]).void }
-      def wrap_jsonb_non_primivitives!(attributes)
+      def wrap_jsonb_non_primivitives!(attributes) # rubocop:disable Metrics/AbcSize
         # setting `@raw_db_connection.wrap_json_primitives = true`
         # only works on JSON primitives, but not on blank hashes/arrays
         return unless App.config.db_extensions.include?(:pg_json)
 
+        pgvector_enabled = App.config.db_extensions.include?(:pgvector)
+
         attributes.each_pair do |key, value|
-          if vector_column?(key.to_s)
+          if pgvector_enabled && vector_column?(key.to_s)
             attributes[key] = cast_to_vector(value)
           elsif value.is_a?(Hash) || value.is_a?(Array)
             attributes[key] = T.unsafe(Sequel).pg_jsonb_wrap(value)
@@ -103,6 +105,10 @@ module Kirei
       # install the gem "pgvector" if you need to use vector columns
       # also add `:pgvector` to the `App.config.db_extensions` array
       # and enable the vector extension on the database.
+      #
+      # Note: Sequel caches `db.schema` results internally (Database#cache_schema is true by default),
+      # so this only hits the database once per table per app lifecycle.
+      # @see https://github.com/jeremyevans/sequel/blob/master/lib/sequel/extensions/schema_caching.rb
       #
       sig { params(column_name: String).returns(T::Boolean) }
       def vector_column?(column_name)
