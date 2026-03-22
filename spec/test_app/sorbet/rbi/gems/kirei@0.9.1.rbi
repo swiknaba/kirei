@@ -695,7 +695,7 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#233
+  # source://kirei//lib/kirei/routing/base.rb#254
   sig { params(headers: T::Hash[::String, ::String], env: T::Hash[::String, T.untyped]).void }
   def add_cors_headers(headers, env); end
 
@@ -707,7 +707,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#216
+  # source://kirei//lib/kirei/routing/base.rb#237
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -758,9 +758,24 @@ class Kirei::Routing::Base
   end
   def render_json(data, status: T.unsafe(nil), headers: T.unsafe(nil)); end
 
+  # Renders a response from a Services::Result.
+  # On success, delegates to render_json with the result's value.
+  # On failure, delegates to render_error with the result's errors.
+  #
+  # source://kirei//lib/kirei/routing/base.rb#228
+  sig do
+    params(
+      result: Kirei::Services::Result[T.untyped],
+      status_success: ::Integer,
+      status_failure: ::Integer,
+      headers: T::Hash[::String, ::String]
+    ).returns([::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])])
+  end
+  def render_result(result, status_success: T.unsafe(nil), status_failure: T.unsafe(nil), headers: T.unsafe(nil)); end
+
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#259
+  # source://kirei//lib/kirei/routing/base.rb#280
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -773,7 +788,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#247
+  # source://kirei//lib/kirei/routing/base.rb#268
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end

@@ -212,6 +212,27 @@ module Kirei
         render_json({ "errors" => errors.map(&:serialize) }, status: status, headers: headers)
       end
 
+      #
+      # Renders a response from a Services::Result.
+      # On success, delegates to render_json with the result's value.
+      # On failure, delegates to render_error with the result's errors.
+      #
+      sig do
+        params(
+          result: Services::Result[T.untyped],
+          status_success: Integer,
+          status_failure: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_result(result, status_success: 200, status_failure: 400, headers: {})
+        if result.success?
+          render_json(result.result, status: status_success, headers: headers)
+        else
+          render_error(result.errors, status: status_failure, headers: headers)
+        end
+      end
+
       sig { returns(T::Hash[String, String]) }
       def default_headers
         {
