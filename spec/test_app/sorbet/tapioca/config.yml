@@ -2,23 +2,60 @@ gem:
   # Add your `gem` command parameters here:
   #
   exclude:
+  - addressable
   - amazing_print
+  - ast
   - bigdecimal
   - byebug
   - concurrent-ruby
+  - dotenv
+  - erb
   - erubi
+  - io-console
+  - json-schema
+  - language_server-protocol
+  - lint_roller
+  - mcp
   - nio4r
   - parallel
+  - pp
   - prettier_print
+  - prettyprint
+  - prism
+  - psych
+  - public_suffix
+  - racc
+  - rainbow
   - rbi
   - rbs
+  - rdoc
+  - regexp_parser
+  - reline
+  - rspec
+  - rspec-core
+  - rspec-expectations
+  - rspec-mocks
+  - rspec-support
+  - rubocop
+  - rubocop-ast
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-sorbet
+  - ruby-progressbar
   - sequel_pg
   - spoom
+  - stringio
   - syntax_tree
   - tapioca
   - thor
+  - tsort
   - tzinfo
   - tzinfo-data
+  - unicode-display_width
+  - unicode-emoji
   - yard
   - yard-sorbet
 dsl:
