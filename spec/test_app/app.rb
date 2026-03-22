@@ -45,6 +45,7 @@ class TestApp < Kirei::App
   config.metric_default_tags = {
     "some_feature_flag_enabled" => "true",
   }
+  config.metrics_backend = Kirei::Metrics::StatsdBackend.new
 end
 
 APP_LOADER.eager_load

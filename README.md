@@ -2,7 +2,7 @@
 
 Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [Sequel](https://github.com/jeremyevans/sequel) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Rack](https://github.com/rack/rack) as web server interface. It strives to have zero magic and to be as explicit as possible.
 
-Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and build-in high-performance logging and metric-tracking toolkits. It is opiniated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
+Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and built-in high-performance logging and pluggable metric-tracking toolkit. It is opinionated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
 
 > Kirei (きれい) is a Japanese adjective that primarily means "beautiful" or "pretty." It can also be used to describe something that is "clean" or "neat."
 
@@ -319,6 +319,40 @@ module Airports
   end
 end
 ```
+
+#### Metrics
+
+Kirei ships with a pluggable metrics interface via `Kirei::Metrics::Backend`. Three backends are included:
+
+| Backend | Description |
+|---|---|
+| `LoggingBackend` | **Default.** Prints metrics to stdout via `puts` — great for local development and small MVPs. |
+| `StatsdBackend` | Wraps [`statsd-instrument`](https://github.com/Shopify/statsd-instrument). Add `gem 'statsd-instrument'` to your Gemfile. |
+| `NullBackend` | No-op — silently discards all metrics. |
+
+The backend exposes three methods: `increment`, `measure`, and `gauge`.
+
+Configure the backend in your app:
+
+```ruby
+class MyApp < Kirei::App
+  # Use StatsD (requires `gem 'statsd-instrument'` in Gemfile)
+  config.metrics_backend = Kirei::Metrics::StatsdBackend.new
+
+  # Or disable metrics entirely
+  config.metrics_backend = Kirei::Metrics::NullBackend.new
+end
+```
+
+Emit custom metrics anywhere via `Kirei::Logging::Metric`:
+
+```ruby
+Kirei::Logging::Metric.call("airports_search_term", 1, tags: { "query" => search })
+```
+
+Request timing and service execution timing are tracked automatically.
+
+To build a custom backend (e.g. Prometheus, OpenTelemetry), subclass `Kirei::Metrics::Backend` and implement `increment`, `measure`, and `gauge`.
 
 ### Goes well with these gems
 

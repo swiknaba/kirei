@@ -7,6 +7,7 @@ ruby RUBY_VERSION
 gem "kirei", path: "../../"
 
 gem "puma"
+gem "statsd-instrument", "~> 3.0"
 
 gem "amazing_print"
 gem "bundler"
