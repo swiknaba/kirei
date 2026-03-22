@@ -5,21 +5,21 @@
 # Please instead update this file by running `bin/tapioca gem kirei`.
 
 
-# source://kirei//lib/kirei.rb#30
+# source://kirei//lib/kirei.rb#29
 module Kirei
   class << self
-    # source://kirei//lib/kirei.rb#53
+    # source://kirei//lib/kirei.rb#52
     sig { returns(T.nilable(::Kirei::Config)) }
     def configuration; end
 
     # @return [Kirei::Config, nil]
     #
-    # source://kirei//lib/kirei.rb#53
+    # source://kirei//lib/kirei.rb#52
     def configuration=(_arg0); end
 
     # @yield [T.must(configuration)]
     #
-    # source://kirei//lib/kirei.rb#60
+    # source://kirei//lib/kirei.rb#59
     sig { params(_: T.proc.params(configuration: ::Kirei::Config).void).void }
     def configure(&_); end
   end
@@ -83,6 +83,7 @@ class Kirei::Config < ::T::Struct
   prop :log_default_metadata, T::Hash[::String, T.untyped], default: T.unsafe(nil)
   prop :log_level, ::Kirei::Logging::Level, default: T.unsafe(nil)
   prop :metric_default_tags, T::Hash[::String, T.untyped], default: T.unsafe(nil)
+  prop :metrics_backend, ::Kirei::Metrics::Backend, default: T.unsafe(nil)
   prop :sensitive_keys, T::Array[::Regexp], default: T.unsafe(nil)
   prop :app_name, ::String, default: T.unsafe(nil)
   prop :db_extensions, T::Array[::Symbol], default: T.unsafe(nil)
@@ -178,7 +179,7 @@ class Kirei::Errors::JsonApiErrorSource < ::T::Struct
   const :id, T.nilable(::String)
 end
 
-# source://kirei//lib/kirei.rb#44
+# source://kirei//lib/kirei.rb#43
 Kirei::GEM_ROOT = T.let(T.unsafe(nil), String)
 
 # source://kirei//lib/kirei/helpers.rb#5
@@ -318,10 +319,115 @@ class Kirei::Logging::Metric
     sig { params(metric_name: ::String, value: ::Integer, tags: T::Hash[::String, T.untyped]).void }
     def call(metric_name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
 
-    # source://kirei//lib/kirei/logging/metric.rb#27
+    # source://kirei//lib/kirei/logging/metric.rb#25
     sig { params(tags: T::Hash[::String, T.untyped]).returns(T::Hash[::String, T.untyped]) }
     def inject_defaults(tags); end
   end
+end
+
+# source://kirei//lib/kirei/metrics/backend.rb#5
+module Kirei::Metrics; end
+
+# @abstract It cannot be directly instantiated. Subclasses must implement the `abstract` methods below.
+#
+# source://kirei//lib/kirei/metrics/backend.rb#6
+class Kirei::Metrics::Backend
+  abstract!
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/metrics/backend.rb#39
+  sig { abstract.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def gauge(name, value, tags: T.unsafe(nil)); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/metrics/backend.rb#19
+  sig { abstract.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
+
+  # @abstract
+  #
+  # source://kirei//lib/kirei/metrics/backend.rb#29
+  sig do
+    abstract
+      .params(
+        name: ::String,
+        duration_ms: T.any(::Float, ::Integer),
+        tags: T::Hash[::String, T.untyped]
+      ).void
+  end
+  def measure(name, duration_ms, tags: T.unsafe(nil)); end
+end
+
+# source://kirei//lib/kirei/metrics/logging_backend.rb#6
+class Kirei::Metrics::LoggingBackend < ::Kirei::Metrics::Backend
+  # source://kirei//lib/kirei/metrics/logging_backend.rb#38
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def gauge(name, value, tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/logging_backend.rb#16
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/logging_backend.rb#27
+  sig do
+    override
+      .params(
+        name: ::String,
+        duration_ms: T.any(::Float, ::Integer),
+        tags: T::Hash[::String, T.untyped]
+      ).void
+  end
+  def measure(name, duration_ms, tags: T.unsafe(nil)); end
+end
+
+# source://kirei//lib/kirei/metrics/null_backend.rb#6
+class Kirei::Metrics::NullBackend < ::Kirei::Metrics::Backend
+  # source://kirei//lib/kirei/metrics/null_backend.rb#36
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def gauge(name, value, tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/null_backend.rb#16
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/null_backend.rb#26
+  sig do
+    override
+      .params(
+        name: ::String,
+        duration_ms: T.any(::Float, ::Integer),
+        tags: T::Hash[::String, T.untyped]
+      ).void
+  end
+  def measure(name, duration_ms, tags: T.unsafe(nil)); end
+end
+
+# source://kirei//lib/kirei/metrics/statsd_backend.rb#7
+class Kirei::Metrics::StatsdBackend < ::Kirei::Metrics::Backend
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#11
+  sig { void }
+  def initialize; end
+
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#47
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def gauge(name, value, tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#25
+  sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
+  def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
+
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#36
+  sig do
+    override
+      .params(
+        name: ::String,
+        duration_ms: T.any(::Float, ::Integer),
+        tags: T::Hash[::String, T.untyped]
+      ).void
+  end
+  def measure(name, duration_ms, tags: T.unsafe(nil)); end
 end
 
 # source://kirei//lib/kirei/model.rb#5
@@ -572,7 +678,7 @@ Kirei::Model::HumanIdGenerator::ALLOWED_CHARS_COUNT = T.let(T.unsafe(nil), Integ
 
 # we don't know what Oj does under the hood with the options hash, so don't freeze it
 #
-# source://kirei//lib/kirei.rb#35
+# source://kirei//lib/kirei.rb#34
 Kirei::OJ_OPTIONS = T.let(T.unsafe(nil), Hash)
 
 # source://kirei//lib/kirei/routing/base.rb#6

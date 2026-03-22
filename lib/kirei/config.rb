@@ -21,6 +21,7 @@ module Kirei
     prop :log_level, Kirei::Logging::Level, default: Kirei::Logging::Level::INFO
 
     prop :metric_default_tags, T::Hash[String, T.untyped], default: {}
+    prop :metrics_backend, Kirei::Metrics::Backend, factory: -> { Kirei::Metrics::LoggingBackend.new }
 
     # dup to allow the user to extend the existing list of sensitive keys
     prop :sensitive_keys, T::Array[Regexp], factory: -> { SENSITIVE_KEYS.dup }

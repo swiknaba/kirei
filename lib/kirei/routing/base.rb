@@ -128,7 +128,7 @@ module Kirei
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         if start # early return for 404
           latency_in_ms = stop - start
-          ::StatsD.measure("request", latency_in_ms, tags: statsd_timing_tags)
+          App.config.metrics_backend.measure("request", latency_in_ms, tags: statsd_timing_tags)
 
           Kirei::Logging::Logger.call(
             level: status >= 500 ? Kirei::Logging::Level::ERROR : Kirei::Logging::Level::INFO,

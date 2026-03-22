@@ -27,7 +27,7 @@ module Kirei
         result = service_result(service)
 
         metric_tags = Logging::Metric.inject_defaults({ "service.result" => result })
-        ::StatsD.measure(class_name, latency_in_ms, tags: metric_tags)
+        App.config.metrics_backend.measure(class_name, latency_in_ms, tags: metric_tags)
 
         logtags = {
           "service.name" => class_name.to_s,

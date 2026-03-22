@@ -9,7 +9,6 @@ PATH
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
       sorbet-runtime (~> 0.5)
-      statsd-instrument (~> 3.0)
       tzinfo-data (~> 1.0)
       zeitwerk (~> 2.5)
 
@@ -110,6 +109,7 @@ DEPENDENCIES
   rbs (= 4.0.0.dev.5)
   sorbet
   spoom
+  statsd-instrument (~> 3.0)
   tapioca
 
 RUBY VERSION

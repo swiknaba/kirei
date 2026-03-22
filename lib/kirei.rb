@@ -13,7 +13,6 @@ require "bundler/setup"
 
 # Second: load all gems (runtime dependencies only)
 require "logger"
-require "statsd-instrument"
 require "sorbet-runtime"
 require "oj"
 require "rack"
