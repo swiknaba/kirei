@@ -404,21 +404,21 @@ class Kirei::Metrics::NullBackend < ::Kirei::Metrics::Backend
   def measure(name, duration_ms, tags: T.unsafe(nil)); end
 end
 
-# source://kirei//lib/kirei/metrics/statsd_backend.rb#7
+# source://kirei//lib/kirei/metrics/statsd_backend.rb#6
 class Kirei::Metrics::StatsdBackend < ::Kirei::Metrics::Backend
-  # source://kirei//lib/kirei/metrics/statsd_backend.rb#11
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#10
   sig { void }
   def initialize; end
 
-  # source://kirei//lib/kirei/metrics/statsd_backend.rb#47
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#46
   sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
   def gauge(name, value, tags: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/metrics/statsd_backend.rb#25
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#24
   sig { override.params(name: ::String, value: T.any(::Float, ::Integer), tags: T::Hash[::String, T.untyped]).void }
   def increment(name, value = T.unsafe(nil), tags: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/metrics/statsd_backend.rb#36
+  # source://kirei//lib/kirei/metrics/statsd_backend.rb#35
   sig do
     override
       .params(
@@ -561,7 +561,7 @@ module Kirei::Model::ClassMethods
   sig { override.returns(T::Array[T.attached_class]) }
   def all; end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#117
+  # source://kirei//lib/kirei/model/class_methods.rb#123
   sig { params(value: T.any(::Sequel::SQL::Expression, T::Array[::Numeric])).returns(::Sequel::SQL::Expression) }
   def cast_to_vector(value); end
 
@@ -579,26 +579,26 @@ module Kirei::Model::ClassMethods
   sig { override.params(sql: ::String, params: T::Array[T.untyped]).returns(T::Array[T::Hash[::Symbol, T.untyped]]) }
   def exec_sql(sql, params); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#132
+  # source://kirei//lib/kirei/model/class_methods.rb#138
   sig { override.params(hash: T::Hash[::Symbol, T.untyped]).returns(T.nilable(T.attached_class)) }
   def find_by(hash); end
 
   # Generates a human-readable ID for the record.
   # The ID is prefixed with the table name and an underscore.
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#190
+  # source://kirei//lib/kirei/model/class_methods.rb#196
   sig { override.returns(::String) }
   def generate_human_id; end
 
   # defaults to 6
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#179
+  # source://kirei//lib/kirei/model/class_methods.rb#185
   sig { override.returns(::Integer) }
   def human_id_length; end
 
   # defaults to "model_name" (table_name without the trailing "s")
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#183
+  # source://kirei//lib/kirei/model/class_methods.rb#189
   sig { override.returns(::String) }
   def human_id_prefix; end
 
@@ -616,7 +616,7 @@ module Kirei::Model::ClassMethods
   # Source: https://sorbet.org/docs/tstruct#from_hash-gotchas
   # "strict" defaults to "false".
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#147
+  # source://kirei//lib/kirei/model/class_methods.rb#153
   sig do
     override
       .params(
@@ -626,7 +626,7 @@ module Kirei::Model::ClassMethods
   end
   def resolve(query, strict = T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/model/class_methods.rb#171
+  # source://kirei//lib/kirei/model/class_methods.rb#177
   sig { override.params(query: ::Sequel::Dataset, strict: T.nilable(T::Boolean)).returns(T.nilable(T.attached_class)) }
   def resolve_first(query, strict = T.unsafe(nil)); end
 
@@ -640,7 +640,12 @@ module Kirei::Model::ClassMethods
   # also add `:pgvector` to the `App.config.db_extensions` array
   # and enable the vector extension on the database.
   #
-  # source://kirei//lib/kirei/model/class_methods.rb#108
+  # Note: Sequel caches `db.schema` results internally (Database#cache_schema is true by default),
+  # so this only hits the database once per table per app lifecycle.
+  #
+  # @see https://github.com/jeremyevans/sequel/blob/master/lib/sequel/extensions/schema_caching.rb
+  #
+  # source://kirei//lib/kirei/model/class_methods.rb#114
   sig { params(column_name: ::String).returns(T::Boolean) }
   def vector_column?(column_name); end
 
