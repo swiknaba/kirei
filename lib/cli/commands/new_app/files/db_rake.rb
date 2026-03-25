@@ -166,8 +166,8 @@ module Cli
                   db = #{app_name}.raw_db_connection
                   model_file_name = args[:model_file_name]&.to_s
 
-                  app_root_dir = TestApp.root
-                  app_dir = File.join(TestApp.root, "app")
+                  app_root_dir = #{app_name}.root
+                  app_dir = File.join(app_root_dir, "app")
 
                   Dir.glob("app/**/*.rb").each do |model_file|
                     next if !model_file_name.nil? && model_file == model_file_name
