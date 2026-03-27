@@ -6,7 +6,7 @@ Kirei's main advantages over other frameworks are its strict typing, low memory 
 
 > Kirei (きれい) is a Japanese adjective that primarily means "beautiful" or "pretty." It can also be used to describe something that is "clean" or "neat."
 
-👉 AI-generated wiki available on [DeepWiki.com](https://deepwiki.com/swiknaba/kirei).
+👉 AI-generated wiki available on [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/swiknaba/kirei)
 
 ## Why another Ruby framework?
 
