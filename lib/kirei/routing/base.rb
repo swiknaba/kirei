@@ -23,6 +23,7 @@ module Kirei
 
       sig { params(env: RackEnvType).returns(RackResponseType) }
       def call(env)
+        statsd_timing_tags = T.let({}, T::Hash[String, T.untyped])
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         status = 500 # we use it in the "ensure" block, so we need to define early (Sorbet doesn't like `status ||= 418`)
 
@@ -90,11 +91,8 @@ module Kirei
           },
         )
 
-        statsd_timing_tags = {
-          "controller" => controller.name,
-          "route" => route.action,
-        }
-        Logging::Metric.inject_defaults(statsd_timing_tags)
+        statsd_timing_tags["controller"] = controller.name
+        statsd_timing_tags["route"] = route.action
 
         status, headers, response_body = case http_verb
                                          when Verb::HEAD, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
@@ -126,8 +124,9 @@ module Kirei
         ]
       ensure
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
-        if start # early return for 404
+        if start && statsd_timing_tags # early return for 404
           latency_in_ms = stop - start
+          Logging::Metric.inject_defaults(statsd_timing_tags)
           App.config.metrics_backend.measure("request", latency_in_ms, tags: statsd_timing_tags)
 
           Kirei::Logging::Logger.call(

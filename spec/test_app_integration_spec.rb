@@ -12,7 +12,7 @@ RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/De
     @pid = Process.spawn(
       env,
       "bundle", "exec", "puma",
-      "-b", "tcp://127.0.0.1:9292",
+      "-b", "tcp://127.0.0.1:9294",
       chdir: app_dir,
       out: File::NULL,
       err: File::NULL
@@ -21,7 +21,7 @@ RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/De
     start_time = Time.now
     while Time.now - start_time < 10
       begin
-        TCPSocket.new("127.0.0.1", 9292).close
+        TCPSocket.new("127.0.0.1", 9294).close
         break
       rescue Errno::ECONNREFUSED
         sleep 0.1
@@ -37,7 +37,7 @@ RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/De
   end
 
   it "server boots and health check is successful" do
-    uri = URI("http://127.0.0.1:9292/livez")
+    uri = URI("http://127.0.0.1:9294/livez")
     # Clear any proxy settings that might interfere
     ENV["http_proxy"] = nil
     ENV["https_proxy"] = nil
