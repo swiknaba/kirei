@@ -695,7 +695,7 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#254
+  # source://kirei//lib/kirei/routing/base.rb#253
   sig { params(headers: T::Hash[::String, ::String], env: T::Hash[::String, T.untyped]).void }
   def add_cors_headers(headers, env); end
 
@@ -707,7 +707,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#237
+  # source://kirei//lib/kirei/routing/base.rb#236
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -718,7 +718,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#157
+  # source://kirei//lib/kirei/routing/base.rb#156
   sig do
     params(
       body: ::String,
@@ -731,7 +731,7 @@ class Kirei::Routing::Base
   # Renders a JSON:API-compliant error response.
   # Wraps an array of JsonApiError structs into { "errors": [...] }.
   #
-  # source://kirei//lib/kirei/routing/base.rb#211
+  # source://kirei//lib/kirei/routing/base.rb#210
   sig do
     params(
       errors: T::Array[::Kirei::Errors::JsonApiError],
@@ -748,7 +748,7 @@ class Kirei::Routing::Base
   #     then Oj.dump if the result is not already a String
   #   - Anything else: raises ArgumentError
   #
-  # source://kirei//lib/kirei/routing/base.rb#180
+  # source://kirei//lib/kirei/routing/base.rb#179
   sig do
     params(
       data: T.untyped,
@@ -762,7 +762,7 @@ class Kirei::Routing::Base
   # On success, delegates to render_json with the result's value.
   # On failure, delegates to render_error with the result's errors.
   #
-  # source://kirei//lib/kirei/routing/base.rb#228
+  # source://kirei//lib/kirei/routing/base.rb#227
   sig do
     params(
       result: Kirei::Services::Result[T.untyped],
@@ -775,7 +775,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#280
+  # source://kirei//lib/kirei/routing/base.rb#279
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -788,7 +788,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#268
+  # source://kirei//lib/kirei/routing/base.rb#267
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
