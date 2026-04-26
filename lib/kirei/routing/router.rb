@@ -85,6 +85,18 @@ module Kirei
         end
       end
 
+      # must be added manually => we don't want to magically add routes for the user
+      sig { void }
+      def self.add_health_routes!
+        add_routes(
+          [
+            Route.new(verb: Verb::GET, path: "/livez", controller: Kirei::Controllers::Health, action: "livez"),
+            Route.new(verb: Verb::GET, path: "/readyz", controller: Kirei::Controllers::Health, action: "readyz"),
+            Route.new(verb: Verb::GET, path: "/healthz", controller: Kirei::Controllers::Health, action: "healthz"),
+          ],
+        )
+      end
+
       # Matches a request path against registered dynamic routes.
       # Returns [Route, extracted_params] or nil.
       sig do

@@ -2,14 +2,10 @@
 # frozen_string_literal: true
 
 module Kirei::Routing
+  Router.add_health_routes!
+
   Router.add_routes(
     [
-      Route.new(
-        verb: Verb::GET,
-        path: "/livez",
-        controller: Controllers::Health,
-        action: "livez",
-      ),
       Route.new(
         verb: Verb::GET,
         path: "/airports",
