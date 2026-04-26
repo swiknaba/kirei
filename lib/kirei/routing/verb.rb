@@ -25,12 +25,6 @@ module Kirei
 
         # idempotent
         OPTIONS = new("OPTIONS")
-
-        # idempotent
-        TRACE   = new("TRACE")
-
-        # non-idempotent
-        CONNECT = new("CONNECT")
       end
     end
   end

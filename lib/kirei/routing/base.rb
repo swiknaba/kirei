@@ -63,7 +63,7 @@ module Kirei
                      body.rewind # TODO: maybe don't rewind if we don't need to?
                      T.cast(res, T::Hash[String, T.untyped])
                    end
-                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
+                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS
                    {}
                  else
                    T.absurd(http_verb)
@@ -95,7 +95,7 @@ module Kirei
         statsd_timing_tags["route"] = route.action
 
         status, headers, response_body = case http_verb
-                                         when Verb::HEAD, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
+                                         when Verb::HEAD, Verb::OPTIONS
                                            [200, {}, []]
                                          when Verb::GET, Verb::POST, Verb::PUT, Verb::PATCH, Verb::DELETE
                                            T.cast(
