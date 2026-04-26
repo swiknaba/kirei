@@ -36,17 +36,39 @@ RSpec.describe "TestApp integration", :integration do # rubocop:disable RSpec/De
     nil
   end
 
-  it "server boots and health check is successful" do
-    uri = URI("http://127.0.0.1:9294/livez")
-    # Clear any proxy settings that might interfere
+  # Clear any proxy settings that might interfere
+  before do
     ENV["http_proxy"] = nil
     ENV["https_proxy"] = nil
     ENV["HTTP_PROXY"] = nil
     ENV["HTTPS_PROXY"] = nil
+  end
+
+  it "server boots and livez health check is successful" do
+    uri = URI("http://127.0.0.1:9294/livez")
 
     response = Net::HTTP.get_response(uri)
     expect(response.code).to eq("200")
     data = JSON.parse(response.body)
-    expect(data).to include("version")
+    expect(data["status"]).to eq("ok")
+    expect(data).to include("version", "app_name", "environment")
+  end
+
+  it "readyz health check is successful" do
+    uri = URI("http://127.0.0.1:9294/readyz")
+
+    response = Net::HTTP.get_response(uri)
+    expect(response.code).to eq("200")
+    data = JSON.parse(response.body)
+    expect(data).to eq("status" => "ok")
+  end
+
+  it "healthz health check is successful (deprecated alias)" do
+    uri = URI("http://127.0.0.1:9294/healthz")
+
+    response = Net::HTTP.get_response(uri)
+    expect(response.code).to eq("200")
+    data = JSON.parse(response.body)
+    expect(data).to include("status" => "ok")
   end
 end
