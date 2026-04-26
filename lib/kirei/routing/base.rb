@@ -122,6 +122,30 @@ module Kirei
           headers,
           response_body,
         ]
+      rescue StandardError => e
+        status = 500
+
+        Kirei::Logging::Logger.call(
+          level: Kirei::Logging::Level::ERROR,
+          label: "Unhandled Exception",
+          meta: {
+            "error.class" => e.class.name,
+            "error.message" => e.message,
+            "error.backtrace" => e.backtrace&.first(10)&.join("\n"),
+          },
+        )
+
+        detail = if Kirei::App.environment == "development"
+          "#{e.class}: #{e.message}\n#{e.backtrace&.first(10)&.join("\n")}"
+        else
+          "An unexpected error occurred"
+        end
+
+        error = Errors::JsonApiError.new(code: "internal_server_error", detail: detail)
+        body = Oj.dump({ "errors" => [error.serialize] }, Kirei::OJ_OPTIONS)
+        response_body = [body]
+
+        [status, { "Content-Type" => "application/json; charset=utf-8" }, response_body]
       ensure
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         if start && statsd_timing_tags # early return for 404
