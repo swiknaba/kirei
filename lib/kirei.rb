@@ -67,6 +67,4 @@ loader.eager_load
 
 Kirei.configure(&:itself)
 
-yjit_enabled = defined?(RubyVM::YJIT) ? RubyVM::YJIT.enabled? : false
-
-Kirei::Logging::Logger.logger.info("Kirei v#{Kirei::VERSION} booted; YJIT enabled: #{yjit_enabled}")
+Kirei::Logging::Logger.logger.info("Kirei v#{Kirei::VERSION} booted")
