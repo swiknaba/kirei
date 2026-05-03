@@ -401,6 +401,9 @@ class Oj::Parser
   def new(*_arg0); end
 
   # source://oj//lib/oj.rb#15
+  def safe(*_arg0); end
+
+  # source://oj//lib/oj.rb#15
   def saj; end
 
   # source://oj//lib/oj.rb#15
@@ -414,6 +417,9 @@ class Oj::Parser
     def new(*_arg0); end
 
     # source://oj//lib/oj.rb#15
+    def safe(*_arg0); end
+
+    # source://oj//lib/oj.rb#15
     def saj; end
 
     # source://oj//lib/oj.rb#15
@@ -423,6 +429,12 @@ class Oj::Parser
     def validate; end
   end
 end
+
+class Oj::Parser::ArraySizeError < ::Oj::Parser::ValidationError; end
+class Oj::Parser::DepthError < ::Oj::Parser::ValidationError; end
+class Oj::Parser::HashSizeError < ::Oj::Parser::ValidationError; end
+class Oj::Parser::TotalElementsError < ::Oj::Parser::ValidationError; end
+class Oj::Parser::ValidationError < ::RuntimeError; end
 
 module Oj::Rails
   private

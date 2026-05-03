@@ -74,7 +74,7 @@ module Sequel
     #
     # Designed to be used with the +Migrator+ class, part of the +migration+ extension.
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#312
+    # source://sequel//lib/sequel/extensions/migration.rb#309
     def migration(&block); end
 
     # source://sequel//lib/sequel/core.rb#448
@@ -3014,7 +3014,7 @@ class Sequel::Dataset
   #   # SELECT * FROM table WHERE id = ? LIMIT 1 -- (1)
   #   # => {:id=>1}
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#346
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#349
   def bind(bind_vars = T.unsafe(nil)); end
 
   # Append literalization of boolean constant to SQL string.
@@ -3040,7 +3040,7 @@ class Sequel::Dataset
   #   # UPDATE table WHERE id = ? SET col = ? -- (2, 1)
   #   # => 1
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#377
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#380
   def call(type, bind_variables = T.unsafe(nil), *values, &block); end
 
   # Append literalization of case expression to SQL string.
@@ -4319,7 +4319,7 @@ class Sequel::Dataset
   #   # UPDATE table WHERE id = ? SET name = ? -- (1, 'Blah')
   #   # => 1
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#405
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#408
   def prepare(type, name, *values); end
 
   # Set the type of SQL to use for prepared statements based on this
@@ -4332,7 +4332,7 @@ class Sequel::Dataset
   #
   # Other types are treated as :select.
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#430
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#433
   def prepare_sql_type(type); end
 
   # Whether this dataset will provide accurate number of rows matched for
@@ -5590,7 +5590,7 @@ class Sequel::Dataset
   # Return a cloned copy of the current dataset extended with
   # PreparedStatementMethods, setting the type and modify values.
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#438
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#441
   def to_prepared_statement(type, values = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   private
@@ -5780,7 +5780,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#450
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#453
   def allow_preparing_prepared_statements?; end
 
   # Append aliasing expression to SQL string.
@@ -5793,7 +5793,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1230
   def auto_alias_expression(v); end
 
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#454
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#457
   def bound_variable_modules; end
 
   # Don't allow caching SQL if specifically marked not to.
@@ -5927,7 +5927,7 @@ class Sequel::Dataset
   # Return self if the dataset already has a server, or a cloned dataset with the
   # default server otherwise.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1549
+  # source://sequel//lib/sequel/dataset/query.rb#1552
   def default_server; end
 
   # Set the server to use to :default unless it is already set in the passed opts
@@ -5951,16 +5951,16 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/sql.rb#1165
   def delete_from_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1648
+  # source://sequel//lib/sequel/dataset/sql.rb#1653
   def delete_order_sql(sql); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#1337
   def delete_returning_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1661
+  # source://sequel//lib/sequel/dataset/sql.rb#1666
   def delete_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1694
+  # source://sequel//lib/sequel/dataset/sql.rb#1699
   def delete_with_sql(sql); end
 
   # Append the column aliases to the SQL.
@@ -5997,7 +5997,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#460
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#463
   def emulate_prepared_statements?; end
 
   # Execute the given select SQL on the database using execute. Use the
@@ -6029,7 +6029,7 @@ class Sequel::Dataset
 
   # SQL expression object based on the expr type.  See +where+.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1479
+  # source://sequel//lib/sequel/dataset/query.rb#1482
   def filter_expr(expr = T.unsafe(nil), &block); end
 
   # Format the timestamp based on the default_timestamp_format.
@@ -6074,14 +6074,14 @@ class Sequel::Dataset
   # clause from the given dataset added to it, and the second a clone of
   # the given dataset with the WITH clause removed.
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1521
+  # source://sequel//lib/sequel/dataset/query.rb#1524
   def hoist_cte(ds); end
 
   # Whether CTEs need to be hoisted from the given ds into the current ds.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1526
+  # source://sequel//lib/sequel/dataset/query.rb#1529
   def hoist_cte?(ds); end
 
   # Append literalization of identifier to SQL string, considering regular strings
@@ -6146,7 +6146,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/sql.rb#1308
   def insert_values_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1695
+  # source://sequel//lib/sequel/dataset/sql.rb#1700
   def insert_with_sql(sql); end
 
   # Inverts the given order by breaking it into a list of column references
@@ -6155,7 +6155,7 @@ class Sequel::Dataset
   #   DB[:items].invert_order([Sequel.desc(:id)]]) #=> [Sequel.asc(:id)]
   #   DB[:items].invert_order([:category, Sequel.desc(:price)]) #=> [Sequel.desc(:category), Sequel.asc(:price)]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1535
+  # source://sequel//lib/sequel/dataset/query.rb#1538
   def invert_order(order); end
 
   # SQL fragment specifying a JOIN type, converts underscores to
@@ -6235,9 +6235,14 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/sql.rb#1423
   def literal_integer(v); end
 
-  # SQL fragment for nil
+  # Append string to SQL string.
   #
   # source://sequel//lib/sequel/dataset/sql.rb#1428
+  def literal_literal_string_append(sql, v); end
+
+  # SQL fragment for nil
+  #
+  # source://sequel//lib/sequel/dataset/sql.rb#1433
   def literal_nil; end
 
   # Append a literalization of the object to the given SQL string.
@@ -6245,48 +6250,48 @@ class Sequel::Dataset
   # calls +sql_literal+ if object responds to it, otherwise raises an error.
   # If a database specific type is allowed, this should be overriden in a subclass.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1436
+  # source://sequel//lib/sequel/dataset/sql.rb#1441
   def literal_other_append(sql, v); end
 
   # Append a literalization of the set to SQL string.
   # Treats as an expression as an SQL value list.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1454
+  # source://sequel//lib/sequel/dataset/sql.rb#1459
   def literal_set_append(sql, v); end
 
   # SQL fragment for Sequel::SQLTime, containing just the time part
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1459
+  # source://sequel//lib/sequel/dataset/sql.rb#1464
   def literal_sqltime(v); end
 
   # Append literalization of Sequel::SQLTime to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1464
+  # source://sequel//lib/sequel/dataset/sql.rb#1469
   def literal_sqltime_append(sql, v); end
 
   # Append literalization of string to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1469
+  # source://sequel//lib/sequel/dataset/sql.rb#1474
   def literal_string_append(sql, v); end
 
   # Append literalization of symbol to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1474
+  # source://sequel//lib/sequel/dataset/sql.rb#1479
   def literal_symbol_append(sql, v); end
 
   # SQL fragment for Time
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1485
+  # source://sequel//lib/sequel/dataset/sql.rb#1490
   def literal_time(v); end
 
   # Append literalization of Time to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1490
+  # source://sequel//lib/sequel/dataset/sql.rb#1495
   def literal_time_append(sql, v); end
 
   # SQL fragment for true
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1495
+  # source://sequel//lib/sequel/dataset/sql.rb#1500
   def literal_true; end
 
   # What strategy to use for import/multi_insert.  While SQL-92 defaults
@@ -6294,19 +6299,19 @@ class Sequel::Dataset
   # that don't allow that that it can't be the default.  Use separate queries
   # by default, which works everywhere.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1503
+  # source://sequel//lib/sequel/dataset/sql.rb#1508
   def multi_insert_sql_strategy; end
 
   # Get the native function name given the emulated function name.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1509
+  # source://sequel//lib/sequel/dataset/sql.rb#1514
   def native_function_name(emulated_function); end
 
   # Whether the given option key does not affect the generated SQL.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1554
+  # source://sequel//lib/sequel/dataset/query.rb#1557
   def non_sql_option?(key); end
 
   # Downcase identifiers by default when outputing them from the database.
@@ -6325,21 +6330,21 @@ class Sequel::Dataset
   # The argument placeholder.  Most databases used unnumbered
   # arguments with question marks, so that is the default.
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#470
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#473
   def prepared_arg_placeholder; end
 
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#464
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#467
   def prepared_statement_modules; end
 
   # Returns a qualified column name (including a table name) if the column
   # name isn't already qualified.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1515
+  # source://sequel//lib/sequel/dataset/sql.rb#1520
   def qualified_column_name(column, table); end
 
   # Qualify the given expression to the given table.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1535
+  # source://sequel//lib/sequel/dataset/sql.rb#1540
   def qualified_expression(e, table); end
 
   # Wrap the alias symbol in an SQL::Identifier if the identifier on which is based
@@ -6371,73 +6376,73 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1362
   def returning_fetch_rows(sql, &block); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1539
+  # source://sequel//lib/sequel/dataset/sql.rb#1544
   def select_columns_sql(sql); end
 
   # Modify the sql to add a dataset to the via an EXCEPT, INTERSECT, or UNION clause.
   # This uses a subselect for the compound datasets used, because using parantheses doesn't
   # work on all databases.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1558
+  # source://sequel//lib/sequel/dataset/sql.rb#1563
   def select_compounds_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1544
+  # source://sequel//lib/sequel/dataset/sql.rb#1549
   def select_distinct_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1568
+  # source://sequel//lib/sequel/dataset/sql.rb#1573
   def select_from_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1577
+  # source://sequel//lib/sequel/dataset/sql.rb#1582
   def select_group_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1599
+  # source://sequel//lib/sequel/dataset/sql.rb#1604
   def select_having_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1606
+  # source://sequel//lib/sequel/dataset/sql.rb#1611
   def select_join_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1612
+  # source://sequel//lib/sequel/dataset/sql.rb#1617
   def select_limit_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1625
+  # source://sequel//lib/sequel/dataset/sql.rb#1630
   def select_lock_sql(sql); end
 
   # Used only if there is an offset and no limit, making it easier to override
   # in the adapter, as many databases do not support just a plain offset with
   # no limit.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1637
+  # source://sequel//lib/sequel/dataset/sql.rb#1642
   def select_only_offset_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1642
+  # source://sequel//lib/sequel/dataset/sql.rb#1647
   def select_order_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1651
+  # source://sequel//lib/sequel/dataset/sql.rb#1656
   def select_select_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1655
+  # source://sequel//lib/sequel/dataset/sql.rb#1660
   def select_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1664
+  # source://sequel//lib/sequel/dataset/sql.rb#1669
   def select_window_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1680
+  # source://sequel//lib/sequel/dataset/sql.rb#1685
   def select_with_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1698
+  # source://sequel//lib/sequel/dataset/sql.rb#1703
   def select_with_sql_base; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1702
+  # source://sequel//lib/sequel/dataset/sql.rb#1707
   def select_with_sql_cte(sql, cte); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1707
+  # source://sequel//lib/sequel/dataset/sql.rb#1712
   def select_with_sql_prefix(sql, w); end
 
   # Whether the symbol cache should be skipped when literalizing the dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1725
+  # source://sequel//lib/sequel/dataset/sql.rb#1730
   def skip_symbol_cache?; end
 
   # Append literalization of array of sources/tables to SQL string, raising an Error if there
@@ -6445,24 +6450,24 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1731
+  # source://sequel//lib/sequel/dataset/sql.rb#1736
   def source_list_append(sql, sources); end
 
   # Delegate to Sequel.split_symbol.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1737
+  # source://sequel//lib/sequel/dataset/sql.rb#1742
   def split_symbol(sym); end
 
   # The string that is appended to to create the SQL query, the empty
   # string by default.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1743
+  # source://sequel//lib/sequel/dataset/sql.rb#1748
   def sql_string_origin; end
 
   # The precision to use for SQLTime instances (time column values without dates).
   # Defaults to timestamp_precision.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1749
+  # source://sequel//lib/sequel/dataset/sql.rb#1754
   def sqltime_precision; end
 
   # SQL to use if this dataset uses static SQL.  Since static SQL
@@ -6470,18 +6475,18 @@ class Sequel::Dataset
   # we literalize nonstrings.  If there is an append_sql for this
   # dataset, append to that SQL instead of returning the value.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1757
+  # source://sequel//lib/sequel/dataset/sql.rb#1762
   def static_sql(sql); end
 
   # Append literalization of the subselect to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1774
+  # source://sequel//lib/sequel/dataset/sql.rb#1779
   def subselect_sql_append(sql, ds); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1788
+  # source://sequel//lib/sequel/dataset/sql.rb#1793
   def subselect_sql_append_sql(sql, ds); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1784
+  # source://sequel//lib/sequel/dataset/sql.rb#1789
   def subselect_sql_dataset(sql, ds); end
 
   # Whether common table expressions are supported in UNION/INTERSECT/EXCEPT clauses.
@@ -6508,7 +6513,7 @@ class Sequel::Dataset
 
   # The number of decimal digits of precision to use in timestamps.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1793
+  # source://sequel//lib/sequel/dataset/sql.rb#1798
   def timestamp_precision; end
 
   # Return the unaliased part of the identifier.  Handles both
@@ -6518,28 +6523,28 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1376
   def unaliased_identifier(c); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1649
+  # source://sequel//lib/sequel/dataset/sql.rb#1654
   def update_order_sql(sql); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#1338
   def update_returning_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1803
+  # source://sequel//lib/sequel/dataset/sql.rb#1808
   def update_set_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1813
+  # source://sequel//lib/sequel/dataset/sql.rb#1818
   def update_sql_values_hash(sql, values); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1797
+  # source://sequel//lib/sequel/dataset/sql.rb#1802
   def update_table_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1829
+  # source://sequel//lib/sequel/dataset/sql.rb#1834
   def update_update_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1662
+  # source://sequel//lib/sequel/dataset/sql.rb#1667
   def update_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1696
+  # source://sequel//lib/sequel/dataset/sql.rb#1701
   def update_with_sql(sql); end
 
   # Whether the RETURNING clause is used for the given dataset.
@@ -6560,7 +6565,7 @@ class Sequel::Dataset
   # Treat the +block+ as a virtual_row block if not +nil+ and
   # add the resulting columns to the +columns+ array (modifies +columns+).
   #
-  # source://sequel//lib/sequel/dataset/query.rb#1560
+  # source://sequel//lib/sequel/dataset/query.rb#1563
   def virtual_row_columns(columns, block); end
 
   # Return the class name for this dataset, but skip anonymous classes
@@ -6568,7 +6573,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/misc.rb#375
   def visible_class_name; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1833
+  # source://sequel//lib/sequel/dataset/sql.rb#1838
   def window_frame_boundary_sql_append(sql, boundary, direction); end
 
   class << self
@@ -6849,10 +6854,10 @@ module Sequel::Dataset::EmulatePreparedStatementMethods
   # Associates the argument with name k with the next position in
   # the output array.
   #
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#328
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#331
   def prepared_arg(k); end
 
-  # source://sequel//lib/sequel/dataset/prepared_statements.rb#333
+  # source://sequel//lib/sequel/dataset/prepared_statements.rb#336
   def subselect_sql_dataset(sql, ds); end
 end
 
@@ -6889,6 +6894,9 @@ Sequel::Dataset::N_ARITY_OPERATORS = T.let(T.unsafe(nil), Array)
 
 # source://sequel//lib/sequel/dataset.rb#30
 Sequel::Dataset::OPTS = T.let(T.unsafe(nil), Hash)
+
+# source://sequel//lib/sequel/dataset/query.rb#1478
+Sequel::Dataset::PAREN_WRAPPER = T.let(T.unsafe(nil), Array)
 
 # ---------------------
 # :section: 8 - Methods related to prepared statements or bound variables
@@ -6948,58 +6956,58 @@ class Sequel::Dataset::PlaceholderLiteralizer
   #
   # @return [PlaceholderLiteralizer] a new instance of PlaceholderLiteralizer
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#152
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#155
   def initialize(dataset, fragments, final_sql, arity); end
 
   # Return an array of all objects by running the SQL query for the given arguments.
   # If a block is given, yields all objects to the block after loading them.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#179
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#182
   def all(*args, &block); end
 
   # Append the SQL query to use for the given arguments to the given SQL string.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#207
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#210
   def append_sql(sql, *args); end
 
   # Run the SQL query for the given arguments, yielding each returned row to the block.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#184
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#187
   def each(*args, &block); end
 
   # Run the SQL query for the given arguments, returning the first row.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#189
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#192
   def first(*args); end
 
   # Freeze the fragments and final SQL when freezing the literalizer.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#161
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#164
   def freeze; end
 
   # Run the SQL query for the given arguments, returning the first value.  For this to
   # make sense, the dataset should return a single row with a single value (or no rows).
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#195
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#198
   def get(*args); end
 
   # Return the SQL query to use for the given arguments.
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#200
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#203
   def sql(*args); end
 
   # Return a new PlaceholderLiteralizer with a modified dataset.  This yields the
   # receiver's dataset to the block, and the block should return the new dataset
   # to use.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#170
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#173
   def with_dataset; end
 
   private
 
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#225
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#228
   def sql_origin; end
 
   class << self
@@ -7007,7 +7015,7 @@ class Sequel::Dataset::PlaceholderLiteralizer
     # given block, recording the offsets at which the recorders arguments
     # are used in the query.
     #
-    # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#147
+    # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#150
     def loader(dataset, &block); end
   end
 end
@@ -7077,7 +7085,7 @@ class Sequel::Dataset::PlaceholderLiteralizer::Recorder
 
   # Internals of #loader and #prepared_sql_and_frags.
   #
-  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#124
+  # source://sequel//lib/sequel/dataset/placeholder_literalizer.rb#126
   def process(dataset); end
 end
 
@@ -7508,41 +7516,41 @@ end
 # version number starting with 1, where missing or duplicate migration file
 # versions are not allowed.  Part of the +migration+ extension.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#540
+# source://sequel//lib/sequel/extensions/migration.rb#537
 class Sequel::IntegerMigrator < ::Sequel::Migrator
   # Set up all state for the migrator instance
   #
   # @raise [Error]
   # @return [IntegerMigrator] a new instance of IntegerMigrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#553
+  # source://sequel//lib/sequel/extensions/migration.rb#550
   def initialize(db, directory, opts = T.unsafe(nil)); end
 
   # The current version for this migrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#544
+  # source://sequel//lib/sequel/extensions/migration.rb#541
   def current; end
 
   # The direction of the migrator, either :up or :down
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#547
+  # source://sequel//lib/sequel/extensions/migration.rb#544
   def direction; end
 
   # The integer migrator is current if the current version is the same as the target version.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#584
+  # source://sequel//lib/sequel/extensions/migration.rb#581
   def is_current?; end
 
   # The migrations used by this migrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#550
+  # source://sequel//lib/sequel/extensions/migration.rb#547
   def migrations; end
 
   # Apply all migrations on the database
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#589
+  # source://sequel//lib/sequel/extensions/migration.rb#586
   def run; end
 
   private
@@ -7550,33 +7558,33 @@ class Sequel::IntegerMigrator < ::Sequel::Migrator
   # Gets the current migration version stored in the database. If no version
   # number is stored, 0 is returned.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#607
+  # source://sequel//lib/sequel/extensions/migration.rb#604
   def current_migration_version; end
 
   # The default column storing schema version.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#612
+  # source://sequel//lib/sequel/extensions/migration.rb#609
   def default_schema_column; end
 
   # The default table storing schema version.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#617
+  # source://sequel//lib/sequel/extensions/migration.rb#614
   def default_schema_table; end
 
   # Returns any found migration files in the supplied directory.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#622
+  # source://sequel//lib/sequel/extensions/migration.rb#619
   def get_migration_files; end
 
   # Returns a list of migration classes filtered for the migration range and
   # ordered according to the migration direction.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#639
+  # source://sequel//lib/sequel/extensions/migration.rb#636
   def get_migrations; end
 
   # Returns the latest version available in the specified directory.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#644
+  # source://sequel//lib/sequel/extensions/migration.rb#641
   def latest_migration_version; end
 
   # Returns the dataset for the schema_info table. If no such table
@@ -7584,30 +7592,30 @@ class Sequel::IntegerMigrator < ::Sequel::Migrator
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#651
+  # source://sequel//lib/sequel/extensions/migration.rb#648
   def schema_dataset; end
 
   # Sets the current migration version stored in the database.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#664
+  # source://sequel//lib/sequel/extensions/migration.rb#661
   def set_migration_version(version); end
 
   # Whether or not this is an up migration
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#669
+  # source://sequel//lib/sequel/extensions/migration.rb#666
   def up?; end
 
   # An array of numbers corresponding to the migrations,
   # so that each number in the array is the migration version
   # that will be in affect after the migration is run.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#676
+  # source://sequel//lib/sequel/extensions/migration.rb#673
   def version_numbers; end
 end
 
-# source://sequel//lib/sequel/extensions/migration.rb#541
+# source://sequel//lib/sequel/extensions/migration.rb#538
 Sequel::IntegerMigrator::Error = Sequel::Migrator::Error
 
 class Sequel::InvalidOperation < ::Sequel::Error; end
@@ -7758,46 +7766,46 @@ end
 
 # Handles reversing an alter_table block in a reversible migration.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#244
+# source://sequel//lib/sequel/extensions/migration.rb#241
 class Sequel::MigrationAlterTableReverser < ::Sequel::BasicObject
   # @return [MigrationAlterTableReverser] a new instance of MigrationAlterTableReverser
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#245
+  # source://sequel//lib/sequel/extensions/migration.rb#242
   def initialize; end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#249
+  # source://sequel//lib/sequel/extensions/migration.rb#246
   def reverse(&block); end
 
   private
 
-  # source://sequel//lib/sequel/extensions/migration.rb#258
+  # source://sequel//lib/sequel/extensions/migration.rb#255
   def add_column(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#262
+  # source://sequel//lib/sequel/extensions/migration.rb#259
   def add_constraint(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#268
+  # source://sequel//lib/sequel/extensions/migration.rb#265
   def add_foreign_key(key, table, *args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#280
+  # source://sequel//lib/sequel/extensions/migration.rb#277
   def add_full_text_index(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#277
+  # source://sequel//lib/sequel/extensions/migration.rb#274
   def add_index(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#272
+  # source://sequel//lib/sequel/extensions/migration.rb#269
   def add_primary_key(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#281
+  # source://sequel//lib/sequel/extensions/migration.rb#278
   def add_spatial_index(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#283
+  # source://sequel//lib/sequel/extensions/migration.rb#280
   def rename_column(name, new_name); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#287
+  # source://sequel//lib/sequel/extensions/migration.rb#284
   def set_column_allow_null(name, allow_null = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#291
+  # source://sequel//lib/sequel/extensions/migration.rb#288
   def set_column_not_null(name); end
 end
 
@@ -7884,28 +7892,28 @@ class Sequel::MigrationReverser < ::Sequel::BasicObject
 
   private
 
-  # source://sequel//lib/sequel/extensions/migration.rb#210
+  # source://sequel//lib/sequel/extensions/migration.rb#207
   def add_column(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#214
+  # source://sequel//lib/sequel/extensions/migration.rb#211
   def add_index(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#218
+  # source://sequel//lib/sequel/extensions/migration.rb#215
   def alter_table(table, &block); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#222
+  # source://sequel//lib/sequel/extensions/migration.rb#219
   def create_join_table(*args); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#226
+  # source://sequel//lib/sequel/extensions/migration.rb#223
   def create_table(name, opts = T.unsafe(nil), &_); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#230
+  # source://sequel//lib/sequel/extensions/migration.rb#227
   def create_view(name, _, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#234
+  # source://sequel//lib/sequel/extensions/migration.rb#231
   def rename_column(table, name, new_name); end
 
-  # source://sequel//lib/sequel/extensions/migration.rb#238
+  # source://sequel//lib/sequel/extensions/migration.rb#235
   def rename_table(table, new_name); end
 end
 
@@ -7971,53 +7979,53 @@ end
 #
 # Part of the +migration+ extension.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#377
+# source://sequel//lib/sequel/extensions/migration.rb#374
 class Sequel::Migrator
   # Setup the state for the migrator
   #
   # @raise [Error]
   # @return [Migrator] a new instance of Migrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#485
+  # source://sequel//lib/sequel/extensions/migration.rb#482
   def initialize(db, directory, opts = T.unsafe(nil)); end
 
   # The column to use to hold the migration version number for integer migrations or
   # filename for timestamp migrations (defaults to :version for integer migrations and
   # :filename for timestamp migrations)
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#462
+  # source://sequel//lib/sequel/extensions/migration.rb#459
   def column; end
 
   # The database related to this migrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#465
+  # source://sequel//lib/sequel/extensions/migration.rb#462
   def db; end
 
   # The directory for this migrator's files
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#468
+  # source://sequel//lib/sequel/extensions/migration.rb#465
   def directory; end
 
   # The dataset for this migrator, representing the +schema_info+ table for integer
   # migrations and the +schema_migrations+ table for timestamp migrations
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#472
+  # source://sequel//lib/sequel/extensions/migration.rb#469
   def ds; end
 
   # All migration files in this migrator's directory
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#475
+  # source://sequel//lib/sequel/extensions/migration.rb#472
   def files; end
 
   # The table to use to hold the applied migration data (defaults to :schema_info for
   # integer migrations and :schema_migrations for timestamp migrations)
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#479
+  # source://sequel//lib/sequel/extensions/migration.rb#476
   def table; end
 
   # The target version for this migrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#482
+  # source://sequel//lib/sequel/extensions/migration.rb#479
   def target; end
 
   private
@@ -8025,24 +8033,24 @@ class Sequel::Migrator
   # If transactions should be used for the migration, yield to the block
   # inside a transaction.  Otherwise, just yield to the block.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#502
+  # source://sequel//lib/sequel/extensions/migration.rb#499
   def checked_transaction(migration, &block); end
 
   # Load the migration file, raising an exception if the file does not define
   # a single migration.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#518
+  # source://sequel//lib/sequel/extensions/migration.rb#515
   def load_migration_file(file); end
 
   # Return the integer migration version based on the filename.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#532
+  # source://sequel//lib/sequel/extensions/migration.rb#529
   def migration_version_from_file(filename); end
 
   class << self
     # Wrapper for +run+, maintaining backwards API compatibility
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#394
+    # source://sequel//lib/sequel/extensions/migration.rb#391
     def apply(db, directory, target = T.unsafe(nil), current = T.unsafe(nil)); end
 
     # Raise a NotCurrentError unless the migrator is current, takes the same
@@ -8050,7 +8058,7 @@ class Sequel::Migrator
     #
     # @raise [NotCurrentError]
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#400
+    # source://sequel//lib/sequel/extensions/migration.rb#397
     def check_current(*args); end
 
     # Return whether the migrator is current (i.e. it does not need to make
@@ -8058,13 +8066,13 @@ class Sequel::Migrator
     #
     # @return [Boolean]
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#406
+    # source://sequel//lib/sequel/extensions/migration.rb#403
     def is_current?(db, directory, opts = T.unsafe(nil)); end
 
     # Choose the Migrator subclass to use.  Uses the TimestampMigrator
     # if the version number is greater than 20000101, otherwise uses the IntegerMigrator.
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#446
+    # source://sequel//lib/sequel/extensions/migration.rb#443
     def migrator_class(directory); end
 
     # Migrates the supplied database using the migration files in the specified directory. Options:
@@ -8089,7 +8097,7 @@ class Sequel::Migrator
     #   Sequel::Migrator.run(DB, "app1/migrations", column: :app2_version)
     #   Sequel::Migrator.run(DB, "app2/migrations", column: :app2_version, table: :schema_info2)
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#436
+    # source://sequel//lib/sequel/extensions/migration.rb#433
     def run(db, directory, opts = T.unsafe(nil)); end
   end
 end
@@ -8097,27 +8105,27 @@ end
 # Exception class raised when there is an error with the migrator's
 # file structure, database, or arguments.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#385
+# source://sequel//lib/sequel/extensions/migration.rb#382
 class Sequel::Migrator::Error < ::Sequel::Error; end
 
 # Lock ID to use for advisory locks when running migrations
 # "sequel-migration".codepoints.reduce(:*) % (2**63)
 #
-# source://sequel//lib/sequel/extensions/migration.rb#412
+# source://sequel//lib/sequel/extensions/migration.rb#409
 Sequel::Migrator::MIGRATION_ADVISORY_LOCK_ID = T.let(T.unsafe(nil), Integer)
 
-# source://sequel//lib/sequel/extensions/migration.rb#378
+# source://sequel//lib/sequel/extensions/migration.rb#375
 Sequel::Migrator::MIGRATION_FILE_PATTERN = T.let(T.unsafe(nil), Regexp)
 
 # Mutex used around migration file loading
 #
-# source://sequel//lib/sequel/extensions/migration.rb#381
+# source://sequel//lib/sequel/extensions/migration.rb#378
 Sequel::Migrator::MUTEX = T.let(T.unsafe(nil), Thread::Mutex)
 
 # Exception class raised when Migrator.check_current signals that it is
 # not current.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#390
+# source://sequel//lib/sequel/extensions/migration.rb#387
 class Sequel::Migrator::NotCurrentError < ::Sequel::Migrator::Error; end
 
 # <tt>Sequel::Model</tt> is an object relational mapper built on top of Sequel core.  Each
@@ -8165,23 +8173,23 @@ Sequel::Model::Associations::ASSOCIATION_TYPES = T.let(T.unsafe(nil), Hash)
 
 # This module contains methods added to all association datasets
 #
-# source://sequel//lib/sequel/model/associations.rb#1531
+# source://sequel//lib/sequel/model/associations.rb#1697
 module Sequel::Model::Associations::AssociationDatasetMethods
   # The association reflection related to the association dataset
   #
-  # source://sequel//lib/sequel/model/associations.rb#1538
+  # source://sequel//lib/sequel/model/associations.rb#1704
   def association_reflection; end
 
   # The model object that created the association dataset
   #
-  # source://sequel//lib/sequel/model/associations.rb#1533
+  # source://sequel//lib/sequel/model/associations.rb#1699
   def model_object; end
 
   private
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1544
+  # source://sequel//lib/sequel/model/associations.rb#1710
   def non_sql_option?(key); end
 end
 
@@ -8225,7 +8233,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
 
   # Use DISTINCT ON and ORDER BY clauses to limit the results to the first record with matching keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#138
+  # source://sequel//lib/sequel/model/associations.rb#140
   def apply_distinct_on_eager_limit_strategy(ds); end
 
   # Apply all non-instance specific changes and the eager_block option to the given
@@ -8243,18 +8251,18 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # Apply an eager limit strategy to the dataset, or return the dataset
   # unmodified if it doesn't need an eager limit strategy.
   #
-  # source://sequel//lib/sequel/model/associations.rb#126
+  # source://sequel//lib/sequel/model/associations.rb#128
   def apply_eager_limit_strategy(ds, strategy = T.unsafe(nil), limit_and_offset = T.unsafe(nil)); end
 
   # If the ruby eager limit strategy is being used, slice the array using the slice
   # range to return the object(s) at the correct offset/limit.
   #
-  # source://sequel//lib/sequel/model/associations.rb#165
+  # source://sequel//lib/sequel/model/associations.rb#167
   def apply_ruby_eager_limit_strategy(rows, limit_and_offset = T.unsafe(nil)); end
 
   # Use a window function to limit the results of the eager loading dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#144
+  # source://sequel//lib/sequel/model/associations.rb#146
   def apply_window_function_eager_limit_strategy(ds, limit_and_offset = T.unsafe(nil)); end
 
   # Whether the associations cache should use an array when storing the
@@ -8262,7 +8270,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#178
+  # source://sequel//lib/sequel/model/associations.rb#180
   def assign_singular?; end
 
   # The class associated to the current model class via this association
@@ -8280,12 +8288,12 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # Return an dataset that will load the appropriate associated objects for
   # the given object using this association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#215
+  # source://sequel//lib/sequel/model/associations.rb#217
   def association_dataset_for(object); end
 
   # Proc used to create the association dataset method.
   #
-  # source://sequel//lib/sequel/model/associations.rb#227
+  # source://sequel//lib/sequel/model/associations.rb#229
   def association_dataset_proc; end
 
   # Name symbol for association method, the same as the name of the association.
@@ -8299,7 +8307,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#185
+  # source://sequel//lib/sequel/model/associations.rb#187
   def can_have_associated_objects?(obj); end
 
   # Whether you are able to clone from the given association type to the current
@@ -8307,25 +8315,25 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#191
+  # source://sequel//lib/sequel/model/associations.rb#193
   def cloneable?(ref); end
 
   # Name symbol for the dataset association method
   #
-  # source://sequel//lib/sequel/model/associations.rb#196
+  # source://sequel//lib/sequel/model/associations.rb#198
   def dataset_method; end
 
   # Whether the dataset needs a primary key to function, true by default.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#201
+  # source://sequel//lib/sequel/model/associations.rb#203
   def dataset_need_primary_key?; end
 
   # Return the symbol used for the row number column if the window function
   # eager limit strategy is being used, or nil otherwise.
   #
-  # source://sequel//lib/sequel/model/associations.rb#207
+  # source://sequel//lib/sequel/model/associations.rb#209
   def delete_row_number_column(ds = T.unsafe(nil)); end
 
   # Whether to eagerly graph a lazy dataset, true by default.  If this
@@ -8334,28 +8342,28 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#354
+  # source://sequel//lib/sequel/model/associations.rb#361
   def eager_graph_lazy_dataset?; end
 
   # The eager_graph limit strategy to use for this dataset
   #
-  # source://sequel//lib/sequel/model/associations.rb#232
+  # source://sequel//lib/sequel/model/associations.rb#234
   def eager_graph_limit_strategy(strategy); end
 
   # The eager limit strategy to use for this dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#249
+  # source://sequel//lib/sequel/model/associations.rb#251
   def eager_limit_strategy; end
 
   # Eager load the associated objects using the hash of eager options,
   # yielding each row to the block.
   #
-  # source://sequel//lib/sequel/model/associations.rb#264
+  # source://sequel//lib/sequel/model/associations.rb#266
   def eager_load_results(eo, &block); end
 
   # The key to use for the key hash when eager loading
   #
-  # source://sequel//lib/sequel/model/associations.rb#341
+  # source://sequel//lib/sequel/model/associations.rb#348
   def eager_loader_key; end
 
   # By default associations do not need to select a key in an associated table
@@ -8363,7 +8371,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#347
+  # source://sequel//lib/sequel/model/associations.rb#354
   def eager_loading_use_associated_key?; end
 
   # Whether additional conditions should be added when using the filter
@@ -8371,7 +8379,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#360
+  # source://sequel//lib/sequel/model/associations.rb#367
   def filter_by_associations_add_conditions?; end
 
   # The expression to use for the additional conditions to be added for
@@ -8379,17 +8387,17 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # filtered.  Works by using a subquery to test that the objects passed
   # also meet the association filter criteria.
   #
-  # source://sequel//lib/sequel/model/associations.rb#368
+  # source://sequel//lib/sequel/model/associations.rb#375
   def filter_by_associations_conditions_expression(obj); end
 
   # Finalize the association by first attempting to populate the thread-safe cache,
   # and then transfering the thread-safe cache value to the association itself,
   # so that a mutex is not needed to get the value.
   #
-  # source://sequel//lib/sequel/model/associations.rb#376
+  # source://sequel//lib/sequel/model/associations.rb#388
   def finalize; end
 
-  # source://sequel//lib/sequel/model/associations.rb#407
+  # source://sequel//lib/sequel/model/associations.rb#419
   def finalize_settings; end
 
   # Whether to handle silent modification failure when adding/removing
@@ -8397,29 +8405,29 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#413
+  # source://sequel//lib/sequel/model/associations.rb#425
   def handle_silent_modification_failure?; end
 
   # Hash value for the association reflection.  This is precomputed to avoid
   # concurrency issues at runtime.
   #
-  # source://sequel//lib/sequel/model/associations.rb#419
+  # source://sequel//lib/sequel/model/associations.rb#431
   def hash; end
 
   # Initialize the associations cache for the current association for the given objects.
   #
-  # source://sequel//lib/sequel/model/associations.rb#424
+  # source://sequel//lib/sequel/model/associations.rb#436
   def initialize_association_cache(objects); end
 
   # Show which type of reflection this is, and a guess at what code was used to create the
   # association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#435
+  # source://sequel//lib/sequel/model/associations.rb#447
   def inspect; end
 
   # The limit and offset for this association (returned as a two element array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#446
+  # source://sequel//lib/sequel/model/associations.rb#458
   def limit_and_offset; end
 
   # Whether the associated object needs a primary key to be added/removed,
@@ -8427,38 +8435,38 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#456
+  # source://sequel//lib/sequel/model/associations.rb#468
   def need_associated_primary_key?; end
 
   # A placeholder literalizer that can be used to lazily load the association. If
   # one can't be used, returns nil.
   #
-  # source://sequel//lib/sequel/model/associations.rb#462
+  # source://sequel//lib/sequel/model/associations.rb#474
   def placeholder_loader; end
 
   # The values that predicate_keys should match for objects to be associated.
   #
-  # source://sequel//lib/sequel/model/associations.rb#482
+  # source://sequel//lib/sequel/model/associations.rb#494
   def predicate_key_values(object); end
 
   # The keys to use for loading of the regular dataset, as an array.
   #
-  # source://sequel//lib/sequel/model/associations.rb#477
+  # source://sequel//lib/sequel/model/associations.rb#489
   def predicate_keys; end
 
   # Qualify +col+ with the given table name.
   #
-  # source://sequel//lib/sequel/model/associations.rb#487
+  # source://sequel//lib/sequel/model/associations.rb#499
   def qualify(table, col); end
 
   # Qualify col with the associated model's table name.
   #
-  # source://sequel//lib/sequel/model/associations.rb#499
+  # source://sequel//lib/sequel/model/associations.rb#511
   def qualify_assoc(col); end
 
   # Qualify col with the current model's table name.
   #
-  # source://sequel//lib/sequel/model/associations.rb#504
+  # source://sequel//lib/sequel/model/associations.rb#516
   def qualify_cur(col); end
 
   # Returns the reciprocal association variable, if one exists. The reciprocal
@@ -8468,7 +8476,7 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # to populate reciprocal associations.  For example, when you do this_artist.add_album(album)
   # it sets album.artist to this_artist.
   #
-  # source://sequel//lib/sequel/model/associations.rb#514
+  # source://sequel//lib/sequel/model/associations.rb#526
   def reciprocal; end
 
   # Whether the reciprocal of this association returns an array of objects instead of a single object,
@@ -8476,12 +8484,12 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#533
+  # source://sequel//lib/sequel/model/associations.rb#545
   def reciprocal_array?; end
 
   # Name symbol for the remove_all_ association method
   #
-  # source://sequel//lib/sequel/model/associations.rb#538
+  # source://sequel//lib/sequel/model/associations.rb#550
   def remove_all_method; end
 
   # Whether associated objects need to be removed from the association before
@@ -8489,19 +8497,19 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#544
+  # source://sequel//lib/sequel/model/associations.rb#556
   def remove_before_destroy?; end
 
   # Name symbol for the remove_ association method
   #
-  # source://sequel//lib/sequel/model/associations.rb#549
+  # source://sequel//lib/sequel/model/associations.rb#561
   def remove_method; end
 
   # Whether to check that an object to be disassociated is already associated to this object, false by default.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#554
+  # source://sequel//lib/sequel/model/associations.rb#566
   def remove_should_check_existing?; end
 
   # Whether this association returns an array of objects instead of a single object,
@@ -8509,12 +8517,12 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#560
+  # source://sequel//lib/sequel/model/associations.rb#572
   def returns_array?; end
 
   # The columns to select when loading the association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#565
+  # source://sequel//lib/sequel/model/associations.rb#577
   def select; end
 
   # Whether to set the reciprocal association to self when loading associated
@@ -8522,17 +8530,17 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#571
+  # source://sequel//lib/sequel/model/associations.rb#583
   def set_reciprocal_to_self?; end
 
   # Name symbol for the setter association method
   #
-  # source://sequel//lib/sequel/model/associations.rb#576
+  # source://sequel//lib/sequel/model/associations.rb#588
   def setter_method; end
 
   # The range used for slicing when using the :ruby eager limit strategy.
   #
-  # source://sequel//lib/sequel/model/associations.rb#581
+  # source://sequel//lib/sequel/model/associations.rb#593
   def slice_range(limit_and_offset = T.unsafe(nil)); end
 
   private
@@ -8540,40 +8548,52 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # The base dataset used for the association, before any order/conditions
   # options have been applied.
   #
-  # source://sequel//lib/sequel/model/associations.rb#611
+  # source://sequel//lib/sequel/model/associations.rb#623
   def _associated_dataset; end
+
+  # Return an expression to filter the filter by associations dataset to only
+  # rows related to given objects.
+  #
+  # source://sequel//lib/sequel/model/associations.rb#789
+  def _lateral_subquery_filter_limit_strategy_conditions(obj, key, value_method, value_column); end
 
   # Whether for the reciprocal type for the given association cannot be
   # known in advantage, false by default.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#617
+  # source://sequel//lib/sequel/model/associations.rb#629
   def ambiguous_reciprocal_type?; end
 
   # Apply a distinct on eager limit strategy using IN with a subquery
   # that uses DISTINCT ON to ensure only the first matching record for
   # each key is included.
   #
-  # source://sequel//lib/sequel/model/associations.rb#637
+  # source://sequel//lib/sequel/model/associations.rb#649
   def apply_filter_by_associations_distinct_on_limit_strategy(ds); end
 
   # Apply a limit strategy to the given dataset so that filter by
   # associations works with a limited dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#623
+  # source://sequel//lib/sequel/model/associations.rb#635
   def apply_filter_by_associations_limit_strategy(ds); end
 
   # Apply a distinct on eager limit strategy using IN with a subquery
   # that uses a filter on the row_number window function to ensure
   # that only rows inside the limit are returned.
   #
-  # source://sequel//lib/sequel/model/associations.rb#645
+  # source://sequel//lib/sequel/model/associations.rb#657
   def apply_filter_by_associations_window_function_limit_strategy(ds); end
+
+  # source://sequel//lib/sequel/model/associations.rb#776
+  def apply_lateral_subquery_eager_limit_strategy(ds, ids, limit_and_offset); end
+
+  # source://sequel//lib/sequel/model/associations.rb#818
+  def apply_lateral_subquery_filter_limit_strategy(ds, obj); end
 
   # The associated_dataset with the eager_block callback already applied.
   #
-  # source://sequel//lib/sequel/model/associations.rb#650
+  # source://sequel//lib/sequel/model/associations.rb#662
   def associated_eager_dataset; end
 
   # If the key exists in the reflection hash, return it.
@@ -8581,82 +8601,88 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   # If the key doesn't exist and association reflection are cached, check the cache and return
   # the value if present, or yield to get the value, cache the value, and return it.
   #
-  # source://sequel//lib/sequel/model/associations.rb#594
+  # source://sequel//lib/sequel/model/associations.rb#606
   def cached_fetch(key); end
 
   # Cache the value at the given key if caching.
   #
-  # source://sequel//lib/sequel/model/associations.rb#604
+  # source://sequel//lib/sequel/model/associations.rb#616
   def cached_set(key, value); end
 
   # The default eager limit strategy to use for this association
   #
-  # source://sequel//lib/sequel/model/associations.rb#687
+  # source://sequel//lib/sequel/model/associations.rb#699
   def default_eager_limit_strategy; end
 
   # The dataset to use for eager loading associated objects for multiple current objects,
   # given the hash passed to the eager loader.
   #
-  # source://sequel//lib/sequel/model/associations.rb#662
+  # source://sequel//lib/sequel/model/associations.rb#674
   def eager_loading_dataset(eo = T.unsafe(nil)); end
 
   # The predicate condition to use for the eager_loader.
   #
-  # source://sequel//lib/sequel/model/associations.rb#701
+  # source://sequel//lib/sequel/model/associations.rb#713
   def eager_loading_predicate_condition(keys); end
 
   # Set the predicate condition for the eager loading dataset based on the id map
   # in the eager loading options.
   #
-  # source://sequel//lib/sequel/model/associations.rb#693
+  # source://sequel//lib/sequel/model/associations.rb#705
   def eager_loading_set_predicate_condition(ds, eo); end
 
   # Add conditions to the dataset to not include NULL values for
   # the associated keys, and select those keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#710
+  # source://sequel//lib/sequel/model/associations.rb#722
   def filter_by_associations_add_conditions_dataset_filter(ds); end
 
   # The base dataset to use for the filter by associations conditions
   # subquery, regardless of the objects that are passed in as filter
   # values.
   #
-  # source://sequel//lib/sequel/model/associations.rb#733
+  # source://sequel//lib/sequel/model/associations.rb#745
   def filter_by_associations_conditions_dataset; end
 
   # The conditions to add to the filter by associations conditions
   # subquery to restrict it to to the object(s) that was used as the
   # filter value.
   #
-  # source://sequel//lib/sequel/model/associations.rb#718
+  # source://sequel//lib/sequel/model/associations.rb#730
   def filter_by_associations_conditions_subquery_conditions(obj); end
 
   # The strategy to use to filter by a limited association
   #
-  # source://sequel//lib/sequel/model/associations.rb#743
+  # source://sequel//lib/sequel/model/associations.rb#755
   def filter_by_associations_limit_strategy; end
+
+  # source://sequel//lib/sequel/model/associations.rb#769
+  def lateral_subquery_eager_limit_strategy_lateral_dataset(ds, limit_and_offset); end
+
+  # source://sequel//lib/sequel/model/associations.rb#811
+  def lateral_subquery_filter_limit_strategy_lateral_dataset(ds, obj); end
 
   # Whether to limit the associated dataset to a single row.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#758
+  # source://sequel//lib/sequel/model/associations.rb#825
   def limit_to_single_row?; end
 
   # Any offset to use for this association (or nil if there is no offset).
   #
-  # source://sequel//lib/sequel/model/associations.rb#763
+  # source://sequel//lib/sequel/model/associations.rb#830
   def offset; end
 
   # A placeholder literalizer used to speed up eager loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#768
+  # source://sequel//lib/sequel/model/associations.rb#835
   def placeholder_eager_loader; end
 
   # The reciprocal type as an array, should be overridden in reflection subclasses that
   # have ambiguous reciprocal types.
   #
-  # source://sequel//lib/sequel/model/associations.rb#786
+  # source://sequel//lib/sequel/model/associations.rb#858
   def possible_reciprocal_types; end
 
   # Whether the given association reflection is possible reciprocal
@@ -8664,54 +8690,54 @@ class Sequel::Model::Associations::AssociationReflection < ::Hash
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#792
+  # source://sequel//lib/sequel/model/associations.rb#864
   def reciprocal_association?(assoc_reflect); end
 
   # The number of subqueries to use in each union query, used to eagerly load
   # limited associations.  Defaults to 40, the optimal number depends on the
   # latency between the database and the application.
   #
-  # source://sequel//lib/sequel/model/associations.rb#802
+  # source://sequel//lib/sequel/model/associations.rb#874
   def subqueries_per_union; end
 
   # If +s+ is an array, map +s+ over the block.  Otherwise, just call the
   # block with +s+.
   #
-  # source://sequel//lib/sequel/model/associations.rb#808
+  # source://sequel//lib/sequel/model/associations.rb#880
   def transform(s, &block); end
 
   # The eager_graph limit strategy used when true is given as the value, choosing the
   # best strategy based on what the database supports.
   #
-  # source://sequel//lib/sequel/model/associations.rb#826
+  # source://sequel//lib/sequel/model/associations.rb#898
   def true_eager_graph_limit_strategy; end
 
   # What eager limit strategy should be used when true is given as the value,
   # defaults to UNION as that is the fastest strategy if the appropriate keys are indexed.
   #
-  # source://sequel//lib/sequel/model/associations.rb#814
+  # source://sequel//lib/sequel/model/associations.rb#886
   def true_eager_limit_strategy; end
 
   # A placeholder literalizer used to speed up the creation of union queries when eager
   # loading a limited association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#836
+  # source://sequel//lib/sequel/model/associations.rb#908
   def union_eager_loader; end
 
   # Whether the placeholder loader can be used to load the association.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#851
+  # source://sequel//lib/sequel/model/associations.rb#923
   def use_placeholder_loader?; end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#225
+# source://sequel//lib/sequel/model/associations.rb#227
 Sequel::Model::Associations::AssociationReflection::ASSOCIATION_DATASET_PROC = T.let(T.unsafe(nil), Proc)
 
 # Map of methods to cache keys used for finalizing associations.
 #
-# source://sequel//lib/sequel/model/associations.rb#398
+# source://sequel//lib/sequel/model/associations.rb#410
 Sequel::Model::Associations::AssociationReflection::FINALIZE_SETTINGS = T.let(T.unsafe(nil), Hash)
 
 # Each kind of association adds a number of instance methods to the model class which
@@ -8764,11 +8790,11 @@ Sequel::Model::Associations::AssociationReflection::FINALIZE_SETTINGS = T.let(T.
 # see the {Association Basics guide}[rdoc-ref:doc/association_basics.rdoc].
 # For examples of advanced usage, see the {Advanced Associations guide}[rdoc-ref:doc/advanced_associations.rdoc].
 #
-# source://sequel//lib/sequel/model/associations.rb#1598
+# source://sequel//lib/sequel/model/associations.rb#1764
 module Sequel::Model::Associations::ClassMethods
   # Array of all association reflections for this model class
   #
-  # source://sequel//lib/sequel/model/associations.rb#1627
+  # source://sequel//lib/sequel/model/associations.rb#1793
   def all_association_reflections; end
 
   # Associates a related model with the current model. The following types are
@@ -9015,44 +9041,44 @@ module Sequel::Model::Associations::ClassMethods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1872
+  # source://sequel//lib/sequel/model/associations.rb#2038
   def associate(type, name, opts = T.unsafe(nil), &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def association_full_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def association_inner_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def association_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def association_left_join(*args, **_arg1, &block); end
 
   # The association reflection hash for the association of the given name.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1953
+  # source://sequel//lib/sequel/model/associations.rb#2119
   def association_reflection(name); end
 
   # All association reflections defined for this model (default: {}).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1600
+  # source://sequel//lib/sequel/model/associations.rb#1766
   def association_reflections; end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def association_right_join(*args, **_arg1, &block); end
 
   # Array of association name symbols
   #
-  # source://sequel//lib/sequel/model/associations.rb#1958
+  # source://sequel//lib/sequel/model/associations.rb#2124
   def associations; end
 
   # Hash with column symbol keys and arrays of many_to_one
   # association symbols that should be cleared when the column
   # value changes.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1605
+  # source://sequel//lib/sequel/model/associations.rb#1771
   def autoreloading_associations; end
 
   # Whether association metadata should be cached in the association reflection.  If not cached, it will be computed
@@ -9060,7 +9086,7 @@ module Sequel::Model::Associations::ClassMethods
   # setting this will make sure that if an associated class is removed or modified, this class will not have a reference to
   # the previous class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1611
+  # source://sequel//lib/sequel/model/associations.rb#1777
   def cache_associations; end
 
   # Whether association metadata should be cached in the association reflection.  If not cached, it will be computed
@@ -9068,59 +9094,59 @@ module Sequel::Model::Associations::ClassMethods
   # setting this will make sure that if an associated class is removed or modified, this class will not have a reference to
   # the previous class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1611
+  # source://sequel//lib/sequel/model/associations.rb#1777
   def cache_associations=(_arg0); end
 
   # The default options to use for all associations.  This hash is merged into the association reflection hash for
   # all association reflections.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1615
+  # source://sequel//lib/sequel/model/associations.rb#1781
   def default_association_options; end
 
   # The default options to use for all associations.  This hash is merged into the association reflection hash for
   # all association reflections.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1615
+  # source://sequel//lib/sequel/model/associations.rb#1781
   def default_association_options=(_arg0); end
 
   # The default options to use for all associations of a given type.  This is a hash keyed by association type
   # symbol.  If there is a value for the association type symbol key, the resulting hash will be merged into the
   # association reflection hash for all association reflections of that type.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1620
+  # source://sequel//lib/sequel/model/associations.rb#1786
   def default_association_type_options; end
 
   # The default options to use for all associations of a given type.  This is a hash keyed by association type
   # symbol.  If there is a value for the association type symbol key, the resulting hash will be merged into the
   # association reflection hash for all association reflections of that type.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1620
+  # source://sequel//lib/sequel/model/associations.rb#1786
   def default_association_type_options=(_arg0); end
 
   # The default :eager_limit_strategy option to use for limited or offset associations (default: true, causing Sequel
   # to use what it considers the most appropriate strategy).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1624
+  # source://sequel//lib/sequel/model/associations.rb#1790
   def default_eager_limit_strategy; end
 
   # The default :eager_limit_strategy option to use for limited or offset associations (default: true, causing Sequel
   # to use what it considers the most appropriate strategy).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1624
+  # source://sequel//lib/sequel/model/associations.rb#1790
   def default_eager_limit_strategy=(_arg0); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def eager(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def eager_graph(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2012
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def eager_graph_with_options(*args, **_arg1, &block); end
 
   # Eager load the association with the given eager loader options.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1963
+  # source://sequel//lib/sequel/model/associations.rb#2129
   def eager_load_results(opts, eo, &block); end
 
   # Finalize all associations such that values that are looked up
@@ -9128,37 +9154,37 @@ module Sequel::Model::Associations::ClassMethods
   # As this modifies the associations, it must be done before
   # calling freeze.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1982
+  # source://sequel//lib/sequel/model/associations.rb#2148
   def finalize_associations; end
 
   # Freeze association related metadata when freezing model class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1968
+  # source://sequel//lib/sequel/model/associations.rb#2134
   def freeze; end
 
   # Shortcut for adding a many_to_many association, see #associate
   #
-  # source://sequel//lib/sequel/model/associations.rb#1987
+  # source://sequel//lib/sequel/model/associations.rb#2153
   def many_to_many(name, opts = T.unsafe(nil), &block); end
 
   # Shortcut for adding a many_to_one association, see #associate
   #
-  # source://sequel//lib/sequel/model/associations.rb#1992
+  # source://sequel//lib/sequel/model/associations.rb#2158
   def many_to_one(name, opts = T.unsafe(nil), &block); end
 
   # Shortcut for adding a one_through_one association, see #associate
   #
-  # source://sequel//lib/sequel/model/associations.rb#1997
+  # source://sequel//lib/sequel/model/associations.rb#2163
   def one_through_one(name, opts = T.unsafe(nil), &block); end
 
   # Shortcut for adding a one_to_many association, see #associate
   #
-  # source://sequel//lib/sequel/model/associations.rb#2002
+  # source://sequel//lib/sequel/model/associations.rb#2168
   def one_to_many(name, opts = T.unsafe(nil), &block); end
 
   # Shortcut for adding a one_to_one association, see #associate
   #
-  # source://sequel//lib/sequel/model/associations.rb#2007
+  # source://sequel//lib/sequel/model/associations.rb#2173
   def one_to_one(name, opts = T.unsafe(nil), &block); end
 
   private
@@ -9166,20 +9192,20 @@ module Sequel::Model::Associations::ClassMethods
   # The default value for the instance_specific option, if the association
   # could be instance specific and the :instance_specific option is not specified.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2018
+  # source://sequel//lib/sequel/model/associations.rb#2184
   def _association_instance_specific_default(_); end
 
   # The module to use for the association's methods.  Defaults to
   # the overridable_methods_module.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2024
+  # source://sequel//lib/sequel/model/associations.rb#2190
   def association_module(opts = T.unsafe(nil)); end
 
   # Add a method to the module included in the class, so the method
   # can be easily overridden in the class itself while allowing for
   # super to be called.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2031
+  # source://sequel//lib/sequel/model/associations.rb#2197
   def association_module_def(name, opts = T.unsafe(nil), &block); end
 
   # Add a method to the module included in the class, so the method
@@ -9187,65 +9213,65 @@ module Sequel::Model::Associations::ClassMethods
   # super to be called.  This method allows passing keywords through
   # the defined methods.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2041
+  # source://sequel//lib/sequel/model/associations.rb#2207
   def association_module_delegate_def(name, opts, &block); end
 
   # Add a private method to the module included in the class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2051
+  # source://sequel//lib/sequel/model/associations.rb#2217
   def association_module_private_def(name, opts = T.unsafe(nil), &block); end
 
   # Delegate to the type-specific association method to setup the
   # association, and define the association instance methods.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2058
+  # source://sequel//lib/sequel/model/associations.rb#2224
   def def_association(opts); end
 
   # Define all of the association instance methods for this association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2071
+  # source://sequel//lib/sequel/model/associations.rb#2237
   def def_association_instance_methods(opts); end
 
   # Adds the association method to the association methods module.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2064
+  # source://sequel//lib/sequel/model/associations.rb#2230
   def def_association_method(opts); end
 
   # Configures many_to_many and one_through_one association reflection and adds the related association methods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2121
+  # source://sequel//lib/sequel/model/associations.rb#2287
   def def_many_to_many(opts); end
 
   # Configures many_to_one association reflection and adds the related association methods
   #
-  # source://sequel//lib/sequel/model/associations.rb#2308
+  # source://sequel//lib/sequel/model/associations.rb#2474
   def def_many_to_one(opts); end
 
   # Alias of def_many_to_many, since they share pretty much the same code.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2489
+  # source://sequel//lib/sequel/model/associations.rb#2660
   def def_one_through_one(opts); end
 
   # Configures one_to_many and one_to_one association reflections and adds the related association methods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2368
+  # source://sequel//lib/sequel/model/associations.rb#2534
   def def_one_to_many(opts); end
 
   # Alias of def_one_to_many, since they share pretty much the same code.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2494
+  # source://sequel//lib/sequel/model/associations.rb#2665
   def def_one_to_one(opts); end
 
   # Return dataset to graph into given the association reflection, applying the :callback option if set.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2499
+  # source://sequel//lib/sequel/model/associations.rb#2670
   def eager_graph_dataset(opts, eager_options); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2011
+  # source://sequel//lib/sequel/model/associations.rb#2177
   def inherited_instance_variables; end
 
   # If not caching associations, reload the database schema by default,
@@ -9253,7 +9279,7 @@ module Sequel::Model::Associations::ClassMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2512
+  # source://sequel//lib/sequel/model/associations.rb#2686
   def reload_db_schema?; end
 end
 
@@ -9304,18 +9330,18 @@ end
 #
 #   Artist.eager(albums: {proc{|ds| ds.where{year > 1990}}=>{tracks: :genre}})
 #
-# source://sequel//lib/sequel/model/associations.rb#2967
+# source://sequel//lib/sequel/model/associations.rb#3141
 module Sequel::Model::Associations::DatasetMethods
   # If the dataset is being eagerly loaded, default to calling all
   # instead of each.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3344
+  # source://sequel//lib/sequel/model/associations.rb#3518
   def as_hash(key_column = T.unsafe(nil), value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2969
+  # source://sequel//lib/sequel/model/associations.rb#3143
   def association_full_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2969
+  # source://sequel//lib/sequel/model/associations.rb#3143
   def association_inner_join(*associations); end
 
   # Adds one or more INNER JOINs to the existing dataset using the keys and conditions
@@ -9393,13 +9419,13 @@ module Sequel::Model::Associations::DatasetMethods
   #   # ) AS albums ON (albums.artist_id = artists.id)
   #   # INNER JOIN tracks ON (tracks.album_id = albums.id)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3050
+  # source://sequel//lib/sequel/model/associations.rb#3224
   def association_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2969
+  # source://sequel//lib/sequel/model/associations.rb#3143
   def association_left_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2969
+  # source://sequel//lib/sequel/model/associations.rb#3143
   def association_right_join(*associations); end
 
   # If the expression is in the form <tt>x = y</tt> where +y+ is a <tt>Sequel::Model</tt>
@@ -9410,7 +9436,7 @@ module Sequel::Model::Associations::DatasetMethods
   # types, this is a simple transformation, but for +many_to_many+ associations this
   # creates a subquery to the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3061
+  # source://sequel//lib/sequel/model/associations.rb#3235
   def complex_expression_sql_append(sql, op, args); end
 
   # The preferred eager loading method.  Loads all associated records using one
@@ -9489,7 +9515,7 @@ module Sequel::Model::Associations::DatasetMethods
   #   # SELECT * FROM albums WHERE ((year > 1990) AND (artist_id IN (...)))
   #   # SELECT * FROM albums WHERE (artist_id IN (...))
   #
-  # source://sequel//lib/sequel/model/associations.rb#3181
+  # source://sequel//lib/sequel/model/associations.rb#3355
   def eager(*associations); end
 
   # The secondary eager loading method.  Loads all associations in a single query. This
@@ -9596,7 +9622,7 @@ module Sequel::Model::Associations::DatasetMethods
   #   # ) AS albums ON (albums.artist_id = artists.id)
   #   # LEFT OUTER JOIN tracks ON (tracks.album_id = albums.id)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3291
+  # source://sequel//lib/sequel/model/associations.rb#3465
   def eager_graph(*associations); end
 
   # Run eager_graph with some options specific to just this call. Unlike eager_graph, this takes
@@ -9620,13 +9646,13 @@ module Sequel::Model::Associations::DatasetMethods
   #                    significantly slower in some cases (perhaps even the majority of cases), so you should
   #                    only use this if you have benchmarked that it is faster for your use cases.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3315
+  # source://sequel//lib/sequel/model/associations.rb#3489
   def eager_graph_with_options(associations, opts = T.unsafe(nil)); end
 
   # If the dataset is being eagerly loaded, default to calling all
   # instead of each.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3354
+  # source://sequel//lib/sequel/model/associations.rb#3528
   def to_hash_groups(key_column, value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Do not attempt to split the result set into associations,
@@ -9634,7 +9660,7 @@ module Sequel::Model::Associations::DatasetMethods
   # want to use eager_graph as a shortcut to have all of the joins
   # and aliasing set up, but want to do something else with the dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3366
+  # source://sequel//lib/sequel/model/associations.rb#3540
   def ungraphed; end
 
   protected
@@ -9655,7 +9681,7 @@ module Sequel::Model::Associations::DatasetMethods
   #      to use a custom join type.
   # *associations :: any associations dependent on this one
   #
-  # source://sequel//lib/sequel/model/associations.rb#3391
+  # source://sequel//lib/sequel/model/associations.rb#3565
   def eager_graph_association(ds, model, ta, requirements, r, *associations); end
 
   # Check the associations are valid for the given model.
@@ -9668,13 +9694,13 @@ module Sequel::Model::Associations::DatasetMethods
   # requirements :: an array, used as a stack for requirements
   # *associations :: the associations to add to the graph
   #
-  # source://sequel//lib/sequel/model/associations.rb#3450
+  # source://sequel//lib/sequel/model/associations.rb#3624
   def eager_graph_associations(ds, model, ta, requirements, *associations); end
 
   # Replace the array of plain hashes with an array of model objects will all eager_graphed
   # associations set in the associations cache for each object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3469
+  # source://sequel//lib/sequel/model/associations.rb#3643
   def eager_graph_build_associations(hashes); end
 
   private
@@ -9682,118 +9708,118 @@ module Sequel::Model::Associations::DatasetMethods
   # Return a new dataset with JOINs of the given type added, using the tables and
   # conditions specified by the associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3477
+  # source://sequel//lib/sequel/model/associations.rb#3651
   def _association_join(type, associations); end
 
   # Process the array of hashes using the eager graph loader to return an array
   # of model objects with the associations set.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3483
+  # source://sequel//lib/sequel/model/associations.rb#3657
   def _eager_graph_build_associations(hashes, egl); end
 
   # If the association has conditions itself, then it requires additional filters be
   # added to the current dataset to ensure that the passed in object would also be
   # included by the association's conditions.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3490
+  # source://sequel//lib/sequel/model/associations.rb#3664
   def add_association_filter_conditions(ref, obj, expr); end
 
   # Return an expression for filtering by the given association reflection and associated object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3518
+  # source://sequel//lib/sequel/model/associations.rb#3692
   def association_filter_expression(op, ref, obj); end
 
   # Handle inversion for association filters by returning an inverted expression,
   # plus also handling cases where the referenced columns are NULL.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3526
+  # source://sequel//lib/sequel/model/associations.rb#3700
   def association_filter_handle_inversion(op, exp, cols); end
 
   # Return an expression for making sure that the given keys match the value of
   # the given methods for either the single object given or for any of the objects
   # given if +obj+ is an array.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3541
+  # source://sequel//lib/sequel/model/associations.rb#3715
   def association_filter_key_expression(keys, meths, obj); end
 
   # Make sure the association is valid for this model, and return the related AssociationReflection.
   #
   # @raise [Sequel::UndefinedAssociation]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3562
+  # source://sequel//lib/sequel/model/associations.rb#3736
   def check_association(model, association); end
 
   # Allow associations that are eagerly graphed to be specified as an SQL::AliasedExpression, for
   # per-call determining of the alias base.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3570
+  # source://sequel//lib/sequel/model/associations.rb#3744
   def eager_graph_check_association(model, association); end
 
   # The EagerGraphLoader instance used for converting eager_graph results.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3594
+  # source://sequel//lib/sequel/model/associations.rb#3768
   def eager_graph_loader; end
 
   # Eagerly load all specified associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3602
+  # source://sequel//lib/sequel/model/associations.rb#3776
   def eager_load(a, eager_assoc = T.unsafe(nil), m = T.unsafe(nil)); end
 
   # Process the array of associations arguments (Symbols, Arrays, and Hashes),
   # and return a hash of options suitable for cascading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3500
+  # source://sequel//lib/sequel/model/associations.rb#3674
   def eager_options_for_associations(associations); end
 
   # Return a subquery expression for filering by a many_to_many association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3682
+  # source://sequel//lib/sequel/model/associations.rb#3856
   def many_to_many_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a many_to_one association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3705
+  # source://sequel//lib/sequel/model/associations.rb#3879
   def many_to_one_association_filter_expression(op, ref, obj); end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3733
+  # source://sequel//lib/sequel/model/associations.rb#3907
   def non_sql_option?(key); end
 
   # Return a subquery expression for filering by a many_to_many association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3702
+  # source://sequel//lib/sequel/model/associations.rb#3876
   def one_through_one_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a one_to_* association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3719
+  # source://sequel//lib/sequel/model/associations.rb#3893
   def one_to_many_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a one_to_* association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3731
+  # source://sequel//lib/sequel/model/associations.rb#3905
   def one_to_one_association_filter_expression(op, ref, obj); end
 
   # Perform eager loading for a single association using the loader and eager options.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3677
+  # source://sequel//lib/sequel/model/associations.rb#3851
   def perform_eager_load(loader, eo); end
 
   # Using the hash of loaders and eager options, perform the eager loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3670
+  # source://sequel//lib/sequel/model/associations.rb#3844
   def perform_eager_loads(eager_load_data); end
 
   # Build associations from the graph if #eager_graph was used,
   # and/or load other associations if #eager was used.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3739
+  # source://sequel//lib/sequel/model/associations.rb#3913
   def post_load(all_records); end
 
   # Prepare a hash loaders and eager options which will be used to implement the eager loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3618
+  # source://sequel//lib/sequel/model/associations.rb#3792
   def prepare_eager_load(a, reflections, eager_assoc); end
 end
 
@@ -9809,118 +9835,118 @@ end
 # hashes and returning an array of model objects with all eager_graphed associations already set in the
 # association cache.
 #
-# source://sequel//lib/sequel/model/associations.rb#3749
+# source://sequel//lib/sequel/model/associations.rb#3923
 class Sequel::Model::Associations::EagerGraphLoader
   # Initialize all of the data structures used during loading.
   #
   # @return [EagerGraphLoader] a new instance of EagerGraphLoader
   #
-  # source://sequel//lib/sequel/model/associations.rb#3793
+  # source://sequel//lib/sequel/model/associations.rb#3967
   def initialize(dataset); end
 
   # Hash with table alias symbol keys and after_load hook values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3751
+  # source://sequel//lib/sequel/model/associations.rb#3925
   def after_load_map; end
 
   # Hash with table alias symbol keys and association name values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3754
+  # source://sequel//lib/sequel/model/associations.rb#3928
   def alias_map; end
 
   # Hash with table alias symbol keys and subhash values mapping column_alias symbols to the
   # symbol of the real name of the column
   #
-  # source://sequel//lib/sequel/model/associations.rb#3758
+  # source://sequel//lib/sequel/model/associations.rb#3932
   def column_maps; end
 
   # Recursive hash with table alias symbol keys mapping to hashes with dependent table alias symbol keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3761
+  # source://sequel//lib/sequel/model/associations.rb#3935
   def dependency_map; end
 
   # Hash with table alias symbol keys and [limit, offset] values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3764
+  # source://sequel//lib/sequel/model/associations.rb#3938
   def limit_map; end
 
   # Return an array of primary model instances with the associations cache prepopulated
   # for all model objects (both primary and associated).
   #
-  # source://sequel//lib/sequel/model/associations.rb#3893
+  # source://sequel//lib/sequel/model/associations.rb#4067
   def load(hashes); end
 
   # The table alias symbol for the primary model
   #
-  # source://sequel//lib/sequel/model/associations.rb#3767
+  # source://sequel//lib/sequel/model/associations.rb#3941
   def master; end
 
   # Hash with table alias symbol keys and primary key symbol values (or arrays of primary key symbols for
   # composite key tables)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3771
+  # source://sequel//lib/sequel/model/associations.rb#3945
   def primary_keys; end
 
   # Hash with table alias symbol keys and reciprocal association symbol values,
   # used for setting reciprocals for one_to_many associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3775
+  # source://sequel//lib/sequel/model/associations.rb#3949
   def reciprocal_map; end
 
   # Hash with table alias symbol keys and subhash values mapping primary key symbols (or array of symbols)
   # to model instances.  Used so that only a single model instance is created for each object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3779
+  # source://sequel//lib/sequel/model/associations.rb#3953
   def records_map; end
 
   # Hash with table alias symbol keys and AssociationReflection values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3782
+  # source://sequel//lib/sequel/model/associations.rb#3956
   def reflection_map; end
 
   # Hash with table alias symbol keys and callable values used to create model instances
   #
-  # source://sequel//lib/sequel/model/associations.rb#3785
+  # source://sequel//lib/sequel/model/associations.rb#3959
   def row_procs; end
 
   # Hash with table alias symbol keys and true/false values, where true means the
   # association represented by the table alias uses an array of values instead of
   # a single value (i.e. true => *_many, false => *_to_one).
   #
-  # source://sequel//lib/sequel/model/associations.rb#3790
+  # source://sequel//lib/sequel/model/associations.rb#3964
   def type_map; end
 
   private
 
   # Recursive method that creates associated model objects and associates them to the current model object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3942
+  # source://sequel//lib/sequel/model/associations.rb#4116
   def _load(dependency_map, current, h); end
 
   # Return the subhash for the specific table alias +ta+ by parsing the values out of the main hash +h+
   #
-  # source://sequel//lib/sequel/model/associations.rb#3985
+  # source://sequel//lib/sequel/model/associations.rb#4159
   def hfor(ta, h); end
 
   # Return a suitable hash key for any subhash +h+, which is an array of values by column order.
   # This is only used if the primary key cannot be used.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3993
+  # source://sequel//lib/sequel/model/associations.rb#4167
   def hkey(h); end
 
   # Return the subhash for the master table by parsing the values out of the main hash +h+
   #
-  # source://sequel//lib/sequel/model/associations.rb#3998
+  # source://sequel//lib/sequel/model/associations.rb#4172
   def master_hfor(h); end
 
   # Return a primary key value for the master table by parsing it out of the main hash +h+.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4005
+  # source://sequel//lib/sequel/model/associations.rb#4179
   def master_pk(h); end
 
   # Return a primary key value for the given table alias by parsing it out of the main hash +h+.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4018
+  # source://sequel//lib/sequel/model/associations.rb#4192
   def pk(ta, h); end
 
   # If the result set is the result of a cartesian product, then it is possible that
@@ -9929,141 +9955,141 @@ class Sequel::Model::Associations::EagerGraphLoader
   # uniq! on the association to make sure no duplicate records show up.
   # Note that this can cause legitimate duplicate records to be removed.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4035
+  # source://sequel//lib/sequel/model/associations.rb#4209
   def post_process(records, dependency_map); end
 end
 
 # Instance methods used to implement the associations support.
 #
-# source://sequel//lib/sequel/model/associations.rb#2518
+# source://sequel//lib/sequel/model/associations.rb#2692
 module Sequel::Model::Associations::InstanceMethods
   # The currently cached associations.  A hash with the keys being the
   # association name symbols and the values being the associated object
   # or nil (many_to_one), or the array of associated objects (*_to_many).
   #
-  # source://sequel//lib/sequel/model/associations.rb#2522
+  # source://sequel//lib/sequel/model/associations.rb#2696
   def associations; end
 
   # Freeze the associations cache when freezing the object.  Note that
   # retrieving associations after freezing will still work in most cases,
   # but the associations will not be cached in the association cache.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2529
+  # source://sequel//lib/sequel/model/associations.rb#2703
   def freeze; end
 
   private
 
   # Apply the association options such as :order and :limit to the given dataset, returning a modified dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2539
+  # source://sequel//lib/sequel/model/associations.rb#2713
   def _apply_association_options(opts, ds); end
 
   # Return a dataset for the association after applying any dynamic callback.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2551
+  # source://sequel//lib/sequel/model/associations.rb#2725
   def _associated_dataset(opts, dynamic_opts); end
 
   # A placeholder literalizer that can be used to load the association, or nil to not use one.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2560
+  # source://sequel//lib/sequel/model/associations.rb#2734
   def _associated_object_loader(opts, dynamic_opts); end
 
   # Return an association dataset for the given association reflection
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2567
+  # source://sequel//lib/sequel/model/associations.rb#2741
   def _dataset(opts); end
 
   # Dataset for the join table of the given many to many association reflection
   #
-  # source://sequel//lib/sequel/model/associations.rb#2579
+  # source://sequel//lib/sequel/model/associations.rb#2753
   def _join_table_dataset(opts); end
 
   # Return the associated single object for the given association reflection and dynamic options
   # (or nil if no associated object).
   #
-  # source://sequel//lib/sequel/model/associations.rb#2586
+  # source://sequel//lib/sequel/model/associations.rb#2760
   def _load_associated_object(opts, dynamic_opts); end
 
   # Load the associated objects for the given association reflection and dynamic options
   # as an array.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2597
+  # source://sequel//lib/sequel/model/associations.rb#2771
   def _load_associated_object_array(opts, dynamic_opts); end
 
   # Return the associated single object using a primary key lookup on the associated class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2591
+  # source://sequel//lib/sequel/model/associations.rb#2765
   def _load_associated_object_via_primary_key(opts); end
 
   # Return the associated objects from the dataset, without association callbacks, reciprocals, and caching.
   # Still apply the dynamic callback if present.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2612
+  # source://sequel//lib/sequel/model/associations.rb#2786
   def _load_associated_objects(opts, dynamic_opts = T.unsafe(nil)); end
 
   # Clear the associations cache when refreshing
   #
-  # source://sequel//lib/sequel/model/associations.rb#2627
+  # source://sequel//lib/sequel/model/associations.rb#2801
   def _refresh_set_values(hash); end
 
   # Set the given object as the associated object for the given *_to_one association reflection
   #
-  # source://sequel//lib/sequel/model/associations.rb#2869
+  # source://sequel//lib/sequel/model/associations.rb#3043
   def _set_associated_object(opts, o); end
 
   # Add the given associated object to the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2633
+  # source://sequel//lib/sequel/model/associations.rb#2807
   def add_associated_object(opts, o, *args, **_arg3); end
 
   # Add/Set the current object to/as the given object's reciprocal association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2652
+  # source://sequel//lib/sequel/model/associations.rb#2826
   def add_reciprocal_object(opts, o); end
 
   # Call uniq! on the given array. This is used by the :uniq option,
   # and is an actual method for memory reasons.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2666
+  # source://sequel//lib/sequel/model/associations.rb#2840
   def array_uniq!(a); end
 
   # If a foreign key column value changes, clear the related
   # cached associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2672
+  # source://sequel//lib/sequel/model/associations.rb#2846
   def change_column_value(column, value); end
 
   # Save the associated object if the associated object needs a primary key
   # and the associated object is new and does not have one.  Raise an error if
   # the object still does not have a primary key
   #
-  # source://sequel//lib/sequel/model/associations.rb#2707
+  # source://sequel//lib/sequel/model/associations.rb#2881
   def ensure_associated_primary_key(opts, o, *args); end
 
   # Duplicate the associations hash when duplicating the object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2715
+  # source://sequel//lib/sequel/model/associations.rb#2889
   def initialize_copy(other); end
 
   # Load the associated objects using the dataset, handling callbacks, reciprocals, and caching.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2732
+  # source://sequel//lib/sequel/model/associations.rb#2906
   def load_associated_objects(opts, dynamic_opts, &block); end
 
   # If a block is given, assign it as the :callback option in the hash, and return the hash.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2722
+  # source://sequel//lib/sequel/model/associations.rb#2896
   def load_association_objects_options(dynamic_opts, &block); end
 
   # Whether to use a simple primary key lookup on the associated class when loading.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2758
+  # source://sequel//lib/sequel/model/associations.rb#2932
   def load_with_primary_key_lookup?(opts, dynamic_opts); end
 
   # Convert the input of the add_* association method into an associated object. For
@@ -10071,21 +10097,21 @@ module Sequel::Model::Associations::InstanceMethods
   # assume the value specifies a primary key, and lookup an existing object with that primary key.
   # Otherwise, if the object is not already an instance of the class, raise an exception.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2768
+  # source://sequel//lib/sequel/model/associations.rb#2942
   def make_add_associated_object(opts, o); end
 
   # Remove all associated objects from the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2784
+  # source://sequel//lib/sequel/model/associations.rb#2958
   def remove_all_associated_objects(opts, *args, **_arg2); end
 
   # Remove the given associated object from the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2797
+  # source://sequel//lib/sequel/model/associations.rb#2971
   def remove_associated_object(opts, o, *args, **_arg3); end
 
   # Check that the object from the associated table specified by the primary key
@@ -10094,24 +10120,24 @@ module Sequel::Model::Associations::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2823
+  # source://sequel//lib/sequel/model/associations.rb#2997
   def remove_check_existing_object_from_pk(opts, o, *args); end
 
   # Remove/unset the current object from/as the given object's reciprocal association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2831
+  # source://sequel//lib/sequel/model/associations.rb#3005
   def remove_reciprocal_object(opts, o); end
 
   # Run the callback for the association with the object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2843
+  # source://sequel//lib/sequel/model/associations.rb#3017
   def run_association_callbacks(reflection, callback_type, object); end
 
   # Set the given object as the associated object for the given many_to_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2902
+  # source://sequel//lib/sequel/model/associations.rb#3076
   def set_associated_object(opts, o); end
 
   # Whether run the associated object setter code if passed the same object as the one already
@@ -10120,50 +10146,50 @@ module Sequel::Model::Associations::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2897
+  # source://sequel//lib/sequel/model/associations.rb#3071
   def set_associated_object_if_same?; end
 
   # Set the given object as the associated object for the given one_through_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2908
+  # source://sequel//lib/sequel/model/associations.rb#3082
   def set_one_through_one_associated_object(opts, o); end
 
   # Set the given object as the associated object for the given one_to_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2915
+  # source://sequel//lib/sequel/model/associations.rb#3089
   def set_one_to_one_associated_object(opts, o); end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#1237
+# source://sequel//lib/sequel/model/associations.rb#1357
 class Sequel::Model::Associations::ManyToManyAssociationReflection < ::Sequel::Model::Associations::AssociationReflection
   # The alias to use for the associated key when eagerly loading
   #
-  # source://sequel//lib/sequel/model/associations.rb#1241
+  # source://sequel//lib/sequel/model/associations.rb#1361
   def associated_key_alias; end
 
   # Array of associated keys used when eagerly loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1246
+  # source://sequel//lib/sequel/model/associations.rb#1366
   def associated_key_array; end
 
   # The column to use for the associated key when eagerly loading
   #
-  # source://sequel//lib/sequel/model/associations.rb#1257
+  # source://sequel//lib/sequel/model/associations.rb#1377
   def associated_key_column; end
 
   # The join table itself, unless it is aliased, in which case this
   # is the alias.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1379
+  # source://sequel//lib/sequel/model/associations.rb#1499
   def associated_key_table; end
 
   # Alias of right_primary_keys
   #
-  # source://sequel//lib/sequel/model/associations.rb#1262
+  # source://sequel//lib/sequel/model/associations.rb#1382
   def associated_object_keys; end
 
   # many_to_many associations can only have associated objects if none of
@@ -10171,65 +10197,65 @@ class Sequel::Model::Associations::ManyToManyAssociationReflection < ::Sequel::M
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1268
+  # source://sequel//lib/sequel/model/associations.rb#1388
   def can_have_associated_objects?(obj); end
 
   # one_through_one and many_to_many associations can be clones
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1273
+  # source://sequel//lib/sequel/model/associations.rb#1393
   def cloneable?(ref); end
 
   # The default associated key alias(es) to use when eager loading
   # associations via eager.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1279
+  # source://sequel//lib/sequel/model/associations.rb#1399
   def default_associated_key_alias; end
 
   # The default eager loader used if the user doesn't override it.  Extracted
   # to a method so the code can be shared with the many_through_many plugin.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1285
+  # source://sequel//lib/sequel/model/associations.rb#1405
   def default_eager_loader(eo); end
 
   # Default name symbol for the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1316
+  # source://sequel//lib/sequel/model/associations.rb#1436
   def default_join_table; end
 
   # Default foreign key name symbol for key in join table that points to
   # current table's primary key (or :left_primary_key column).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1322
+  # source://sequel//lib/sequel/model/associations.rb#1442
   def default_left_key; end
 
   # Default foreign key name symbol for foreign key in join table that points to
   # the association's table's primary key (or :right_primary_key column).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1328
+  # source://sequel//lib/sequel/model/associations.rb#1448
   def default_right_key; end
 
   # many_to_many associations need to select a key in an associated table to eagerly load
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1361
+  # source://sequel//lib/sequel/model/associations.rb#1481
   def eager_loading_use_associated_key?; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1344
+  # source://sequel//lib/sequel/model/associations.rb#1464
   def finalize_settings; end
 
   # The join table itself, unless it is aliased, in which case this
   # is the alias.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1373
+  # source://sequel//lib/sequel/model/associations.rb#1493
   def join_table_alias; end
 
   # The source of the join table.  This is the join table itself, unless it
   # is aliased, in which case it is the unaliased part.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1367
+  # source://sequel//lib/sequel/model/associations.rb#1487
   def join_table_source; end
 
   # Whether the associated object needs a primary key to be added/removed,
@@ -10237,109 +10263,133 @@ class Sequel::Model::Associations::ManyToManyAssociationReflection < ::Sequel::M
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1383
+  # source://sequel//lib/sequel/model/associations.rb#1503
   def need_associated_primary_key?; end
 
   # The hash key to use for the eager loading predicate (left side of IN (1, 2, 3)).
   # The left key qualified by the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1350
+  # source://sequel//lib/sequel/model/associations.rb#1470
   def predicate_key; end
 
   # The hash key to use for the eager loading predicate (left side of IN (1, 2, 3)).
   # The left key qualified by the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1353
+  # source://sequel//lib/sequel/model/associations.rb#1473
   def qualified_left_key; end
 
   # The right key qualified by the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1356
+  # source://sequel//lib/sequel/model/associations.rb#1476
   def qualified_right_key; end
 
   # #right_primary_key qualified by the associated table
   #
-  # source://sequel//lib/sequel/model/associations.rb#1388
+  # source://sequel//lib/sequel/model/associations.rb#1508
   def qualified_right_primary_key; end
 
   # The primary key column(s) to use in the associated table (can be symbol or array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1393
+  # source://sequel//lib/sequel/model/associations.rb#1513
   def right_primary_key; end
 
   # The method symbol or array of method symbols to call on the associated objects
   # to get the foreign key values for the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1404
+  # source://sequel//lib/sequel/model/associations.rb#1524
   def right_primary_key_method; end
 
   # The array of method symbols to call on the associated objects
   # to get the foreign key values for the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1410
+  # source://sequel//lib/sequel/model/associations.rb#1530
   def right_primary_key_methods; end
 
   # The primary key columns to use in the associated table (always array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#1398
+  # source://sequel//lib/sequel/model/associations.rb#1518
   def right_primary_keys; end
 
   # The columns to select when loading the association, associated_class.table_name.* by default.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1415
+  # source://sequel//lib/sequel/model/associations.rb#1535
   def select; end
 
   # Whether a separate query should be used for the join table.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1420
+  # source://sequel//lib/sequel/model/associations.rb#1540
   def separate_query_per_table?; end
 
   private
 
   # Join to the the join table, unless using a separate query per table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1427
+  # source://sequel//lib/sequel/model/associations.rb#1547
   def _associated_dataset; end
+
+  # source://sequel//lib/sequel/model/associations.rb#1593
+  def apply_lateral_subquery_eager_graph_limit_strategy(ds); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1585
+  def apply_lateral_subquery_eager_limit_strategy(ds, ids, limit_and_offset); end
 
   # The default selection for associations that require joins.  These do not use the default
   # model selection unless all entries in the select are explicitly qualified identifiers, as
   # other it can include unqualified columns which would be made ambiguous by joining.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1448
+  # source://sequel//lib/sequel/model/associations.rb#1614
   def default_select; end
 
   # Use the right_keys from the eager loading options if
   # using a separate query per table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1437
+  # source://sequel//lib/sequel/model/associations.rb#1603
   def eager_loading_set_predicate_condition(ds, eo); end
 
-  # source://sequel//lib/sequel/model/associations.rb#1456
+  # source://sequel//lib/sequel/model/associations.rb#1622
   def filter_by_associations_conditions_associated_keys; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1460
+  # source://sequel//lib/sequel/model/associations.rb#1626
   def filter_by_associations_conditions_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1464
+  # source://sequel//lib/sequel/model/associations.rb#1630
   def filter_by_associations_limit_alias_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1469
+  # source://sequel//lib/sequel/model/associations.rb#1635
   def filter_by_associations_limit_aliases; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1473
+  # source://sequel//lib/sequel/model/associations.rb#1639
   def filter_by_associations_limit_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1477
+  # source://sequel//lib/sequel/model/associations.rb#1577
+  def lateral_subquery_eager_limit_strategy_lateral_dataset(ds, limit_and_offset); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1555
+  def lateral_subquery_filter_limit_strategy_conditions(obj); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1559
+  def lateral_subquery_filter_limit_strategy_conditions_key; end
+
+  # source://sequel//lib/sequel/model/associations.rb#1567
+  def lateral_subquery_filter_limit_strategy_filter_dataset(ds, obj); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1563
+  def lateral_subquery_filter_limit_strategy_filter_lateral_dataset(ds); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1573
+  def lateral_subquery_filter_limit_strategy_lateral_dataset_select; end
+
+  # source://sequel//lib/sequel/model/associations.rb#1643
   def predicate_key_methods; end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1481
+  # source://sequel//lib/sequel/model/associations.rb#1647
   def reciprocal_association?(assoc_reflect); end
 
-  # source://sequel//lib/sequel/model/associations.rb#1489
+  # source://sequel//lib/sequel/model/associations.rb#1655
   def reciprocal_type; end
 
   # Whether the given expression represents a qualified identifier.  Used to determine if it is
@@ -10347,23 +10397,23 @@ class Sequel::Model::Associations::ManyToManyAssociationReflection < ::Sequel::M
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1495
+  # source://sequel//lib/sequel/model/associations.rb#1661
   def selection_is_qualified?(c); end
 
   # Split the join table into source and alias parts.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1509
+  # source://sequel//lib/sequel/model/associations.rb#1675
   def split_join_table_alias; end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#1332
+# source://sequel//lib/sequel/model/associations.rb#1452
 Sequel::Model::Associations::ManyToManyAssociationReflection::FINALIZE_SETTINGS = T.let(T.unsafe(nil), Hash)
 
-# source://sequel//lib/sequel/model/associations.rb#856
+# source://sequel//lib/sequel/model/associations.rb#928
 class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Model::Associations::AssociationReflection
   # The columns in the associated table that the key in the current table references (always an array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#923
+  # source://sequel//lib/sequel/model/associations.rb#995
   def associated_object_keys; end
 
   # many_to_one associations can only have associated objects if none of
@@ -10371,20 +10421,20 @@ class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#861
+  # source://sequel//lib/sequel/model/associations.rb#933
   def can_have_associated_objects?(obj); end
 
   # Whether the dataset needs a primary key to function, false for many_to_one associations.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#866
+  # source://sequel//lib/sequel/model/associations.rb#938
   def dataset_need_primary_key?; end
 
   # Default foreign key name symbol for foreign key in current model's table that points to
   # the given association's table's primary key.
   #
-  # source://sequel//lib/sequel/model/associations.rb#872
+  # source://sequel//lib/sequel/model/associations.rb#944
   def default_key; end
 
   # Whether to eagerly graph a lazy dataset, true for many_to_one associations
@@ -10392,64 +10442,64 @@ class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#878
+  # source://sequel//lib/sequel/model/associations.rb#950
   def eager_graph_lazy_dataset?; end
 
   # many_to_one associations don't need an eager_graph limit strategy
   #
-  # source://sequel//lib/sequel/model/associations.rb#883
+  # source://sequel//lib/sequel/model/associations.rb#955
   def eager_graph_limit_strategy(_); end
 
   # many_to_one associations don't need an eager limit strategy
   #
-  # source://sequel//lib/sequel/model/associations.rb#888
+  # source://sequel//lib/sequel/model/associations.rb#960
   def eager_limit_strategy; end
 
   # many_to_one associations don't need a filter by associations limit strategy
   #
-  # source://sequel//lib/sequel/model/associations.rb#893
+  # source://sequel//lib/sequel/model/associations.rb#965
   def filter_by_associations_limit_strategy; end
 
-  # source://sequel//lib/sequel/model/associations.rb#905
+  # source://sequel//lib/sequel/model/associations.rb#977
   def finalize_settings; end
 
   # The expression to use on the left hand side of the IN lookup when eager loading
   #
-  # source://sequel//lib/sequel/model/associations.rb#910
+  # source://sequel//lib/sequel/model/associations.rb#982
   def predicate_key; end
 
   # The column(s) in the associated table that the key in the current table references (either a symbol or an array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#915
+  # source://sequel//lib/sequel/model/associations.rb#987
   def primary_key; end
 
   # The method symbol or array of method symbols to call on the associated object
   # to get the value to use for the foreign keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#927
+  # source://sequel//lib/sequel/model/associations.rb#999
   def primary_key_method; end
 
   # The array of method symbols to call on the associated object
   # to get the value to use for the foreign keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#933
+  # source://sequel//lib/sequel/model/associations.rb#1005
   def primary_key_methods; end
 
   # The columns in the associated table that the key in the current table references (always an array).
   #
-  # source://sequel//lib/sequel/model/associations.rb#920
+  # source://sequel//lib/sequel/model/associations.rb#992
   def primary_keys; end
 
   # #primary_key qualified by the associated table
   #
-  # source://sequel//lib/sequel/model/associations.rb#938
+  # source://sequel//lib/sequel/model/associations.rb#1010
   def qualified_primary_key; end
 
   # True only if the reciprocal is a one_to_many association.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#943
+  # source://sequel//lib/sequel/model/associations.rb#1015
   def reciprocal_array?; end
 
   # Whether this association returns an array of objects instead of a single object,
@@ -10457,14 +10507,14 @@ class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#949
+  # source://sequel//lib/sequel/model/associations.rb#1021
   def returns_array?; end
 
   # True only if the reciprocal is a one_to_one association.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#954
+  # source://sequel//lib/sequel/model/associations.rb#1026
   def set_reciprocal_to_self?; end
 
   private
@@ -10474,13 +10524,13 @@ class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#963
+  # source://sequel//lib/sequel/model/associations.rb#1035
   def ambiguous_reciprocal_type?; end
 
-  # source://sequel//lib/sequel/model/associations.rb#967
+  # source://sequel//lib/sequel/model/associations.rb#1039
   def filter_by_associations_conditions_associated_keys; end
 
-  # source://sequel//lib/sequel/model/associations.rb#971
+  # source://sequel//lib/sequel/model/associations.rb#1043
   def filter_by_associations_conditions_key; end
 
   # many_to_one associations do not need to be limited to a single row if they
@@ -10488,62 +10538,62 @@ class Sequel::Model::Associations::ManyToOneAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#977
+  # source://sequel//lib/sequel/model/associations.rb#1049
   def limit_to_single_row?; end
 
   # The reciprocal type of a many_to_one association is either
   # a one_to_many or a one_to_one association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#987
+  # source://sequel//lib/sequel/model/associations.rb#1059
   def possible_reciprocal_types; end
 
-  # source://sequel//lib/sequel/model/associations.rb#981
+  # source://sequel//lib/sequel/model/associations.rb#1053
   def predicate_key_methods; end
 
   # Whether the given association reflection is possible reciprocal
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#992
+  # source://sequel//lib/sequel/model/associations.rb#1064
   def reciprocal_association?(assoc_reflect); end
 
   # The reciprocal type of a many_to_one association is either
   # a one_to_many or a one_to_one association, look in the associated class
   # to try to figure out which.
   #
-  # source://sequel//lib/sequel/model/associations.rb#999
+  # source://sequel//lib/sequel/model/associations.rb#1071
   def reciprocal_type; end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#897
+# source://sequel//lib/sequel/model/associations.rb#969
 Sequel::Model::Associations::ManyToOneAssociationReflection::FINALIZE_SETTINGS = T.let(T.unsafe(nil), Hash)
 
-# source://sequel//lib/sequel/model/associations.rb#1514
+# source://sequel//lib/sequel/model/associations.rb#1680
 class Sequel::Model::Associations::OneThroughOneAssociationReflection < ::Sequel::Model::Associations::ManyToManyAssociationReflection
   include ::Sequel::Model::Associations::SingularAssociationReflection
 
   # one_through_one associations should not singularize the association name when
   # creating the foreign key.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1520
+  # source://sequel//lib/sequel/model/associations.rb#1686
   def default_right_key; end
 
   # one_through_one associations have no reciprocals
   #
-  # source://sequel//lib/sequel/model/associations.rb#1525
+  # source://sequel//lib/sequel/model/associations.rb#1691
   def reciprocal; end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#1018
+# source://sequel//lib/sequel/model/associations.rb#1090
 class Sequel::Model::Associations::OneToManyAssociationReflection < ::Sequel::Model::Associations::AssociationReflection
-  # Support a correlated subquery limit strategy when using eager_graph.
+  # Support a lateral_subquery and correlated_subquery limit strategy when using eager_graph.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1022
+  # source://sequel//lib/sequel/model/associations.rb#1094
   def apply_eager_graph_limit_strategy(strategy, ds); end
 
   # The keys in the associated model's table related to this association
   #
-  # source://sequel//lib/sequel/model/associations.rb#1032
+  # source://sequel//lib/sequel/model/associations.rb#1104
   def associated_object_keys; end
 
   # one_to_many associations can only have associated objects if none of
@@ -10551,50 +10601,50 @@ class Sequel::Model::Associations::OneToManyAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1038
+  # source://sequel//lib/sequel/model/associations.rb#1110
   def can_have_associated_objects?(obj); end
 
   # one_to_many and one_to_one associations can be clones
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1043
+  # source://sequel//lib/sequel/model/associations.rb#1115
   def cloneable?(ref); end
 
   # Default foreign key name symbol for key in associated table that points to
   # current table's primary key.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1049
+  # source://sequel//lib/sequel/model/associations.rb#1121
   def default_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1056
+  # source://sequel//lib/sequel/model/associations.rb#1128
   def finalize_settings; end
 
   # Handle silent failure of add/remove methods if raise_on_save_failure is false.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1061
+  # source://sequel//lib/sequel/model/associations.rb#1133
   def handle_silent_modification_failure?; end
 
   # The hash key to use for the eager loading predicate (left side of IN (1, 2, 3))
   #
-  # source://sequel//lib/sequel/model/associations.rb#1066
+  # source://sequel//lib/sequel/model/associations.rb#1138
   def predicate_key; end
 
   # The column in the current table that the key in the associated table references.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1072
+  # source://sequel//lib/sequel/model/associations.rb#1144
   def primary_key; end
 
   # The hash key to use for the eager loading predicate (left side of IN (1, 2, 3))
   #
-  # source://sequel//lib/sequel/model/associations.rb#1069
+  # source://sequel//lib/sequel/model/associations.rb#1141
   def qualified_key; end
 
   # #primary_key qualified by the current table
   #
-  # source://sequel//lib/sequel/model/associations.rb#1077
+  # source://sequel//lib/sequel/model/associations.rb#1149
   def qualified_primary_key; end
 
   # Whether the reciprocal of this association returns an array of objects instead of a single object,
@@ -10602,28 +10652,28 @@ class Sequel::Model::Associations::OneToManyAssociationReflection < ::Sequel::Mo
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1083
+  # source://sequel//lib/sequel/model/associations.rb#1155
   def reciprocal_array?; end
 
   # Destroying one_to_many associated objects automatically deletes the foreign key.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1088
+  # source://sequel//lib/sequel/model/associations.rb#1160
   def remove_before_destroy?; end
 
   # The one_to_many association needs to check that an object to be removed already is associated.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1093
+  # source://sequel//lib/sequel/model/associations.rb#1165
   def remove_should_check_existing?; end
 
   # One to many associations set the reciprocal to self when loading associated records.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1098
+  # source://sequel//lib/sequel/model/associations.rb#1170
   def set_reciprocal_to_self?; end
 
   private
@@ -10632,54 +10682,85 @@ class Sequel::Model::Associations::OneToManyAssociationReflection < ::Sequel::Mo
   # work correctly if the associated dataset uses qualified identifers in the WHERE clause,
   # as they would reference the containing query instead of the subquery.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1107
+  # source://sequel//lib/sequel/model/associations.rb#1179
   def apply_correlated_subquery_limit_strategy(ds); end
 
   # Support correlated subquery strategy when filtering by limited associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1122
+  # source://sequel//lib/sequel/model/associations.rb#1242
   def apply_filter_by_associations_limit_strategy(ds); end
 
-  # source://sequel//lib/sequel/model/associations.rb#1131
+  # Use a LATERAL subquery to limit the dataset.  Note that this will not
+  # work correctly if the associated dataset uses qualified identifers in the WHERE clause,
+  # as they would reference the containing query instead of the subquery.
+  #
+  # This does not contain the conditions that are necessary to join to the
+  # query, since the necessary qualifier is not passed as an argument.
+  #
+  # source://sequel//lib/sequel/model/associations.rb#1199
+  def apply_lateral_subquery_eager_graph_limit_strategy(ds); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1221
+  def apply_lateral_subquery_eager_limit_strategy(ds, ids, limit_and_offset); end
+
+  # Avoid setting duplicate predicate condition when using the lateral subquery
+  # eager limit strategy.
+  #
+  # source://sequel//lib/sequel/model/associations.rb#1217
+  def eager_loading_set_predicate_condition(ds, eo); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1251
   def filter_by_associations_conditions_associated_keys; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1135
+  # source://sequel//lib/sequel/model/associations.rb#1255
   def filter_by_associations_conditions_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1139
+  # source://sequel//lib/sequel/model/associations.rb#1259
   def filter_by_associations_limit_alias_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1143
+  # source://sequel//lib/sequel/model/associations.rb#1263
   def filter_by_associations_limit_aliases; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1147
+  # source://sequel//lib/sequel/model/associations.rb#1267
   def filter_by_associations_limit_key; end
 
-  # source://sequel//lib/sequel/model/associations.rb#1151
+  # source://sequel//lib/sequel/model/associations.rb#1225
+  def lateral_subquery_filter_limit_strategy_conditions(obj); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1233
+  def lateral_subquery_filter_limit_strategy_filter_dataset(ds, obj); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1229
+  def lateral_subquery_filter_limit_strategy_filter_lateral_dataset(ds); end
+
+  # source://sequel//lib/sequel/model/associations.rb#1237
+  def lateral_subquery_filter_limit_strategy_lateral_dataset_select; end
+
+  # source://sequel//lib/sequel/model/associations.rb#1271
   def predicate_key_methods; end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1155
+  # source://sequel//lib/sequel/model/associations.rb#1275
   def reciprocal_association?(assoc_reflect); end
 
   # The reciprocal type of a one_to_many association is a many_to_one association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1160
+  # source://sequel//lib/sequel/model/associations.rb#1280
   def reciprocal_type; end
 
   # Support automatic use of correlated subqueries if :ruby option is best available option,
   # the database supports them, and either the associated class has a non-composite primary key
   # or the database supports multiple columns in IN.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1167
+  # source://sequel//lib/sequel/model/associations.rb#1287
   def true_eager_graph_limit_strategy; end
 end
 
-# source://sequel//lib/sequel/model/associations.rb#1053
+# source://sequel//lib/sequel/model/associations.rb#1125
 Sequel::Model::Associations::OneToManyAssociationReflection::FINALIZE_SETTINGS = T.let(T.unsafe(nil), Hash)
 
-# source://sequel//lib/sequel/model/associations.rb#1232
+# source://sequel//lib/sequel/model/associations.rb#1352
 class Sequel::Model::Associations::OneToOneAssociationReflection < ::Sequel::Model::Associations::OneToManyAssociationReflection
   include ::Sequel::Model::Associations::SingularAssociationReflection
 end
@@ -10687,7 +10768,7 @@ end
 # Methods that turn an association that returns multiple objects into an association that
 # returns a single object.
 #
-# source://sequel//lib/sequel/model/associations.rb#1180
+# source://sequel//lib/sequel/model/associations.rb#1300
 module Sequel::Model::Associations::SingularAssociationReflection
   # Singular associations do not assign singular if they are using the ruby eager limit strategy
   # and have a slice range, since they need to store the array of associated objects in order to
@@ -10695,7 +10776,7 @@ module Sequel::Model::Associations::SingularAssociationReflection
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1184
+  # source://sequel//lib/sequel/model/associations.rb#1304
   def assign_singular?; end
 
   # Add conditions when filtering by singular associations with orders, since the
@@ -10703,37 +10784,37 @@ module Sequel::Model::Associations::SingularAssociationReflection
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1190
+  # source://sequel//lib/sequel/model/associations.rb#1310
   def filter_by_associations_add_conditions?; end
 
   # Make sure singular associations always have 1 as the limit
   #
-  # source://sequel//lib/sequel/model/associations.rb#1195
+  # source://sequel//lib/sequel/model/associations.rb#1315
   def limit_and_offset; end
 
   # Singular associations always return a single object, not an array.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#1205
+  # source://sequel//lib/sequel/model/associations.rb#1325
   def returns_array?; end
 
   private
 
   # Only use a eager limit strategy by default if there is an offset or an order.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1212
+  # source://sequel//lib/sequel/model/associations.rb#1332
   def default_eager_limit_strategy; end
 
   # Use a strategy for filtering by associations if there is an order or an offset,
   # or a specific limiting strategy has been specified.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1218
+  # source://sequel//lib/sequel/model/associations.rb#1338
   def filter_by_associations_limit_strategy; end
 
   # Use the DISTINCT ON eager limit strategy for true if the database supports it.
   #
-  # source://sequel//lib/sequel/model/associations.rb#1223
+  # source://sequel//lib/sequel/model/associations.rb#1343
   def true_eager_graph_limit_strategy; end
 end
 
@@ -15267,14 +15348,16 @@ module Sequel::Schema; end
 # For more information on Sequel's support for schema modification, see
 # the {"Schema Modification" guide}[link:files/doc/schema_modification_rdoc.html].
 #
-# source://sequel//lib/sequel/database/schema_generator.rb#431
+# source://sequel//lib/sequel/database/schema_generator.rb#460
 class Sequel::Schema::AlterTableGenerator
+  include ::Sequel::Schema::ColumnOptionMerger
+
   # Set the Database object to which to apply the changes, and evaluate the
   # block in the context of this object.
   #
   # @return [AlterTableGenerator] a new instance of AlterTableGenerator
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#437
+  # source://sequel//lib/sequel/database/schema_generator.rb#468
   def initialize(db, &block); end
 
   # Add a column with the given name, type, and opts.
@@ -15291,7 +15374,7 @@ class Sequel::Schema::AlterTableGenerator
   # :after :: The name of an existing column that the new column should be positioned after
   # :first :: Create this new column before all other existing columns
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#456
+  # source://sequel//lib/sequel/database/schema_generator.rb#487
   def add_column(name, type, opts = T.unsafe(nil)); end
 
   # Add a constraint with the given name and args.
@@ -15302,7 +15385,7 @@ class Sequel::Schema::AlterTableGenerator
   #   add_constraint({name: :valid_name, deferrable: true}, Sequel.like(:name, 'A%'))
   #   # ADD CONSTRAINT valid_name CHECK (name LIKE 'A%' ESCAPE '\') DEFERRABLE INITIALLY DEFERRED
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#471
+  # source://sequel//lib/sequel/database/schema_generator.rb#502
   def add_constraint(name, *args, &block); end
 
   # Add a foreign key with the given name and referencing the given table.
@@ -15328,13 +15411,13 @@ class Sequel::Schema::AlterTableGenerator
   #               to mark the constraint as valid.  Note that this option only makes
   #               sense when using an array of columns.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#520
+  # source://sequel//lib/sequel/database/schema_generator.rb#551
   def add_foreign_key(name, table, opts = T.unsafe(nil)); end
 
   # Add a full text index on the given columns.
   # See CreateTableGenerator#full_text_index for available options.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#527
+  # source://sequel//lib/sequel/database/schema_generator.rb#558
   def add_full_text_index(columns, opts = T.unsafe(nil)); end
 
   # Add an index on the given columns. See
@@ -15342,7 +15425,7 @@ class Sequel::Schema::AlterTableGenerator
   #
   #   add_index(:artist_id) # CREATE INDEX table_artist_id_index ON table (artist_id)
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#535
+  # source://sequel//lib/sequel/database/schema_generator.rb#566
   def add_index(columns, opts = T.unsafe(nil)); end
 
   # Add a primary key.  See CreateTableGenerator#column
@@ -15360,13 +15443,13 @@ class Sequel::Schema::AlterTableGenerator
   # :without_overlaps :: Use WITHOUT OVERLAPS clause to specify an exclusion constraint
   #                      on the final column (PostgreSQL 18+, composite primary keys only).
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#554
+  # source://sequel//lib/sequel/database/schema_generator.rb#585
   def add_primary_key(name, opts = T.unsafe(nil)); end
 
   # Add a spatial index on the given columns.
   # See CreateTableGenerator#index for available options.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#562
+  # source://sequel//lib/sequel/database/schema_generator.rb#593
   def add_spatial_index(columns, opts = T.unsafe(nil)); end
 
   # Add a unique constraint to the given column(s)
@@ -15386,7 +15469,7 @@ class Sequel::Schema::AlterTableGenerator
   # :without_overlaps :: Use WITHOUT OVERLAPS clause to specify an exclusion constraint
   #                      on the final column (PostgreSQL 18+, composite unique constraints only).
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#493
+  # source://sequel//lib/sequel/database/schema_generator.rb#524
   def add_unique_constraint(columns, opts = T.unsafe(nil)); end
 
   # Remove a column from the table.
@@ -15403,7 +15486,7 @@ class Sequel::Schema::AlterTableGenerator
   # :if_exists :: Use IF EXISTS, so no error is raised if the column does not
   #               exist.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#579
+  # source://sequel//lib/sequel/database/schema_generator.rb#610
   def drop_column(name, opts = T.unsafe(nil)); end
 
   # Remove a constraint from the table:
@@ -15416,7 +15499,7 @@ class Sequel::Schema::AlterTableGenerator
   # :type :: Set the type of constraint to drop, either :primary_key, :foreign_key,
   #          or :unique.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#593
+  # source://sequel//lib/sequel/database/schema_generator.rb#624
   def drop_constraint(name, opts = T.unsafe(nil)); end
 
   # Remove a foreign key and the associated column from the table. General options:
@@ -15430,7 +15513,7 @@ class Sequel::Schema::AlterTableGenerator
   #   drop_foreign_key(:artist_id) # DROP CONSTRAINT table_artist_id_fkey, DROP COLUMN artist_id
   #   drop_foreign_key([:name]) # DROP CONSTRAINT table_name_fkey
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#608
+  # source://sequel//lib/sequel/database/schema_generator.rb#639
   def drop_foreign_key(name, opts = T.unsafe(nil)); end
 
   # Remove an index from the table. General options:
@@ -15449,19 +15532,19 @@ class Sequel::Schema::AlterTableGenerator
   #   drop_index([:a, :b]) # DROP INDEX table_a_b_index
   #   drop_index([:a, :b], name: :foo) # DROP INDEX foo
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#632
+  # source://sequel//lib/sequel/database/schema_generator.rb#663
   def drop_index(columns, options = T.unsafe(nil)); end
 
   # An array of operations to perform
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#433
+  # source://sequel//lib/sequel/database/schema_generator.rb#464
   def operations; end
 
   # Rename one of the table's columns.
   #
   #   rename_column(:name, :artist_name) # RENAME COLUMN name TO artist_name
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#640
+  # source://sequel//lib/sequel/database/schema_generator.rb#671
   def rename_column(name, new_name, opts = T.unsafe(nil)); end
 
   # Set a given column as allowing NULL values.
@@ -15471,7 +15554,7 @@ class Sequel::Schema::AlterTableGenerator
   # On MySQL, make sure to use a symbol for the name of the column, as otherwise you
   # can lose the default and type for the column.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#683
+  # source://sequel//lib/sequel/database/schema_generator.rb#714
   def set_column_allow_null(name, allow_null = T.unsafe(nil)); end
 
   # Modify the default value for one of the table's column.
@@ -15485,7 +15568,7 @@ class Sequel::Schema::AlterTableGenerator
   # On MySQL, make sure to use a symbol for the name of the column, as otherwise you
   # can lose the type and NULL/NOT NULL setting for the column.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#655
+  # source://sequel//lib/sequel/database/schema_generator.rb#686
   def set_column_default(name, default); end
 
   # Set a given column as not allowing NULL values.
@@ -15495,7 +15578,7 @@ class Sequel::Schema::AlterTableGenerator
   # On MySQL, make sure to use a symbol for the name of the column, as otherwise you
   # can lose the default and type for the column.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#694
+  # source://sequel//lib/sequel/database/schema_generator.rb#725
   def set_column_not_null(name); end
 
   # Modify the type of one of the table's column. The given options are considered when
@@ -15511,25 +15594,38 @@ class Sequel::Schema::AlterTableGenerator
   # On MySQL, make sure to use a symbol for the name of the column, as otherwise you
   # can lose the default and NULL/NOT NULL setting for the column.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#672
+  # source://sequel//lib/sequel/database/schema_generator.rb#703
   def set_column_type(name, type, opts = T.unsafe(nil)); end
 
   private
 
   # Add a composite foreign key constraint
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#707
+  # source://sequel//lib/sequel/database/schema_generator.rb#738
   def add_composite_foreign_key(columns, table, opts); end
 
   # Add a composite primary key constraint
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#701
+  # source://sequel//lib/sequel/database/schema_generator.rb#732
   def add_composite_primary_key(columns, opts); end
 
   # Drop a composite foreign key constraint
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#713
+  # source://sequel//lib/sequel/database/schema_generator.rb#744
   def drop_composite_foreign_key(columns, opts); end
+end
+
+# source://sequel//lib/sequel/database/schema_generator.rb#6
+module Sequel::Schema::ColumnOptionMerger
+  private
+
+  # Merge given options into the column's default options. For backwards compatibility,
+  # the options take priority, but in cases where the option value overrides the argument
+  # value, and the values are different, we warn as this is likely to be an error in the
+  # code.
+  #
+  # source://sequel//lib/sequel/database/schema_generator.rb#13
+  def _merge_column_options(defaults, opts); end
 end
 
 # Schema::CreateTableGenerator is an internal class that the user is not expected
@@ -15546,59 +15642,61 @@ end
 # For more information on Sequel's support for schema modification, see
 # the {"Schema Modification" guide}[rdoc-ref:doc/schema_modification.rdoc].
 #
-# source://sequel//lib/sequel/database/schema_generator.rb#19
+# source://sequel//lib/sequel/database/schema_generator.rb#46
 class Sequel::Schema::CreateTableGenerator
+  include ::Sequel::Schema::ColumnOptionMerger
+
   # Set the database in which to create the table, and evaluate the block
   # in the context of this object.
   #
   # @return [CreateTableGenerator] a new instance of CreateTableGenerator
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#34
+  # source://sequel//lib/sequel/database/schema_generator.rb#63
   def initialize(db, &block); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def BigDecimal(name, opts = T.unsafe(nil)); end
 
   # Use custom Bignum method to use :Bignum instead of Bignum class, to work
   # correctly in cases where Bignum is the same as Integer.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#45
+  # source://sequel//lib/sequel/database/schema_generator.rb#74
   def Bignum(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def Date(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def DateTime(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def FalseClass(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def File(name, opts = T.unsafe(nil)); end
 
   # Use custom Fixnum method to use Integer instead of Fixnum class, to avoid
   # warnings on ruby 2.4+.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#51
+  # source://sequel//lib/sequel/database/schema_generator.rb#80
   def Fixnum(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def Float(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def Integer(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def Numeric(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def String(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def Time(name, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/database/schema_generator.rb#69
+  # source://sequel//lib/sequel/database/schema_generator.rb#98
   def TrueClass(name, opts = T.unsafe(nil)); end
 
   # Add an unnamed constraint, specified by the given block
@@ -15607,7 +15705,7 @@ class Sequel::Schema::CreateTableGenerator
   #   check(num: 1..5) # CHECK num >= 1 AND num <= 5
   #   check{num > 5}   # CHECK num > 5
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#79
+  # source://sequel//lib/sequel/database/schema_generator.rb#108
   def check(*args, &block); end
 
   # Add a column with the given name, type, and opts:
@@ -15703,12 +15801,12 @@ class Sequel::Schema::CreateTableGenerator
   # :clustered :: When using :primary_key or :unique, marks the primary key or unique
   #               constraint as CLUSTERED (if true), or NONCLUSTERED (if false).
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#175
+  # source://sequel//lib/sequel/database/schema_generator.rb#204
   def column(name, type, opts = T.unsafe(nil)); end
 
   # Column hashes created by this generator
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#24
+  # source://sequel//lib/sequel/database/schema_generator.rb#53
   def columns; end
 
   # Adds a named CHECK constraint (or unnamed if name is nil),
@@ -15732,12 +15830,12 @@ class Sequel::Schema::CreateTableGenerator
   # :not_enforced :: Whether the CHECK constraint should be marked NOT ENFORCED.
   # :not_valid :: Whether the CHECK constraint should be marked NOT VALID.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#203
+  # source://sequel//lib/sequel/database/schema_generator.rb#232
   def constraint(name, *args, &block); end
 
   # Constraint hashes created by this generator
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#27
+  # source://sequel//lib/sequel/database/schema_generator.rb#56
   def constraints; end
 
   # Add a foreign key in the table that references another table. See #column
@@ -15771,7 +15869,7 @@ class Sequel::Schema::CreateTableGenerator
   #   foreign_key([:artist_name, :artist_location], :artists, name: :artist_fk)
   #   # ADD CONSTRAINT artist_fk FOREIGN KEY (artist_name, artist_location) REFERENCES artists
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#239
+  # source://sequel//lib/sequel/database/schema_generator.rb#268
   def foreign_key(name, table = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Add a full text index on the given columns.
@@ -15782,14 +15880,14 @@ class Sequel::Schema::CreateTableGenerator
   #                default GIN index.
   # :language :: Set a language to use for the index (default: simple).
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#259
+  # source://sequel//lib/sequel/database/schema_generator.rb#288
   def full_text_index(columns, opts = T.unsafe(nil)); end
 
   # True if the generator includes the creation of a column with the given name.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#264
+  # source://sequel//lib/sequel/database/schema_generator.rb#293
   def has_column?(name); end
 
   # Add an index on the given column(s) with the given options. Examples:
@@ -15832,18 +15930,18 @@ class Sequel::Schema::CreateTableGenerator
   #
   # :key_index :: Sets the KEY INDEX to the given value.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#307
+  # source://sequel//lib/sequel/database/schema_generator.rb#336
   def index(columns, opts = T.unsafe(nil)); end
 
   # Index hashes created by this generator
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#30
+  # source://sequel//lib/sequel/database/schema_generator.rb#59
   def indexes; end
 
   # Add a column with the given type, name, and opts.  See #column for available
   # options.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#314
+  # source://sequel//lib/sequel/database/schema_generator.rb#343
   def method_missing(type, name = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Adds an autoincrementing primary key column or a primary key constraint.
@@ -15876,18 +15974,18 @@ class Sequel::Schema::CreateTableGenerator
   #   primary_key(:id, type: :Bignum, keep_order: true)
   #   primary_key([:street_number, :house_number], name: :some_constraint_name)
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#352
+  # source://sequel//lib/sequel/database/schema_generator.rb#381
   def primary_key(name, *args); end
 
   # The name of the primary key for this generator, if it has a primary key.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#374
+  # source://sequel//lib/sequel/database/schema_generator.rb#403
   def primary_key_name; end
 
   # Add a spatial index on the given columns.
   # See #index for additional options.
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#380
+  # source://sequel//lib/sequel/database/schema_generator.rb#409
   def spatial_index(columns, opts = T.unsafe(nil)); end
 
   # Add a unique constraint on the given columns.
@@ -15906,26 +16004,26 @@ class Sequel::Schema::CreateTableGenerator
   # :without_overlaps :: Use WITHOUT OVERLAPS clause to specify an exclusion constraint
   #                      on the final column (PostgreSQL 18+, composite unique only).
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#399
+  # source://sequel//lib/sequel/database/schema_generator.rb#428
   def unique(columns, opts = T.unsafe(nil)); end
 
   private
 
   # Add a composite foreign key constraint
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#414
+  # source://sequel//lib/sequel/database/schema_generator.rb#443
   def composite_foreign_key(columns, opts); end
 
   # Add a composite primary key constraint
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#407
+  # source://sequel//lib/sequel/database/schema_generator.rb#436
   def composite_primary_key(columns, *args); end
 
   # This object responds to all methods.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/database/schema_generator.rb#319
+  # source://sequel//lib/sequel/database/schema_generator.rb#348
   def respond_to_missing?(meth, include_private); end
 
   class << self
@@ -15934,14 +16032,14 @@ class Sequel::Schema::CreateTableGenerator
     # be constants/classes or a capitalized string/symbol with the same name
     # as a constant/class.
     #
-    # source://sequel//lib/sequel/database/schema_generator.rb#59
+    # source://sequel//lib/sequel/database/schema_generator.rb#88
     def add_type_method(*types); end
   end
 end
 
 # Classes specifying generic types that Sequel will convert to database-specific types.
 #
-# source://sequel//lib/sequel/database/schema_generator.rb#21
+# source://sequel//lib/sequel/database/schema_generator.rb#50
 Sequel::Schema::CreateTableGenerator::GENERIC_TYPES = T.let(T.unsafe(nil), Array)
 
 # Sequel doesn't pay much attention to timezones by default, but you can set it to
@@ -16514,18 +16612,18 @@ Sequel::TINY = T.let(T.unsafe(nil), Integer)
 # after later migrations.  If you plan to do that, the responsibility is on
 # you to make sure the migrations don't conflict. Part of the +migration+ extension.
 #
-# source://sequel//lib/sequel/extensions/migration.rb#694
+# source://sequel//lib/sequel/extensions/migration.rb#691
 class Sequel::TimestampMigrator < ::Sequel::Migrator
   # Set up all state for the migrator instance
   #
   # @return [TimestampMigrator] a new instance of TimestampMigrator
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#704
+  # source://sequel//lib/sequel/extensions/migration.rb#701
   def initialize(db, directory, opts = T.unsafe(nil)); end
 
   # Array of strings of applied migration filenames
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#698
+  # source://sequel//lib/sequel/extensions/migration.rb#695
   def applied_migrations; end
 
   # The timestamp migrator is current if there are no migrations to apply
@@ -16533,74 +16631,74 @@ class Sequel::TimestampMigrator < ::Sequel::Migrator
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#720
+  # source://sequel//lib/sequel/extensions/migration.rb#717
   def is_current?; end
 
   # Get tuples of migrations, filenames, and actions for each migration
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#701
+  # source://sequel//lib/sequel/extensions/migration.rb#698
   def migration_tuples; end
 
   # Apply all migration tuples on the database
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#725
+  # source://sequel//lib/sequel/extensions/migration.rb#722
   def run; end
 
   # Apply single migration tuple at the given path with the given direction
   # on the database.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#734
+  # source://sequel//lib/sequel/extensions/migration.rb#731
   def run_single(path, direction); end
 
   private
 
   # Apply a single migration with the given filename in the given direction.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#748
+  # source://sequel//lib/sequel/extensions/migration.rb#745
   def apply_migration(migration, file_name, direction); end
 
   # Convert the schema_info table to the new schema_migrations table format,
   # using the version of the schema_info table and the current migration files.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#762
+  # source://sequel//lib/sequel/extensions/migration.rb#759
   def convert_from_schema_info; end
 
   # The default column storing migration filenames.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#774
+  # source://sequel//lib/sequel/extensions/migration.rb#771
   def default_schema_column; end
 
   # The default table storing migration filenames.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#779
+  # source://sequel//lib/sequel/extensions/migration.rb#776
   def default_schema_table; end
 
   # Returns filenames of all applied migrations
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#784
+  # source://sequel//lib/sequel/extensions/migration.rb#781
   def get_applied_migrations; end
 
   # Returns any migration files found in the migrator's directory.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#792
+  # source://sequel//lib/sequel/extensions/migration.rb#789
   def get_migration_files; end
 
   # Returns tuples of migration, filename, and direction
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#818
+  # source://sequel//lib/sequel/extensions/migration.rb#815
   def get_migration_tuples; end
 
   # Returns the dataset for the schema_migrations table. If no such table
   # exists, it is automatically created.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#841
+  # source://sequel//lib/sequel/extensions/migration.rb#838
   def schema_dataset; end
 
   # Return an integer and name (without extension) for the given path.
   #
-  # source://sequel//lib/sequel/extensions/migration.rb#811
+  # source://sequel//lib/sequel/extensions/migration.rb#808
   def split_migration_filename(path); end
 
   class << self
@@ -16608,12 +16706,12 @@ class Sequel::TimestampMigrator < ::Sequel::Migrator
     # available options.  Additionally, this method supports the :direction
     # option for whether to run the migration up (default) or down.
     #
-    # source://sequel//lib/sequel/extensions/migration.rb#714
+    # source://sequel//lib/sequel/extensions/migration.rb#711
     def run_single(db, path, opts = T.unsafe(nil)); end
   end
 end
 
-# source://sequel//lib/sequel/extensions/migration.rb#695
+# source://sequel//lib/sequel/extensions/migration.rb#692
 Sequel::TimestampMigrator::Error = Sequel::Migrator::Error
 
 # Backwards compatible alias

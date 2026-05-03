@@ -134,6 +134,34 @@ class Kirei::Controller < ::Kirei::Routing::Base
   end
 end
 
+# source://kirei//lib/kirei/controllers/health.rb#5
+module Kirei::Controllers; end
+
+# Built-in health check controller implementing Kubernetes API health endpoints.
+#
+# Provides three endpoints following the Kubernetes convention:
+#   - /livez   — Liveness probe. Indicates the process is alive.
+#   - /readyz  — Readiness probe. Verifies downstream dependencies (DB) are reachable.
+#   - /healthz — Deprecated alias for /livez (deprecated since Kubernetes v1.16).
+#
+# Reference: https://kubernetes.io/docs/reference/using-api/health-checks/
+#
+# source://kirei//lib/kirei/controllers/health.rb#16
+class Kirei::Controllers::Health < ::Kirei::Controller
+  # @return [Routing::RackResponseType]
+  #
+  # source://kirei//lib/kirei/controllers/health.rb#39
+  def healthz(*args, **_arg1, &blk); end
+
+  # source://kirei//lib/kirei/controllers/health.rb#20
+  sig { returns([::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])]) }
+  def livez; end
+
+  # source://kirei//lib/kirei/controllers/health.rb#42
+  sig { returns([::Integer, T::Hash[::String, ::String], T.any(::Proc, T::Array[::String])]) }
+  def readyz; end
+end
+
 # source://kirei//lib/kirei/domain/entity.rb#5
 module Kirei::Domain; end
 
@@ -695,7 +723,7 @@ class Kirei::Routing::Base
   sig { params(params: T::Hash[::String, T.untyped]).void }
   def initialize(params: T.unsafe(nil)); end
 
-  # source://kirei//lib/kirei/routing/base.rb#253
+  # source://kirei//lib/kirei/routing/base.rb#277
   sig { params(headers: T::Hash[::String, ::String], env: T::Hash[::String, T.untyped]).void }
   def add_cors_headers(headers, env); end
 
@@ -707,7 +735,7 @@ class Kirei::Routing::Base
   end
   def call(env); end
 
-  # source://kirei//lib/kirei/routing/base.rb#236
+  # source://kirei//lib/kirei/routing/base.rb#260
   sig { returns(T::Hash[::String, ::String]) }
   def default_headers; end
 
@@ -718,7 +746,7 @@ class Kirei::Routing::Base
   # * "status": defaults to 200
   # * "headers": Kirei adds some default headers for security, but the user can override them
   #
-  # source://kirei//lib/kirei/routing/base.rb#156
+  # source://kirei//lib/kirei/routing/base.rb#180
   sig do
     params(
       body: ::String,
@@ -731,7 +759,7 @@ class Kirei::Routing::Base
   # Renders a JSON:API-compliant error response.
   # Wraps an array of JsonApiError structs into { "errors": [...] }.
   #
-  # source://kirei//lib/kirei/routing/base.rb#210
+  # source://kirei//lib/kirei/routing/base.rb#234
   sig do
     params(
       errors: T::Array[::Kirei::Errors::JsonApiError],
@@ -748,7 +776,7 @@ class Kirei::Routing::Base
   #     then Oj.dump if the result is not already a String
   #   - Anything else: raises ArgumentError
   #
-  # source://kirei//lib/kirei/routing/base.rb#179
+  # source://kirei//lib/kirei/routing/base.rb#203
   sig do
     params(
       data: T.untyped,
@@ -762,7 +790,7 @@ class Kirei::Routing::Base
   # On success, delegates to render_json with the result's value.
   # On failure, delegates to render_error with the result's errors.
   #
-  # source://kirei//lib/kirei/routing/base.rb#227
+  # source://kirei//lib/kirei/routing/base.rb#251
   sig do
     params(
       result: Kirei::Services::Result[T.untyped],
@@ -775,7 +803,7 @@ class Kirei::Routing::Base
 
   private
 
-  # source://kirei//lib/kirei/routing/base.rb#279
+  # source://kirei//lib/kirei/routing/base.rb#303
   sig do
     params(
       controller: T.class_of(Kirei::Controller),
@@ -788,7 +816,7 @@ class Kirei::Routing::Base
   sig { returns(::Kirei::Routing::Router) }
   def router; end
 
-  # source://kirei//lib/kirei/routing/base.rb#267
+  # source://kirei//lib/kirei/routing/base.rb#291
   sig { params(hooks: T.nilable(T::Set[T.proc.void])).void }
   def run_hooks(hooks); end
 end
@@ -909,7 +937,7 @@ class Kirei::Routing::Router
   # Matches a request path against registered dynamic routes.
   # Returns [Route, extracted_params] or nil.
   #
-  # source://kirei//lib/kirei/routing/router.rb#96
+  # source://kirei//lib/kirei/routing/router.rb#108
   sig do
     params(
       verb: ::Kirei::Routing::Verb,
@@ -919,6 +947,12 @@ class Kirei::Routing::Router
   def match_dynamic(verb, path); end
 
   class << self
+    # must be added manually => we don't want to magically add routes for the user
+    #
+    # source://kirei//lib/kirei/routing/router.rb#90
+    sig { void }
+    def add_health_routes!; end
+
     # source://kirei//lib/kirei/routing/router.rb#77
     sig { params(routes: T::Array[::Kirei::Routing::Route]).void }
     def add_routes(routes); end
@@ -942,7 +976,6 @@ Kirei::Routing::Router::RoutesHash = T.type_alias { T::Hash[::String, ::Kirei::R
 # source://kirei//lib/kirei/routing/verb.rb#6
 class Kirei::Routing::Verb < ::T::Enum
   enums do
-    CONNECT = new
     DELETE = new
     GET = new
     HEAD = new
@@ -950,7 +983,6 @@ class Kirei::Routing::Verb < ::T::Enum
     PATCH = new
     POST = new
     PUT = new
-    TRACE = new
   end
 end
 
