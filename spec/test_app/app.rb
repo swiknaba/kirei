@@ -18,9 +18,7 @@ APP_LOADER = Zeitwerk::Loader.new
 APP_LOADER.tag = File.basename(__FILE__, ".rb")
 [
   "/app",
-  "/app/models",
-  "/app/services",
-  "/app/domain",
+  "/app/domains",
 ].each do |root_namespace|
   # a root namespace skips the auto-infered module for this folder
   # so we don't have to write e.g. `Models::` or `Services::`
@@ -49,3 +47,9 @@ class TestApp < Kirei::App
 end
 
 APP_LOADER.eager_load
+
+# Routes are declared in their respective domain controllers (via the
+# `route` helper on Controllers::Base) and registered during eager_load above.
+# The framework health routes have no application controller to host them,
+# so register them here.
+Kirei::Routing::Router.add_health_routes!

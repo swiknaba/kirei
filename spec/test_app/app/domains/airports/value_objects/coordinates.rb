@@ -1,8 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-
-module Aviation
+module Airports
   module ValueObjects
     class Coordinates < T::Struct
       extend T::Sig
