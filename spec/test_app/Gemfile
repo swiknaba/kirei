@@ -6,6 +6,8 @@ ruby RUBY_VERSION
 
 gem "kirei", path: "../../"
 
+gem "packwerk", git: "git@github.com:swiknaba/shopify-packwerk.git", branch: "main"
+
 gem "puma"
 gem "statsd-instrument", "~> 3.0"
 
