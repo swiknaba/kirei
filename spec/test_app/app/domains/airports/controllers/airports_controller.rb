@@ -4,6 +4,9 @@
 module Airports
   module Controllers
     class AirportsController < ::Controllers::Base
+      route Kirei::Routing::Verb::GET, "/airports", :index
+      route Kirei::Routing::Verb::GET, "/airports/:code", :show
+
       sig { returns(T.anything) }
       def index
         search = T.let(params.fetch("q", nil), T.nilable(String))

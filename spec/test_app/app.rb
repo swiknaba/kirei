@@ -47,3 +47,9 @@ class TestApp < Kirei::App
 end
 
 APP_LOADER.eager_load
+
+# Routes are declared in their respective domain controllers (via the
+# `route` helper on Controllers::Base) and registered during eager_load above.
+# The framework health routes have no application controller to host them,
+# so register them here.
+Kirei::Routing::Router.add_health_routes!

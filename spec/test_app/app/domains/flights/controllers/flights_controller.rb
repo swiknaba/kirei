@@ -4,6 +4,8 @@
 module Flights
   module Controllers
     class FlightsController < ::Controllers::Base
+      route Kirei::Routing::Verb::GET, "/flights", :index
+
       sig { returns(T.anything) }
       def index
         departure = T.let(params.fetch("from", nil), T.nilable(String))
