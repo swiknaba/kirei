@@ -2,9 +2,11 @@ gem:
   # Add your `gem` command parameters here:
   #
   exclude:
+  - actionview
   - addressable
   - amazing_print
   - ast
+  - better_html
   - bigdecimal
   - byebug
   - concurrent-ruby
@@ -25,6 +27,8 @@ gem:
   - psych
   - public_suffix
   - racc
+  - rails-dom-testing
+  - rails-html-sanitizer
   - rainbow
   - rbi
   - rbs
