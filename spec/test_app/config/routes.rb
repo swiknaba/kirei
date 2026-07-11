@@ -9,14 +9,20 @@ module Kirei::Routing
       Route.new(
         verb: Verb::GET,
         path: "/airports",
-        controller: Controllers::AirportsController,
+        controller: Airports::Controllers::AirportsController,
         action: "index",
       ),
       Route.new(
         verb: Verb::GET,
         path: "/airports/:code",
-        controller: Controllers::AirportsController,
+        controller: Airports::Controllers::AirportsController,
         action: "show",
+      ),
+      Route.new(
+        verb: Verb::GET,
+        path: "/flights",
+        controller: Flights::Controllers::FlightsController,
+        action: "index",
       ),
     ],
   )

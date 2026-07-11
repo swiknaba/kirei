@@ -24,7 +24,7 @@ module Sequel
   extend ::Sequel::SQL::OperatorBuilders
 
   class << self
-    # source://sequel//lib/sequel/model.rb#79
+    # source://sequel//lib/sequel/model.rb#80
     def Model(source); end
 
     # Allow nicer syntax for creating Sequel expressions:
@@ -3774,12 +3774,12 @@ class Sequel::Dataset
 
   # Append literalization of JOIN clause without ON or USING to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#575
+  # source://sequel//lib/sequel/dataset/sql.rb#576
   def join_clause_sql_append(sql, jc); end
 
   # Append literalization of JOIN ON clause to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#585
+  # source://sequel//lib/sequel/dataset/sql.rb#586
   def join_on_clause_sql_append(sql, jc); end
 
   # Returns a joined dataset.  Not usually called directly, users should use the
@@ -3848,7 +3848,7 @@ class Sequel::Dataset
 
   # Append literalization of JOIN USING clause to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#592
+  # source://sequel//lib/sequel/dataset/sql.rb#593
   def join_using_clause_sql_append(sql, jc); end
 
   # Whether this dataset is a joined dataset (multiple FROM tables or any JOINs).
@@ -4131,7 +4131,7 @@ class Sequel::Dataset
 
   # Append literalization of negative boolean constant to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#598
+  # source://sequel//lib/sequel/dataset/sql.rb#599
   def negative_boolean_constant_sql_append(sql, constant); end
 
   # Returns a copy of the dataset that will raise a DatabaseLockTimeout instead
@@ -4215,7 +4215,7 @@ class Sequel::Dataset
 
   # Append literalization of ordered expression to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#604
+  # source://sequel//lib/sequel/dataset/sql.rb#605
   def ordered_expression_sql_append(sql, oe); end
 
   # Yields each row in the dataset, but internally uses multiple queries as needed to
@@ -4281,7 +4281,7 @@ class Sequel::Dataset
 
   # Append literalization of placeholder literal string to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#633
+  # source://sequel//lib/sequel/dataset/sql.rb#634
   def placeholder_literal_string_sql_append(sql, pls); end
 
   # The class to use for placeholder literalizers for the current dataset.
@@ -4348,7 +4348,7 @@ class Sequel::Dataset
   # If 3 arguments are given, the 2nd should be the table/qualifier and the third should be
   # column/qualified.  If 2 arguments are given, the 2nd should be an SQL::QualifiedIdentifier.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#678
+  # source://sequel//lib/sequel/dataset/sql.rb#679
   def qualified_identifier_sql_append(sql, table, column = T.unsafe(nil)); end
 
   # Qualify to the given table, or first source if no table is given.
@@ -4370,7 +4370,7 @@ class Sequel::Dataset
   # being quoted, returns name as a string.  If identifiers are being quoted
   # quote the name with quoted_identifier.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#688
+  # source://sequel//lib/sequel/dataset/sql.rb#689
   def quote_identifier_append(sql, name); end
 
   # Whether this dataset quotes identifiers.
@@ -4385,7 +4385,7 @@ class Sequel::Dataset
 
   # Append literalization of identifier or unqualified identifier to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#703
+  # source://sequel//lib/sequel/dataset/sql.rb#704
   def quote_schema_table_append(sql, table); end
 
   # Append literalization of quoted identifier to SQL string.
@@ -4393,7 +4393,7 @@ class Sequel::Dataset
   # should be overridden by subclasses to provide quoting not matching the
   # SQL standard, such as backtick (used by MySQL and SQLite).
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#719
+  # source://sequel//lib/sequel/dataset/sql.rb#720
   def quoted_identifier_append(sql, name); end
 
   # Whether you must use a column alias list for recursive CTEs, false by default.
@@ -4484,7 +4484,7 @@ class Sequel::Dataset
   # level of qualification (e.g. database.schema.table on Microsoft
   # SQL Server).
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#730
+  # source://sequel//lib/sequel/dataset/sql.rb#731
   def schema_and_table(table_name, sch = T.unsafe(nil)); end
 
   # Returns a copy of the dataset with the columns selected changed
@@ -4772,7 +4772,7 @@ class Sequel::Dataset
   #   ds.split_qualifiers(Sequel[:d][:t][:s]) # ['d', 't', 's']
   #   ds.split_qualifiers(Sequel.qualify(Sequel[:h][:d], Sequel[:t][:s])) # ['h', 'd', 't', 's']
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#753
+  # source://sequel//lib/sequel/dataset/sql.rb#754
   def split_qualifiers(table_name, *args); end
 
   # Same as +select_sql+, not aliased directly to make subclassing simpler.
@@ -4782,7 +4782,7 @@ class Sequel::Dataset
 
   # Append literalization of subscripts (SQL array accesses) to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#764
+  # source://sequel//lib/sequel/dataset/sql.rb#765
   def subscript_sql_append(sql, s); end
 
   # Returns the sum for the given column/expression.
@@ -5316,7 +5316,7 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#792
+  # source://sequel//lib/sequel/dataset/sql.rb#793
   def window_sql_append(sql, opts); end
 
   # Add a common table expression (CTE) with the given name and a dataset that defines the CTE.
@@ -5564,7 +5564,7 @@ class Sequel::Dataset
   # Return a from_self dataset if an order or limit is specified, so it works as expected
   # with UNION, EXCEPT, and INTERSECT clauses.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#881
+  # source://sequel//lib/sequel/dataset/sql.rb#882
   def compound_from_self; end
 
   # Return true if the dataset has a non-nil value for any key in opts.
@@ -5611,7 +5611,7 @@ class Sequel::Dataset
   #
   # @raise [InvalidOperation]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1075
+  # source://sequel//lib/sequel/dataset/sql.rb#1076
   def _check_modification_allowed!(modifying_joins_supported); end
 
   # Save original clone implementation, as some other methods need
@@ -5646,13 +5646,13 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1191
   def _import_transaction(values, trans_opts, &block); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1290
+  # source://sequel//lib/sequel/dataset/sql.rb#1291
   def _insert_columns_sql(sql, columns); end
 
   # source://sequel//lib/sequel/dataset/sql.rb#267
   def _insert_sql; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1312
+  # source://sequel//lib/sequel/dataset/sql.rb#1313
   def _insert_values_sql(sql, values); end
 
   # If invert is true, invert the condition.
@@ -5660,15 +5660,15 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/query.rb#1409
   def _invert_filter(cond, invert); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#900
+  # source://sequel//lib/sequel/dataset/sql.rb#901
   def _merge_delete_sql(sql, data); end
 
   # Append the INSERT sql used in a MERGE
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#888
+  # source://sequel//lib/sequel/dataset/sql.rb#889
   def _merge_insert_sql(sql, data); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#895
+  # source://sequel//lib/sequel/dataset/sql.rb#896
   def _merge_update_sql(sql, data); end
 
   # Append to the current MERGE WHEN clauses.
@@ -5679,14 +5679,14 @@ class Sequel::Dataset
 
   # Append MERGE WHEN conditions, if there are conditions provided.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#939
+  # source://sequel//lib/sequel/dataset/sql.rb#940
   def _merge_when_conditions_sql(sql, data); end
 
   # Add the WHEN clauses to the MERGE SQL
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#927
+  # source://sequel//lib/sequel/dataset/sql.rb#928
   def _merge_when_sql(sql); end
 
   # Parse the values passed to insert_sql, returning columns and values
@@ -5694,7 +5694,7 @@ class Sequel::Dataset
   # for an INSERT without explicit column references. Returned values can be an
   # array, dataset, or literal string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#950
+  # source://sequel//lib/sequel/dataset/sql.rb#951
   def _parse_insert_sql_args(values); end
 
   # Internals of +select_hash+ and +select_hash_groups+
@@ -5715,7 +5715,7 @@ class Sequel::Dataset
   # Formats the truncate statement.  Assumes the table given has already been
   # literalized.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#979
+  # source://sequel//lib/sequel/dataset/sql.rb#980
   def _truncate_sql(table); end
 
   # Internal recursive version of unqualified_column_for, handling Strings inside
@@ -5752,7 +5752,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1028
+  # source://sequel//lib/sequel/dataset/sql.rb#1029
   def aggreate_dataset_use_from_self?; end
 
   # Clone of this dataset usable in aggregate operations.  Does
@@ -5761,19 +5761,19 @@ class Sequel::Dataset
   # order if not. Also removes the row_proc, which isn't needed
   # for aggregate calculations.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1023
+  # source://sequel//lib/sequel/dataset/sql.rb#1024
   def aggregate_dataset; end
 
   # Returns an appropriate symbol for the alias represented by s.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#984
+  # source://sequel//lib/sequel/dataset/sql.rb#985
   def alias_alias_symbol(s); end
 
   # Returns an appropriate alias symbol for the given object, which can be
   # a Symbol, String, SQL::Identifier, SQL::QualifiedIdentifier, or
   # SQL::AliasedExpression.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1000
+  # source://sequel//lib/sequel/dataset/sql.rb#1001
   def alias_symbol(sym); end
 
   # Don't allow preparing prepared statements by default.
@@ -5785,7 +5785,7 @@ class Sequel::Dataset
 
   # Append aliasing expression to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1033
+  # source://sequel//lib/sequel/dataset/sql.rb#1034
   def as_sql_append(sql, aliaz, column_aliases = T.unsafe(nil)); end
 
   # Automatically alias the given expression if it does not have an identifiable alias.
@@ -5800,7 +5800,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1045
+  # source://sequel//lib/sequel/dataset/sql.rb#1046
   def cache_sql?; end
 
   # Check the cache for the given key, returning the value.
@@ -5838,42 +5838,42 @@ class Sequel::Dataset
 
   # Check whether it is allowed to delete from this dataset.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1065
+  # source://sequel//lib/sequel/dataset/sql.rb#1066
   def check_delete_allowed!; end
 
   # Check whether it is allowed to insert into this dataset.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1059
+  # source://sequel//lib/sequel/dataset/sql.rb#1060
   def check_insert_allowed!; end
 
   # Raise an InvalidOperation exception if modification is not allowed for this dataset.
   # Check whether it is allowed to insert into this dataset.
   # Only for backwards compatibility with older external adapters.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1052
+  # source://sequel//lib/sequel/dataset/sql.rb#1053
   def check_modification_allowed!; end
 
   # Raise error if the dataset uses limits or offsets.
   #
   # @raise [InvalidOperation]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1081
+  # source://sequel//lib/sequel/dataset/sql.rb#1082
   def check_not_limited!(type); end
 
   # Check whether it is allowed to insert into this dataset.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1062
+  # source://sequel//lib/sequel/dataset/sql.rb#1063
   def check_truncation_allowed!; end
 
   # Check whether it is allowed to update this dataset.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1070
+  # source://sequel//lib/sequel/dataset/sql.rb#1071
   def check_update_allowed!; end
 
   # Append column list to SQL string.
   # If the column list is empty, a wildcard (*) is appended.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1088
+  # source://sequel//lib/sequel/dataset/sql.rb#1089
   def column_list_append(sql, columns); end
 
   # Set the columns for the current dataset.
@@ -5886,31 +5886,31 @@ class Sequel::Dataset
   # two arguments.  For more than two arguments, the first
   # argument to the block will be result of the previous block call.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1100
+  # source://sequel//lib/sequel/dataset/sql.rb#1101
   def complex_expression_arg_pairs(args); end
 
   # Append the literalization of the args using complex_expression_arg_pairs
   # to the given SQL string, used when database operator/function is 2-ary
   # where Sequel expression is N-ary.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1114
+  # source://sequel//lib/sequel/dataset/sql.rb#1115
   def complex_expression_arg_pairs_append(sql, args, &block); end
 
   # Append literalization of complex expression to SQL string, for
   # operators unsupported by some databases. Used by adapters for databases
   # that don't support the operators natively.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1121
+  # source://sequel//lib/sequel/dataset/sql.rb#1122
   def complex_expression_emulate_append(sql, op, args); end
 
   # Append literalization of dataset used in UNION/INTERSECT/EXCEPT clause to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1142
+  # source://sequel//lib/sequel/dataset/sql.rb#1143
   def compound_dataset_sql_append(sql, ds); end
 
   # The alias to use for datasets, takes a number to make sure the name is unique.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1147
+  # source://sequel//lib/sequel/dataset/sql.rb#1148
   def dataset_alias(number); end
 
   # The default number of rows that can be inserted in a single INSERT statement via import.
@@ -5937,51 +5937,51 @@ class Sequel::Dataset
 
   # The strftime format to use when literalizing time (Sequel::SQLTime) values.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1152
+  # source://sequel//lib/sequel/dataset/sql.rb#1153
   def default_time_format; end
 
   # The strftime format to use when literalizing timestamp (Time/DateTime) values.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1157
+  # source://sequel//lib/sequel/dataset/sql.rb#1158
   def default_timestamp_format; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1161
+  # source://sequel//lib/sequel/dataset/sql.rb#1162
   def delete_delete_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1165
+  # source://sequel//lib/sequel/dataset/sql.rb#1166
   def delete_from_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1653
+  # source://sequel//lib/sequel/dataset/sql.rb#1654
   def delete_order_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1337
+  # source://sequel//lib/sequel/dataset/sql.rb#1338
   def delete_returning_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1666
+  # source://sequel//lib/sequel/dataset/sql.rb#1667
   def delete_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1699
+  # source://sequel//lib/sequel/dataset/sql.rb#1700
   def delete_with_sql(sql); end
 
   # Append the column aliases to the SQL.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1173
+  # source://sequel//lib/sequel/dataset/sql.rb#1174
   def derived_column_list_sql_append(sql, column_aliases); end
 
   # Disable caching of SQL for the current dataset
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1178
+  # source://sequel//lib/sequel/dataset/sql.rb#1179
   def disable_sql_caching!; end
 
   # An expression for how to handle an empty array lookup.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1222
+  # source://sequel//lib/sequel/dataset/sql.rb#1223
   def empty_array_value(op, cols); end
 
   # An SQL FROM clause to use in SELECT statements where the dataset has
   # no from tables.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1184
+  # source://sequel//lib/sequel/dataset/sql.rb#1185
   def empty_from_sql; end
 
   # Whether to emulate the function with the given name.  This should only be true
@@ -5989,7 +5989,7 @@ class Sequel::Dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1190
+  # source://sequel//lib/sequel/dataset/sql.rb#1191
   def emulate_function?(name); end
 
   # Whether prepared statements should be emulated.  True by
@@ -6024,7 +6024,7 @@ class Sequel::Dataset
   # Append literalization of array of expressions to SQL string, separating them
   # with commas.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1196
+  # source://sequel//lib/sequel/dataset/sql.rb#1197
   def expression_list_append(sql, columns); end
 
   # SQL expression object based on the expr type.  See +where+.
@@ -6034,13 +6034,13 @@ class Sequel::Dataset
 
   # Format the timestamp based on the default_timestamp_format.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1227
+  # source://sequel//lib/sequel/dataset/sql.rb#1228
   def format_timestamp(v); end
 
   # Return the SQL timestamp fragment to use for the fractional time part.
   # Should start with the decimal point.  Uses 6 decimal places by default.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1235
+  # source://sequel//lib/sequel/dataset/sql.rb#1236
   def format_timestamp_usec(usec, ts = T.unsafe(nil)); end
 
   # Transform the hash of graph aliases and return a two element array
@@ -6052,7 +6052,7 @@ class Sequel::Dataset
 
   # Append literalization of array of grouping elements to SQL string, seperating them with commas.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1207
+  # source://sequel//lib/sequel/dataset/sql.rb#1208
   def grouping_element_list_append(sql, columns); end
 
   # Return a plain symbol given a potentially qualified or aliased symbol,
@@ -6087,12 +6087,12 @@ class Sequel::Dataset
   # Append literalization of identifier to SQL string, considering regular strings
   # as SQL identifiers instead of SQL strings.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1246
+  # source://sequel//lib/sequel/dataset/sql.rb#1247
   def identifier_append(sql, v); end
 
   # Append literalization of array of identifiers to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1262
+  # source://sequel//lib/sequel/dataset/sql.rb#1263
   def identifier_list_append(sql, args); end
 
   # Returns an expression that will ignore values preceding the given row, using the
@@ -6114,25 +6114,25 @@ class Sequel::Dataset
 
   # Upcase identifiers by default when inputting them into the database.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1273
+  # source://sequel//lib/sequel/dataset/sql.rb#1274
   def input_identifier(v); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1286
+  # source://sequel//lib/sequel/dataset/sql.rb#1287
   def insert_columns_sql(sql); end
 
   # The columns and values to use for an empty insert if the database doesn't support
   # INSERT with DEFAULT VALUES.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1300
+  # source://sequel//lib/sequel/dataset/sql.rb#1301
   def insert_empty_columns_values; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1304
+  # source://sequel//lib/sequel/dataset/sql.rb#1305
   def insert_insert_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1277
+  # source://sequel//lib/sequel/dataset/sql.rb#1278
   def insert_into_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1331
+  # source://sequel//lib/sequel/dataset/sql.rb#1332
   def insert_returning_sql(sql); end
 
   # Whether insert(nil) or insert({}) must be emulated by
@@ -6143,10 +6143,10 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/features.rb#243
   def insert_supports_empty_values?; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1308
+  # source://sequel//lib/sequel/dataset/sql.rb#1309
   def insert_values_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1700
+  # source://sequel//lib/sequel/dataset/sql.rb#1701
   def insert_with_sql(sql); end
 
   # Inverts the given order by breaking it into a list of column references
@@ -6161,88 +6161,88 @@ class Sequel::Dataset
   # SQL fragment specifying a JOIN type, converts underscores to
   # spaces and upcases.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1342
+  # source://sequel//lib/sequel/dataset/sql.rb#1343
   def join_type_sql(join_type); end
 
   # Append USING clause for JOIN USING
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1347
+  # source://sequel//lib/sequel/dataset/sql.rb#1348
   def join_using_clause_using_sql_append(sql, using_columns); end
 
   # Append a literalization of the array to SQL string.
   # Treats as an expression if an array of all two pairs, or as a SQL array otherwise.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1355
+  # source://sequel//lib/sequel/dataset/sql.rb#1356
   def literal_array_append(sql, v); end
 
   # SQL fragment for BigDecimal
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1364
+  # source://sequel//lib/sequel/dataset/sql.rb#1365
   def literal_big_decimal(v); end
 
   # Append literalization of SQL::Blob to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1370
+  # source://sequel//lib/sequel/dataset/sql.rb#1371
   def literal_blob_append(sql, v); end
 
   # Append literalization of dataset to SQL string.  Does a subselect inside parantheses.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1375
+  # source://sequel//lib/sequel/dataset/sql.rb#1376
   def literal_dataset_append(sql, v); end
 
   # SQL fragment for Date, using the ISO8601 format.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1383
+  # source://sequel//lib/sequel/dataset/sql.rb#1384
   def literal_date(v); end
 
   # Append literalization of date to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1388
+  # source://sequel//lib/sequel/dataset/sql.rb#1389
   def literal_date_append(sql, v); end
 
   # SQL fragment for DateTime
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1393
+  # source://sequel//lib/sequel/dataset/sql.rb#1394
   def literal_datetime(v); end
 
   # Append literalization of DateTime to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1398
+  # source://sequel//lib/sequel/dataset/sql.rb#1399
   def literal_datetime_append(sql, v); end
 
   # Append literalization of SQL::Expression to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1403
+  # source://sequel//lib/sequel/dataset/sql.rb#1404
   def literal_expression_append(sql, v); end
 
   # SQL fragment for false
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1408
+  # source://sequel//lib/sequel/dataset/sql.rb#1409
   def literal_false; end
 
   # SQL fragment for Float
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1413
+  # source://sequel//lib/sequel/dataset/sql.rb#1414
   def literal_float(v); end
 
   # Append literalization of Hash to SQL string, treating hash as a boolean expression.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1418
+  # source://sequel//lib/sequel/dataset/sql.rb#1419
   def literal_hash_append(sql, v); end
 
   # SQL fragment for Integer
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1423
+  # source://sequel//lib/sequel/dataset/sql.rb#1424
   def literal_integer(v); end
 
   # Append string to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1428
+  # source://sequel//lib/sequel/dataset/sql.rb#1429
   def literal_literal_string_append(sql, v); end
 
   # SQL fragment for nil
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1433
+  # source://sequel//lib/sequel/dataset/sql.rb#1434
   def literal_nil; end
 
   # Append a literalization of the object to the given SQL string.
@@ -6250,48 +6250,48 @@ class Sequel::Dataset
   # calls +sql_literal+ if object responds to it, otherwise raises an error.
   # If a database specific type is allowed, this should be overriden in a subclass.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1441
+  # source://sequel//lib/sequel/dataset/sql.rb#1442
   def literal_other_append(sql, v); end
 
   # Append a literalization of the set to SQL string.
   # Treats as an expression as an SQL value list.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1459
+  # source://sequel//lib/sequel/dataset/sql.rb#1460
   def literal_set_append(sql, v); end
 
   # SQL fragment for Sequel::SQLTime, containing just the time part
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1464
+  # source://sequel//lib/sequel/dataset/sql.rb#1465
   def literal_sqltime(v); end
 
   # Append literalization of Sequel::SQLTime to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1469
+  # source://sequel//lib/sequel/dataset/sql.rb#1470
   def literal_sqltime_append(sql, v); end
 
   # Append literalization of string to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1474
+  # source://sequel//lib/sequel/dataset/sql.rb#1475
   def literal_string_append(sql, v); end
 
   # Append literalization of symbol to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1479
+  # source://sequel//lib/sequel/dataset/sql.rb#1480
   def literal_symbol_append(sql, v); end
 
   # SQL fragment for Time
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1490
+  # source://sequel//lib/sequel/dataset/sql.rb#1491
   def literal_time(v); end
 
   # Append literalization of Time to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1495
+  # source://sequel//lib/sequel/dataset/sql.rb#1496
   def literal_time_append(sql, v); end
 
   # SQL fragment for true
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1500
+  # source://sequel//lib/sequel/dataset/sql.rb#1501
   def literal_true; end
 
   # What strategy to use for import/multi_insert.  While SQL-92 defaults
@@ -6299,12 +6299,12 @@ class Sequel::Dataset
   # that don't allow that that it can't be the default.  Use separate queries
   # by default, which works everywhere.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1508
+  # source://sequel//lib/sequel/dataset/sql.rb#1509
   def multi_insert_sql_strategy; end
 
   # Get the native function name given the emulated function name.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1514
+  # source://sequel//lib/sequel/dataset/sql.rb#1515
   def native_function_name(emulated_function); end
 
   # Whether the given option key does not affect the generated SQL.
@@ -6339,12 +6339,12 @@ class Sequel::Dataset
   # Returns a qualified column name (including a table name) if the column
   # name isn't already qualified.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1520
+  # source://sequel//lib/sequel/dataset/sql.rb#1521
   def qualified_column_name(column, table); end
 
   # Qualify the given expression to the given table.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1540
+  # source://sequel//lib/sequel/dataset/sql.rb#1541
   def qualified_expression(e, table); end
 
   # Wrap the alias symbol in an SQL::Identifier if the identifier on which is based
@@ -6376,73 +6376,73 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1362
   def returning_fetch_rows(sql, &block); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1544
+  # source://sequel//lib/sequel/dataset/sql.rb#1545
   def select_columns_sql(sql); end
 
   # Modify the sql to add a dataset to the via an EXCEPT, INTERSECT, or UNION clause.
   # This uses a subselect for the compound datasets used, because using parantheses doesn't
   # work on all databases.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1563
+  # source://sequel//lib/sequel/dataset/sql.rb#1564
   def select_compounds_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1549
+  # source://sequel//lib/sequel/dataset/sql.rb#1550
   def select_distinct_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1573
+  # source://sequel//lib/sequel/dataset/sql.rb#1574
   def select_from_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1582
+  # source://sequel//lib/sequel/dataset/sql.rb#1583
   def select_group_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1604
+  # source://sequel//lib/sequel/dataset/sql.rb#1605
   def select_having_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1611
+  # source://sequel//lib/sequel/dataset/sql.rb#1612
   def select_join_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1617
+  # source://sequel//lib/sequel/dataset/sql.rb#1618
   def select_limit_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1630
+  # source://sequel//lib/sequel/dataset/sql.rb#1631
   def select_lock_sql(sql); end
 
   # Used only if there is an offset and no limit, making it easier to override
   # in the adapter, as many databases do not support just a plain offset with
   # no limit.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1642
+  # source://sequel//lib/sequel/dataset/sql.rb#1643
   def select_only_offset_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1647
+  # source://sequel//lib/sequel/dataset/sql.rb#1648
   def select_order_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1656
+  # source://sequel//lib/sequel/dataset/sql.rb#1657
   def select_select_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1660
+  # source://sequel//lib/sequel/dataset/sql.rb#1661
   def select_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1669
+  # source://sequel//lib/sequel/dataset/sql.rb#1670
   def select_window_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1685
+  # source://sequel//lib/sequel/dataset/sql.rb#1686
   def select_with_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1703
+  # source://sequel//lib/sequel/dataset/sql.rb#1704
   def select_with_sql_base; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1707
+  # source://sequel//lib/sequel/dataset/sql.rb#1708
   def select_with_sql_cte(sql, cte); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1712
+  # source://sequel//lib/sequel/dataset/sql.rb#1713
   def select_with_sql_prefix(sql, w); end
 
   # Whether the symbol cache should be skipped when literalizing the dataset
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1730
+  # source://sequel//lib/sequel/dataset/sql.rb#1731
   def skip_symbol_cache?; end
 
   # Append literalization of array of sources/tables to SQL string, raising an Error if there
@@ -6450,24 +6450,24 @@ class Sequel::Dataset
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1736
+  # source://sequel//lib/sequel/dataset/sql.rb#1737
   def source_list_append(sql, sources); end
 
   # Delegate to Sequel.split_symbol.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1742
+  # source://sequel//lib/sequel/dataset/sql.rb#1743
   def split_symbol(sym); end
 
   # The string that is appended to to create the SQL query, the empty
   # string by default.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1748
+  # source://sequel//lib/sequel/dataset/sql.rb#1749
   def sql_string_origin; end
 
   # The precision to use for SQLTime instances (time column values without dates).
   # Defaults to timestamp_precision.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1754
+  # source://sequel//lib/sequel/dataset/sql.rb#1755
   def sqltime_precision; end
 
   # SQL to use if this dataset uses static SQL.  Since static SQL
@@ -6475,18 +6475,18 @@ class Sequel::Dataset
   # we literalize nonstrings.  If there is an append_sql for this
   # dataset, append to that SQL instead of returning the value.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1762
+  # source://sequel//lib/sequel/dataset/sql.rb#1763
   def static_sql(sql); end
 
   # Append literalization of the subselect to SQL string.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1779
+  # source://sequel//lib/sequel/dataset/sql.rb#1780
   def subselect_sql_append(sql, ds); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1793
+  # source://sequel//lib/sequel/dataset/sql.rb#1794
   def subselect_sql_append_sql(sql, ds); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1789
+  # source://sequel//lib/sequel/dataset/sql.rb#1790
   def subselect_sql_dataset(sql, ds); end
 
   # Whether common table expressions are supported in UNION/INTERSECT/EXCEPT clauses.
@@ -6513,7 +6513,7 @@ class Sequel::Dataset
 
   # The number of decimal digits of precision to use in timestamps.
   #
-  # source://sequel//lib/sequel/dataset/sql.rb#1798
+  # source://sequel//lib/sequel/dataset/sql.rb#1799
   def timestamp_precision; end
 
   # Return the unaliased part of the identifier.  Handles both
@@ -6523,28 +6523,28 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/actions.rb#1376
   def unaliased_identifier(c); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1654
+  # source://sequel//lib/sequel/dataset/sql.rb#1655
   def update_order_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1338
+  # source://sequel//lib/sequel/dataset/sql.rb#1339
   def update_returning_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1808
+  # source://sequel//lib/sequel/dataset/sql.rb#1809
   def update_set_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1818
+  # source://sequel//lib/sequel/dataset/sql.rb#1819
   def update_sql_values_hash(sql, values); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1802
+  # source://sequel//lib/sequel/dataset/sql.rb#1803
   def update_table_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1834
+  # source://sequel//lib/sequel/dataset/sql.rb#1835
   def update_update_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1667
+  # source://sequel//lib/sequel/dataset/sql.rb#1668
   def update_where_sql(sql); end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1701
+  # source://sequel//lib/sequel/dataset/sql.rb#1702
   def update_with_sql(sql); end
 
   # Whether the RETURNING clause is used for the given dataset.
@@ -6573,7 +6573,7 @@ class Sequel::Dataset
   # source://sequel//lib/sequel/dataset/misc.rb#375
   def visible_class_name; end
 
-  # source://sequel//lib/sequel/dataset/sql.rb#1838
+  # source://sequel//lib/sequel/dataset/sql.rb#1839
   def window_frame_boundary_sql_append(sql, boundary, direction); end
 
   class << self
@@ -6875,12 +6875,12 @@ Sequel::Dataset::JOIN_METHODS = T.let(T.unsafe(nil), Array)
 # source://sequel//lib/sequel/dataset/sql.rb#286
 Sequel::Dataset::LIKE_OPERATORS = T.let(T.unsafe(nil), Array)
 
-# source://sequel//lib/sequel/dataset/sql.rb#917
+# source://sequel//lib/sequel/dataset/sql.rb#918
 Sequel::Dataset::MERGE_NORMALIZE_TYPE_MAP = T.let(T.unsafe(nil), Hash)
 
 # Mapping of merge types to related SQL
 #
-# source://sequel//lib/sequel/dataset/sql.rb#905
+# source://sequel//lib/sequel/dataset/sql.rb#906
 Sequel::Dataset::MERGE_TYPE_SQL = T.let(T.unsafe(nil), Hash)
 
 # Which options don't affect the SQL generation.  Used by simple_select_all?
@@ -7638,18 +7638,18 @@ class Sequel::LiteralString < ::String
 
   # Show that the current string is a literal string in addition to the output.
   #
-  # source://sequel//lib/sequel/sql.rb#2039
+  # source://sequel//lib/sequel/sql.rb#2042
   def inspect; end
 
   # Return self if no args are given, otherwise return a SQL::PlaceholderLiteralString
   # with the current string and the given args.
   #
-  # source://sequel//lib/sequel/sql.rb#2045
+  # source://sequel//lib/sequel/sql.rb#2048
   def lit(*args); end
 
   # Convert a literal string to a SQL::Blob.
   #
-  # source://sequel//lib/sequel/sql.rb#2050
+  # source://sequel//lib/sequel/sql.rb#2053
   def to_sequel_blob; end
 end
 
@@ -8151,6 +8151,14 @@ class Sequel::Model
   extend ::Sequel::Inflections
   extend ::Sequel::Model::ClassMethods
   extend ::Sequel::Model::Associations::ClassMethods
+
+  private
+
+  # source://sequel//lib/sequel/model/base.rb#1050
+  def _initialize_from_db_nil_instance_variables; end
+
+  # source://sequel//lib/sequel/model/base.rb#1050
+  def _initialize_nil_instance_variables; end
 end
 
 # Associations are used in order to specify relationships between model classes
@@ -9044,16 +9052,16 @@ module Sequel::Model::Associations::ClassMethods
   # source://sequel//lib/sequel/model/associations.rb#2038
   def associate(type, name, opts = T.unsafe(nil), &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def association_full_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def association_inner_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def association_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def association_left_join(*args, **_arg1, &block); end
 
   # The association reflection hash for the association of the given name.
@@ -9066,7 +9074,7 @@ module Sequel::Model::Associations::ClassMethods
   # source://sequel//lib/sequel/model/associations.rb#1766
   def association_reflections; end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def association_right_join(*args, **_arg1, &block); end
 
   # Array of association name symbols
@@ -9135,13 +9143,13 @@ module Sequel::Model::Associations::ClassMethods
   # source://sequel//lib/sequel/model/associations.rb#1790
   def default_eager_limit_strategy=(_arg0); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def eager(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def eager_graph(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2178
+  # source://sequel//lib/sequel/model/associations.rb#2179
   def eager_graph_with_options(*args, **_arg1, &block); end
 
   # Eager load the association with the given eager loader options.
@@ -9192,20 +9200,20 @@ module Sequel::Model::Associations::ClassMethods
   # The default value for the instance_specific option, if the association
   # could be instance specific and the :instance_specific option is not specified.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2184
+  # source://sequel//lib/sequel/model/associations.rb#2185
   def _association_instance_specific_default(_); end
 
   # The module to use for the association's methods.  Defaults to
   # the overridable_methods_module.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2190
+  # source://sequel//lib/sequel/model/associations.rb#2191
   def association_module(opts = T.unsafe(nil)); end
 
   # Add a method to the module included in the class, so the method
   # can be easily overridden in the class itself while allowing for
   # super to be called.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2197
+  # source://sequel//lib/sequel/model/associations.rb#2198
   def association_module_def(name, opts = T.unsafe(nil), &block); end
 
   # Add a method to the module included in the class, so the method
@@ -9213,65 +9221,68 @@ module Sequel::Model::Associations::ClassMethods
   # super to be called.  This method allows passing keywords through
   # the defined methods.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2207
+  # source://sequel//lib/sequel/model/associations.rb#2208
   def association_module_delegate_def(name, opts, &block); end
 
   # Add a private method to the module included in the class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2217
+  # source://sequel//lib/sequel/model/associations.rb#2218
   def association_module_private_def(name, opts = T.unsafe(nil), &block); end
 
   # Delegate to the type-specific association method to setup the
   # association, and define the association instance methods.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2224
+  # source://sequel//lib/sequel/model/associations.rb#2225
   def def_association(opts); end
 
   # Define all of the association instance methods for this association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2237
+  # source://sequel//lib/sequel/model/associations.rb#2238
   def def_association_instance_methods(opts); end
 
   # Adds the association method to the association methods module.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2230
+  # source://sequel//lib/sequel/model/associations.rb#2231
   def def_association_method(opts); end
 
   # Configures many_to_many and one_through_one association reflection and adds the related association methods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2287
+  # source://sequel//lib/sequel/model/associations.rb#2288
   def def_many_to_many(opts); end
 
   # Configures many_to_one association reflection and adds the related association methods
   #
-  # source://sequel//lib/sequel/model/associations.rb#2474
+  # source://sequel//lib/sequel/model/associations.rb#2475
   def def_many_to_one(opts); end
 
   # Alias of def_many_to_many, since they share pretty much the same code.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2660
+  # source://sequel//lib/sequel/model/associations.rb#2661
   def def_one_through_one(opts); end
 
   # Configures one_to_many and one_to_one association reflections and adds the related association methods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2534
+  # source://sequel//lib/sequel/model/associations.rb#2535
   def def_one_to_many(opts); end
 
   # Alias of def_one_to_many, since they share pretty much the same code.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2665
+  # source://sequel//lib/sequel/model/associations.rb#2666
   def def_one_to_one(opts); end
+
+  # source://sequel//lib/sequel/model/associations.rb#2177
+  def each_model_instance_variable(&block); end
 
   # Return dataset to graph into given the association reflection, applying the :callback option if set.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2670
+  # source://sequel//lib/sequel/model/associations.rb#2671
   def eager_graph_dataset(opts, eager_options); end
 
-  # source://sequel//lib/sequel/model/associations.rb#2177
+  # source://sequel//lib/sequel/model/associations.rb#2178
   def inherited_instance_variables; end
 
   # If not caching associations, reload the database schema by default,
@@ -9279,7 +9290,7 @@ module Sequel::Model::Associations::ClassMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2686
+  # source://sequel//lib/sequel/model/associations.rb#2687
   def reload_db_schema?; end
 end
 
@@ -9330,18 +9341,18 @@ end
 #
 #   Artist.eager(albums: {proc{|ds| ds.where{year > 1990}}=>{tracks: :genre}})
 #
-# source://sequel//lib/sequel/model/associations.rb#3141
+# source://sequel//lib/sequel/model/associations.rb#3142
 module Sequel::Model::Associations::DatasetMethods
   # If the dataset is being eagerly loaded, default to calling all
   # instead of each.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3518
+  # source://sequel//lib/sequel/model/associations.rb#3519
   def as_hash(key_column = T.unsafe(nil), value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/model/associations.rb#3143
+  # source://sequel//lib/sequel/model/associations.rb#3144
   def association_full_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#3143
+  # source://sequel//lib/sequel/model/associations.rb#3144
   def association_inner_join(*associations); end
 
   # Adds one or more INNER JOINs to the existing dataset using the keys and conditions
@@ -9419,13 +9430,13 @@ module Sequel::Model::Associations::DatasetMethods
   #   # ) AS albums ON (albums.artist_id = artists.id)
   #   # INNER JOIN tracks ON (tracks.album_id = albums.id)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3224
+  # source://sequel//lib/sequel/model/associations.rb#3225
   def association_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#3143
+  # source://sequel//lib/sequel/model/associations.rb#3144
   def association_left_join(*associations); end
 
-  # source://sequel//lib/sequel/model/associations.rb#3143
+  # source://sequel//lib/sequel/model/associations.rb#3144
   def association_right_join(*associations); end
 
   # If the expression is in the form <tt>x = y</tt> where +y+ is a <tt>Sequel::Model</tt>
@@ -9436,7 +9447,7 @@ module Sequel::Model::Associations::DatasetMethods
   # types, this is a simple transformation, but for +many_to_many+ associations this
   # creates a subquery to the join table.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3235
+  # source://sequel//lib/sequel/model/associations.rb#3236
   def complex_expression_sql_append(sql, op, args); end
 
   # The preferred eager loading method.  Loads all associated records using one
@@ -9515,7 +9526,7 @@ module Sequel::Model::Associations::DatasetMethods
   #   # SELECT * FROM albums WHERE ((year > 1990) AND (artist_id IN (...)))
   #   # SELECT * FROM albums WHERE (artist_id IN (...))
   #
-  # source://sequel//lib/sequel/model/associations.rb#3355
+  # source://sequel//lib/sequel/model/associations.rb#3356
   def eager(*associations); end
 
   # The secondary eager loading method.  Loads all associations in a single query. This
@@ -9622,7 +9633,7 @@ module Sequel::Model::Associations::DatasetMethods
   #   # ) AS albums ON (albums.artist_id = artists.id)
   #   # LEFT OUTER JOIN tracks ON (tracks.album_id = albums.id)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3465
+  # source://sequel//lib/sequel/model/associations.rb#3466
   def eager_graph(*associations); end
 
   # Run eager_graph with some options specific to just this call. Unlike eager_graph, this takes
@@ -9646,13 +9657,13 @@ module Sequel::Model::Associations::DatasetMethods
   #                    significantly slower in some cases (perhaps even the majority of cases), so you should
   #                    only use this if you have benchmarked that it is faster for your use cases.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3489
+  # source://sequel//lib/sequel/model/associations.rb#3490
   def eager_graph_with_options(associations, opts = T.unsafe(nil)); end
 
   # If the dataset is being eagerly loaded, default to calling all
   # instead of each.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3528
+  # source://sequel//lib/sequel/model/associations.rb#3529
   def to_hash_groups(key_column, value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Do not attempt to split the result set into associations,
@@ -9660,7 +9671,7 @@ module Sequel::Model::Associations::DatasetMethods
   # want to use eager_graph as a shortcut to have all of the joins
   # and aliasing set up, but want to do something else with the dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3540
+  # source://sequel//lib/sequel/model/associations.rb#3541
   def ungraphed; end
 
   protected
@@ -9681,7 +9692,7 @@ module Sequel::Model::Associations::DatasetMethods
   #      to use a custom join type.
   # *associations :: any associations dependent on this one
   #
-  # source://sequel//lib/sequel/model/associations.rb#3565
+  # source://sequel//lib/sequel/model/associations.rb#3566
   def eager_graph_association(ds, model, ta, requirements, r, *associations); end
 
   # Check the associations are valid for the given model.
@@ -9694,13 +9705,13 @@ module Sequel::Model::Associations::DatasetMethods
   # requirements :: an array, used as a stack for requirements
   # *associations :: the associations to add to the graph
   #
-  # source://sequel//lib/sequel/model/associations.rb#3624
+  # source://sequel//lib/sequel/model/associations.rb#3625
   def eager_graph_associations(ds, model, ta, requirements, *associations); end
 
   # Replace the array of plain hashes with an array of model objects will all eager_graphed
   # associations set in the associations cache for each object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3643
+  # source://sequel//lib/sequel/model/associations.rb#3644
   def eager_graph_build_associations(hashes); end
 
   private
@@ -9708,118 +9719,118 @@ module Sequel::Model::Associations::DatasetMethods
   # Return a new dataset with JOINs of the given type added, using the tables and
   # conditions specified by the associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3651
+  # source://sequel//lib/sequel/model/associations.rb#3652
   def _association_join(type, associations); end
 
   # Process the array of hashes using the eager graph loader to return an array
   # of model objects with the associations set.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3657
+  # source://sequel//lib/sequel/model/associations.rb#3658
   def _eager_graph_build_associations(hashes, egl); end
 
   # If the association has conditions itself, then it requires additional filters be
   # added to the current dataset to ensure that the passed in object would also be
   # included by the association's conditions.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3664
+  # source://sequel//lib/sequel/model/associations.rb#3665
   def add_association_filter_conditions(ref, obj, expr); end
 
   # Return an expression for filtering by the given association reflection and associated object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3692
+  # source://sequel//lib/sequel/model/associations.rb#3693
   def association_filter_expression(op, ref, obj); end
 
   # Handle inversion for association filters by returning an inverted expression,
   # plus also handling cases where the referenced columns are NULL.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3700
+  # source://sequel//lib/sequel/model/associations.rb#3701
   def association_filter_handle_inversion(op, exp, cols); end
 
   # Return an expression for making sure that the given keys match the value of
   # the given methods for either the single object given or for any of the objects
   # given if +obj+ is an array.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3715
+  # source://sequel//lib/sequel/model/associations.rb#3716
   def association_filter_key_expression(keys, meths, obj); end
 
   # Make sure the association is valid for this model, and return the related AssociationReflection.
   #
   # @raise [Sequel::UndefinedAssociation]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3736
+  # source://sequel//lib/sequel/model/associations.rb#3737
   def check_association(model, association); end
 
   # Allow associations that are eagerly graphed to be specified as an SQL::AliasedExpression, for
   # per-call determining of the alias base.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3744
+  # source://sequel//lib/sequel/model/associations.rb#3745
   def eager_graph_check_association(model, association); end
 
   # The EagerGraphLoader instance used for converting eager_graph results.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3768
+  # source://sequel//lib/sequel/model/associations.rb#3769
   def eager_graph_loader; end
 
   # Eagerly load all specified associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3776
+  # source://sequel//lib/sequel/model/associations.rb#3777
   def eager_load(a, eager_assoc = T.unsafe(nil), m = T.unsafe(nil)); end
 
   # Process the array of associations arguments (Symbols, Arrays, and Hashes),
   # and return a hash of options suitable for cascading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3674
+  # source://sequel//lib/sequel/model/associations.rb#3675
   def eager_options_for_associations(associations); end
 
   # Return a subquery expression for filering by a many_to_many association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3856
+  # source://sequel//lib/sequel/model/associations.rb#3857
   def many_to_many_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a many_to_one association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3879
+  # source://sequel//lib/sequel/model/associations.rb#3880
   def many_to_one_association_filter_expression(op, ref, obj); end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3907
+  # source://sequel//lib/sequel/model/associations.rb#3908
   def non_sql_option?(key); end
 
   # Return a subquery expression for filering by a many_to_many association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3876
+  # source://sequel//lib/sequel/model/associations.rb#3877
   def one_through_one_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a one_to_* association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3893
+  # source://sequel//lib/sequel/model/associations.rb#3894
   def one_to_many_association_filter_expression(op, ref, obj); end
 
   # Return a simple equality expression for filering by a one_to_* association
   #
-  # source://sequel//lib/sequel/model/associations.rb#3905
+  # source://sequel//lib/sequel/model/associations.rb#3906
   def one_to_one_association_filter_expression(op, ref, obj); end
 
   # Perform eager loading for a single association using the loader and eager options.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3851
+  # source://sequel//lib/sequel/model/associations.rb#3852
   def perform_eager_load(loader, eo); end
 
   # Using the hash of loaders and eager options, perform the eager loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3844
+  # source://sequel//lib/sequel/model/associations.rb#3845
   def perform_eager_loads(eager_load_data); end
 
   # Build associations from the graph if #eager_graph was used,
   # and/or load other associations if #eager was used.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3913
+  # source://sequel//lib/sequel/model/associations.rb#3914
   def post_load(all_records); end
 
   # Prepare a hash loaders and eager options which will be used to implement the eager loading.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3792
+  # source://sequel//lib/sequel/model/associations.rb#3793
   def prepare_eager_load(a, reflections, eager_assoc); end
 end
 
@@ -9835,118 +9846,118 @@ end
 # hashes and returning an array of model objects with all eager_graphed associations already set in the
 # association cache.
 #
-# source://sequel//lib/sequel/model/associations.rb#3923
+# source://sequel//lib/sequel/model/associations.rb#3924
 class Sequel::Model::Associations::EagerGraphLoader
   # Initialize all of the data structures used during loading.
   #
   # @return [EagerGraphLoader] a new instance of EagerGraphLoader
   #
-  # source://sequel//lib/sequel/model/associations.rb#3967
+  # source://sequel//lib/sequel/model/associations.rb#3968
   def initialize(dataset); end
 
   # Hash with table alias symbol keys and after_load hook values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3925
+  # source://sequel//lib/sequel/model/associations.rb#3926
   def after_load_map; end
 
   # Hash with table alias symbol keys and association name values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3928
+  # source://sequel//lib/sequel/model/associations.rb#3929
   def alias_map; end
 
   # Hash with table alias symbol keys and subhash values mapping column_alias symbols to the
   # symbol of the real name of the column
   #
-  # source://sequel//lib/sequel/model/associations.rb#3932
+  # source://sequel//lib/sequel/model/associations.rb#3933
   def column_maps; end
 
   # Recursive hash with table alias symbol keys mapping to hashes with dependent table alias symbol keys.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3935
+  # source://sequel//lib/sequel/model/associations.rb#3936
   def dependency_map; end
 
   # Hash with table alias symbol keys and [limit, offset] values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3938
+  # source://sequel//lib/sequel/model/associations.rb#3939
   def limit_map; end
 
   # Return an array of primary model instances with the associations cache prepopulated
   # for all model objects (both primary and associated).
   #
-  # source://sequel//lib/sequel/model/associations.rb#4067
+  # source://sequel//lib/sequel/model/associations.rb#4068
   def load(hashes); end
 
   # The table alias symbol for the primary model
   #
-  # source://sequel//lib/sequel/model/associations.rb#3941
+  # source://sequel//lib/sequel/model/associations.rb#3942
   def master; end
 
   # Hash with table alias symbol keys and primary key symbol values (or arrays of primary key symbols for
   # composite key tables)
   #
-  # source://sequel//lib/sequel/model/associations.rb#3945
+  # source://sequel//lib/sequel/model/associations.rb#3946
   def primary_keys; end
 
   # Hash with table alias symbol keys and reciprocal association symbol values,
   # used for setting reciprocals for one_to_many associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3949
+  # source://sequel//lib/sequel/model/associations.rb#3950
   def reciprocal_map; end
 
   # Hash with table alias symbol keys and subhash values mapping primary key symbols (or array of symbols)
   # to model instances.  Used so that only a single model instance is created for each object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3953
+  # source://sequel//lib/sequel/model/associations.rb#3954
   def records_map; end
 
   # Hash with table alias symbol keys and AssociationReflection values
   #
-  # source://sequel//lib/sequel/model/associations.rb#3956
+  # source://sequel//lib/sequel/model/associations.rb#3957
   def reflection_map; end
 
   # Hash with table alias symbol keys and callable values used to create model instances
   #
-  # source://sequel//lib/sequel/model/associations.rb#3959
+  # source://sequel//lib/sequel/model/associations.rb#3960
   def row_procs; end
 
   # Hash with table alias symbol keys and true/false values, where true means the
   # association represented by the table alias uses an array of values instead of
   # a single value (i.e. true => *_many, false => *_to_one).
   #
-  # source://sequel//lib/sequel/model/associations.rb#3964
+  # source://sequel//lib/sequel/model/associations.rb#3965
   def type_map; end
 
   private
 
   # Recursive method that creates associated model objects and associates them to the current model object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4116
+  # source://sequel//lib/sequel/model/associations.rb#4117
   def _load(dependency_map, current, h); end
 
   # Return the subhash for the specific table alias +ta+ by parsing the values out of the main hash +h+
   #
-  # source://sequel//lib/sequel/model/associations.rb#4159
+  # source://sequel//lib/sequel/model/associations.rb#4160
   def hfor(ta, h); end
 
   # Return a suitable hash key for any subhash +h+, which is an array of values by column order.
   # This is only used if the primary key cannot be used.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4167
+  # source://sequel//lib/sequel/model/associations.rb#4168
   def hkey(h); end
 
   # Return the subhash for the master table by parsing the values out of the main hash +h+
   #
-  # source://sequel//lib/sequel/model/associations.rb#4172
+  # source://sequel//lib/sequel/model/associations.rb#4173
   def master_hfor(h); end
 
   # Return a primary key value for the master table by parsing it out of the main hash +h+.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4179
+  # source://sequel//lib/sequel/model/associations.rb#4180
   def master_pk(h); end
 
   # Return a primary key value for the given table alias by parsing it out of the main hash +h+.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4192
+  # source://sequel//lib/sequel/model/associations.rb#4193
   def pk(ta, h); end
 
   # If the result set is the result of a cartesian product, then it is possible that
@@ -9955,141 +9966,141 @@ class Sequel::Model::Associations::EagerGraphLoader
   # uniq! on the association to make sure no duplicate records show up.
   # Note that this can cause legitimate duplicate records to be removed.
   #
-  # source://sequel//lib/sequel/model/associations.rb#4209
+  # source://sequel//lib/sequel/model/associations.rb#4210
   def post_process(records, dependency_map); end
 end
 
 # Instance methods used to implement the associations support.
 #
-# source://sequel//lib/sequel/model/associations.rb#2692
+# source://sequel//lib/sequel/model/associations.rb#2693
 module Sequel::Model::Associations::InstanceMethods
   # The currently cached associations.  A hash with the keys being the
   # association name symbols and the values being the associated object
   # or nil (many_to_one), or the array of associated objects (*_to_many).
   #
-  # source://sequel//lib/sequel/model/associations.rb#2696
+  # source://sequel//lib/sequel/model/associations.rb#2697
   def associations; end
 
   # Freeze the associations cache when freezing the object.  Note that
   # retrieving associations after freezing will still work in most cases,
   # but the associations will not be cached in the association cache.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2703
+  # source://sequel//lib/sequel/model/associations.rb#2704
   def freeze; end
 
   private
 
   # Apply the association options such as :order and :limit to the given dataset, returning a modified dataset.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2713
+  # source://sequel//lib/sequel/model/associations.rb#2714
   def _apply_association_options(opts, ds); end
 
   # Return a dataset for the association after applying any dynamic callback.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2725
+  # source://sequel//lib/sequel/model/associations.rb#2726
   def _associated_dataset(opts, dynamic_opts); end
 
   # A placeholder literalizer that can be used to load the association, or nil to not use one.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2734
+  # source://sequel//lib/sequel/model/associations.rb#2735
   def _associated_object_loader(opts, dynamic_opts); end
 
   # Return an association dataset for the given association reflection
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2741
+  # source://sequel//lib/sequel/model/associations.rb#2742
   def _dataset(opts); end
 
   # Dataset for the join table of the given many to many association reflection
   #
-  # source://sequel//lib/sequel/model/associations.rb#2753
+  # source://sequel//lib/sequel/model/associations.rb#2754
   def _join_table_dataset(opts); end
 
   # Return the associated single object for the given association reflection and dynamic options
   # (or nil if no associated object).
   #
-  # source://sequel//lib/sequel/model/associations.rb#2760
+  # source://sequel//lib/sequel/model/associations.rb#2761
   def _load_associated_object(opts, dynamic_opts); end
 
   # Load the associated objects for the given association reflection and dynamic options
   # as an array.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2771
+  # source://sequel//lib/sequel/model/associations.rb#2772
   def _load_associated_object_array(opts, dynamic_opts); end
 
   # Return the associated single object using a primary key lookup on the associated class.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2765
+  # source://sequel//lib/sequel/model/associations.rb#2766
   def _load_associated_object_via_primary_key(opts); end
 
   # Return the associated objects from the dataset, without association callbacks, reciprocals, and caching.
   # Still apply the dynamic callback if present.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2786
+  # source://sequel//lib/sequel/model/associations.rb#2787
   def _load_associated_objects(opts, dynamic_opts = T.unsafe(nil)); end
 
   # Clear the associations cache when refreshing
   #
-  # source://sequel//lib/sequel/model/associations.rb#2801
+  # source://sequel//lib/sequel/model/associations.rb#2802
   def _refresh_set_values(hash); end
 
   # Set the given object as the associated object for the given *_to_one association reflection
   #
-  # source://sequel//lib/sequel/model/associations.rb#3043
+  # source://sequel//lib/sequel/model/associations.rb#3044
   def _set_associated_object(opts, o); end
 
   # Add the given associated object to the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2807
+  # source://sequel//lib/sequel/model/associations.rb#2808
   def add_associated_object(opts, o, *args, **_arg3); end
 
   # Add/Set the current object to/as the given object's reciprocal association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2826
+  # source://sequel//lib/sequel/model/associations.rb#2827
   def add_reciprocal_object(opts, o); end
 
   # Call uniq! on the given array. This is used by the :uniq option,
   # and is an actual method for memory reasons.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2840
+  # source://sequel//lib/sequel/model/associations.rb#2841
   def array_uniq!(a); end
 
   # If a foreign key column value changes, clear the related
   # cached associations.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2846
+  # source://sequel//lib/sequel/model/associations.rb#2847
   def change_column_value(column, value); end
 
   # Save the associated object if the associated object needs a primary key
   # and the associated object is new and does not have one.  Raise an error if
   # the object still does not have a primary key
   #
-  # source://sequel//lib/sequel/model/associations.rb#2881
+  # source://sequel//lib/sequel/model/associations.rb#2882
   def ensure_associated_primary_key(opts, o, *args); end
 
   # Duplicate the associations hash when duplicating the object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2889
+  # source://sequel//lib/sequel/model/associations.rb#2890
   def initialize_copy(other); end
 
   # Load the associated objects using the dataset, handling callbacks, reciprocals, and caching.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2906
+  # source://sequel//lib/sequel/model/associations.rb#2907
   def load_associated_objects(opts, dynamic_opts, &block); end
 
   # If a block is given, assign it as the :callback option in the hash, and return the hash.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2896
+  # source://sequel//lib/sequel/model/associations.rb#2897
   def load_association_objects_options(dynamic_opts, &block); end
 
   # Whether to use a simple primary key lookup on the associated class when loading.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2932
+  # source://sequel//lib/sequel/model/associations.rb#2933
   def load_with_primary_key_lookup?(opts, dynamic_opts); end
 
   # Convert the input of the add_* association method into an associated object. For
@@ -10097,21 +10108,21 @@ module Sequel::Model::Associations::InstanceMethods
   # assume the value specifies a primary key, and lookup an existing object with that primary key.
   # Otherwise, if the object is not already an instance of the class, raise an exception.
   #
-  # source://sequel//lib/sequel/model/associations.rb#2942
+  # source://sequel//lib/sequel/model/associations.rb#2943
   def make_add_associated_object(opts, o); end
 
   # Remove all associated objects from the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2958
+  # source://sequel//lib/sequel/model/associations.rb#2959
   def remove_all_associated_objects(opts, *args, **_arg2); end
 
   # Remove the given associated object from the given association
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2971
+  # source://sequel//lib/sequel/model/associations.rb#2972
   def remove_associated_object(opts, o, *args, **_arg3); end
 
   # Check that the object from the associated table specified by the primary key
@@ -10120,24 +10131,24 @@ module Sequel::Model::Associations::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#2997
+  # source://sequel//lib/sequel/model/associations.rb#2998
   def remove_check_existing_object_from_pk(opts, o, *args); end
 
   # Remove/unset the current object from/as the given object's reciprocal association.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3005
+  # source://sequel//lib/sequel/model/associations.rb#3006
   def remove_reciprocal_object(opts, o); end
 
   # Run the callback for the association with the object.
   #
-  # source://sequel//lib/sequel/model/associations.rb#3017
+  # source://sequel//lib/sequel/model/associations.rb#3018
   def run_association_callbacks(reflection, callback_type, object); end
 
   # Set the given object as the associated object for the given many_to_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3076
+  # source://sequel//lib/sequel/model/associations.rb#3077
   def set_associated_object(opts, o); end
 
   # Whether run the associated object setter code if passed the same object as the one already
@@ -10146,21 +10157,21 @@ module Sequel::Model::Associations::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3071
+  # source://sequel//lib/sequel/model/associations.rb#3072
   def set_associated_object_if_same?; end
 
   # Set the given object as the associated object for the given one_through_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3082
+  # source://sequel//lib/sequel/model/associations.rb#3083
   def set_one_through_one_associated_object(opts, o); end
 
   # Set the given object as the associated object for the given one_to_one association reflection
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/associations.rb#3089
+  # source://sequel//lib/sequel/model/associations.rb#3090
   def set_one_to_one_associated_object(opts, o); end
 end
 
@@ -10873,7 +10884,7 @@ module Sequel::Model::ClassMethods
   #     dataset # => DB1[:comments]
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#181
+  # source://sequel//lib/sequel/model/base.rb#185
   def Model(source); end
 
   # Returns the first record from the database matching the conditions.
@@ -10887,22 +10898,22 @@ module Sequel::Model::ClassMethods
   #   Artist[name: 'Bob'] # SELECT * FROM artists WHERE (name = 'Bob') LIMIT 1
   #   # => #<Artist {:name=>'Bob', ...}>
   #
-  # source://sequel//lib/sequel/model/base.rb#214
+  # source://sequel//lib/sequel/model/base.rb#218
   def [](*args); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def all(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def any?(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def as_hash(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def as_set(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def avg(*args, **_arg1, &block); end
 
   # Whether to cache the anonymous models created by Sequel::Model(), true by default.  This is
@@ -10922,12 +10933,12 @@ module Sequel::Model::ClassMethods
   # Requires that values be a hash where all keys are symbols. It
   # probably should not be used by external code.
   #
-  # source://sequel//lib/sequel/model/base.rb#223
+  # source://sequel//lib/sequel/model/base.rb#227
   def call(values); end
 
   # Clear the setter_methods cache
   #
-  # source://sequel//lib/sequel/model/base.rb#230
+  # source://sequel//lib/sequel/model/base.rb#232
   def clear_setter_methods_cache; end
 
   # Returns the columns in the result set in their original order.
@@ -10938,10 +10949,10 @@ module Sequel::Model::ClassMethods
   #   Artist.columns
   #   # => [:id, :name]
   #
-  # source://sequel//lib/sequel/model/base.rb#241
+  # source://sequel//lib/sequel/model/base.rb#243
   def columns; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def count(*args, **_arg1, &block); end
 
   # Creates instance using new with the given values and block, and saves it.
@@ -10953,10 +10964,10 @@ module Sequel::Model::ClassMethods
   #     a.name = 'Jim'
   #   end # INSERT INTO artists (name) VALUES ('Jim')
   #
-  # source://sequel//lib/sequel/model/base.rb#255
+  # source://sequel//lib/sequel/model/base.rb#257
   def create(values = T.unsafe(nil), &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def cross_join(*args, **_arg1, &block); end
 
   # Returns the dataset associated with the Model class.  Raises
@@ -10966,12 +10977,12 @@ module Sequel::Model::ClassMethods
   #
   #   Artist.dataset.all # SELECT * FROM artists
   #
-  # source://sequel//lib/sequel/model/base.rb#265
+  # source://sequel//lib/sequel/model/base.rb#267
   def dataset; end
 
   # Alias of set_dataset
   #
-  # source://sequel//lib/sequel/model/base.rb#270
+  # source://sequel//lib/sequel/model/base.rb#272
   def dataset=(ds); end
 
   # Array of modules that extend this model's dataset.  Stored
@@ -11037,7 +11048,7 @@ module Sequel::Model::ClassMethods
   # call the method on the dataset, assuming that the class method is not already
   # defined.
   #
-  # source://sequel//lib/sequel/model/base.rb#329
+  # source://sequel//lib/sequel/model/base.rb#331
   def dataset_module(mod = T.unsafe(nil), &block); end
 
   # The Module subclass to use for dataset_module blocks.
@@ -11058,7 +11069,7 @@ module Sequel::Model::ClassMethods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#352
+  # source://sequel//lib/sequel/model/base.rb#354
   def db; end
 
   # Sets the database associated with the Model class.
@@ -11078,7 +11089,7 @@ module Sequel::Model::ClassMethods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#373
+  # source://sequel//lib/sequel/model/base.rb#375
   def db=(db); end
 
   # Returns the cached schema information if available or gets it
@@ -11090,7 +11101,7 @@ module Sequel::Model::ClassMethods
   #   # {:id=>{:type=>:integer, :primary_key=>true, ...},
   #   #  :name=>{:type=>:string, :primary_key=>false, ...}}
   #
-  # source://sequel//lib/sequel/model/base.rb#386
+  # source://sequel//lib/sequel/model/base.rb#388
   def db_schema; end
 
   # Define a Model method on the given module that calls the Model
@@ -11114,13 +11125,13 @@ module Sequel::Model::ClassMethods
   #     end
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#139
+  # source://sequel//lib/sequel/model/base.rb#143
   def def_Model(mod); end
 
   # Create a column alias, where the column methods have one name, but the underlying storage uses a
   # different name.
   #
-  # source://sequel//lib/sequel/model/base.rb#394
+  # source://sequel//lib/sequel/model/base.rb#396
   def def_column_alias(meth, column); end
 
   # The default options to use for Model#set_fields.  These are merged with
@@ -11135,25 +11146,25 @@ module Sequel::Model::ClassMethods
   # source://sequel//lib/sequel/model/base.rb#41
   def default_set_fields_options=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def distinct(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def each(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def each_server(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def empty?(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def except(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def exclude(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def exclude_having(*args, **_arg1, &block); end
 
   # SQL string fragment used for faster DELETE statement creation when deleting/destroying
@@ -11173,13 +11184,13 @@ module Sequel::Model::ClassMethods
   #   Artist.fetch("SELECT * FROM artists WHERE name LIKE 'A%'")
   #   Artist.fetch("SELECT * FROM artists WHERE id = ?", 1)
   #
-  # source://sequel//lib/sequel/model/base.rb#1065
+  # source://sequel//lib/sequel/model/base.rb#1141
   def fetch(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def fetch_rows(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def filter(*args, **_arg1, &block); end
 
   # Finds a single record according to the supplied filter.
@@ -11191,7 +11202,7 @@ module Sequel::Model::ClassMethods
   #   Artist.find{name > 'M'}
   #   # SELECT * FROM artists WHERE (name > 'M') LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#410
+  # source://sequel//lib/sequel/model/base.rb#412
   def find(*args, &block); end
 
   # Like +find+ but invokes create with given conditions when record does not
@@ -11207,54 +11218,54 @@ module Sequel::Model::ClassMethods
   #   # SELECT * FROM artists WHERE (name = 'Jim') LIMIT 1
   #   # INSERT INTO artists (name, hometown) VALUES ('Jim', 'Sactown')
   #
-  # source://sequel//lib/sequel/model/base.rb#426
+  # source://sequel//lib/sequel/model/base.rb#428
   def find_or_create(cond, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def first(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def first!(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def for_update(*args, **_arg1, &block); end
 
   # Freeze a model class, disallowing any further changes to it.
   #
-  # source://sequel//lib/sequel/model/base.rb#431
+  # source://sequel//lib/sequel/model/base.rb#433
   def freeze; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def from(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def from_self(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def full_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def full_outer_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def get(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def graph(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def grep(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def group(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def group_and_count(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def group_append(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def group_by(*args, **_arg1, &block); end
 
   # Whether the model has a dataset.  True for most model classes,
@@ -11263,10 +11274,10 @@ module Sequel::Model::ClassMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#454
+  # source://sequel//lib/sequel/model/base.rb#456
   def has_dataset?; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def having(*args, **_arg1, &block); end
 
   # Returns the implicit table name for the model class, which is the demodulized,
@@ -11275,22 +11286,22 @@ module Sequel::Model::ClassMethods
   #   Artist.implicit_table_name # => :artists
   #   Foo::ArtistAlias.implicit_table_name # => :artist_aliases
   #
-  # source://sequel//lib/sequel/model/base.rb#470
+  # source://sequel//lib/sequel/model/base.rb#472
   def implicit_table_name; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def import(*args, **_arg1, &block); end
 
   # Clear the setter_methods cache when a module is included, as it
   # may contain setter methods.
   #
-  # source://sequel//lib/sequel/model/base.rb#460
+  # source://sequel//lib/sequel/model/base.rb#462
   def include(*mods); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def inner_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def insert(*args, **_arg1, &block); end
 
   # The dataset that instance datasets (#this) are based on.  Generally a naked version of
@@ -11299,63 +11310,63 @@ module Sequel::Model::ClassMethods
   # source://sequel//lib/sequel/model/base.rb#53
   def instance_dataset; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def intersect(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def invert(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def join_table(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def last(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def left_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def left_outer_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def limit(*args, **_arg1, &block); end
 
   # Calls #call with the values hash.
   #
-  # source://sequel//lib/sequel/model/base.rb#475
+  # source://sequel//lib/sequel/model/base.rb#477
   def load(values); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def lock_style(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def map(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def max(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def min(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def multi_insert(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def naked(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def natural_full_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def natural_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def natural_left_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def natural_right_join(*args, **_arg1, &block); end
 
   # Mark the model as not having a primary key. Not having a primary key
@@ -11365,28 +11376,28 @@ module Sequel::Model::ClassMethods
   #   Artist.no_primary_key
   #   Artist.primary_key # => nil
   #
-  # source://sequel//lib/sequel/model/base.rb#485
+  # source://sequel//lib/sequel/model/base.rb#487
   def no_primary_key; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def offset(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def order(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def order_append(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def order_by(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def order_more(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def order_prepend(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def paged_each(*args, **_arg1, &block); end
 
   # Loads a plugin for use with the model class, passing optional arguments
@@ -11394,7 +11405,7 @@ module Sequel::Model::ClassMethods
   # require the plugin from sequel/plugins/#{plugin} and then attempt to load
   # the module using a the camelized plugin name under Sequel::Plugins.
   #
-  # source://sequel//lib/sequel/model/base.rb#494
+  # source://sequel//lib/sequel/model/base.rb#496
   def plugin(plugin, *args, **_arg2, &block); end
 
   # Array of plugin modules loaded by this class
@@ -11421,7 +11432,7 @@ module Sequel::Model::ClassMethods
   #   Artist.primary_key_hash(1) # => {:id=>1}
   #   Artist.primary_key_hash([1, 2]) # => {:id1=>1, :id2=>2}
   #
-  # source://sequel//lib/sequel/model/base.rb#525
+  # source://sequel//lib/sequel/model/base.rb#533
   def primary_key_hash(value); end
 
   # Return a qualified identifier or array of qualified identifiers for
@@ -11432,7 +11443,7 @@ module Sequel::Model::ClassMethods
   #   Artist.order(Artist.qualified_primary_key)
   #   # SELECT * FROM artists ORDER BY artists.id
   #
-  # source://sequel//lib/sequel/model/base.rb#545
+  # source://sequel//lib/sequel/model/base.rb#553
   def qualified_primary_key(qualifier = T.unsafe(nil)); end
 
   # Return a hash where the keys are qualified column references.  Uses the given
@@ -11443,10 +11454,10 @@ module Sequel::Model::ClassMethods
   #   Artist.where(Artist.qualified_primary_key_hash(1))
   #   # SELECT * FROM artists WHERE (artists.id = 1)
   #
-  # source://sequel//lib/sequel/model/base.rb#563
+  # source://sequel//lib/sequel/model/base.rb#571
   def qualified_primary_key_hash(value, qualifier = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def qualify(*args, **_arg1, &block); end
 
   # Whether to raise an error instead of returning nil on a failure
@@ -11511,7 +11522,7 @@ module Sequel::Model::ClassMethods
   # this is the default, this only make sense to use in a subclass where the
   # parent class has used +unrestrict_primary_key+.
   #
-  # source://sequel//lib/sequel/model/base.rb#579
+  # source://sequel//lib/sequel/model/base.rb#587
   def restrict_primary_key; end
 
   # Whether or not setting the primary key(s) when using mass assignment (e.g. +set+) is
@@ -11519,55 +11530,55 @@ module Sequel::Model::ClassMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#586
+  # source://sequel//lib/sequel/model/base.rb#594
   def restrict_primary_key?; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def reverse(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def reverse_order(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def right_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def right_outer_join(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_all(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_append(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_group(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_hash(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_hash_groups(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_map(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_more(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_order_map(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_prepend(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def select_set(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def server(*args, **_arg1, &block); end
 
   # Sets the dataset associated with the Model class. +ds+ can be a +Symbol+,
@@ -11597,8 +11608,14 @@ module Sequel::Model::ClassMethods
   #   class Artist < Sequel::Model(DB[:tbl_artists])
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#616
+  # source://sequel//lib/sequel/model/base.rb#624
   def set_dataset(ds, opts = T.unsafe(nil)); end
+
+  # Set instance variables used by instances of this model class.
+  # Only has an effect if shape_friendly is true.
+  #
+  # source://sequel//lib/sequel/model/base.rb#644
+  def set_model_instance_variables(*ivs); end
 
   # Sets the primary key for this model. You can use either a regular
   # or a composite primary key.  To not use a primary key, set to nil
@@ -11615,36 +11632,47 @@ module Sequel::Model::ClassMethods
   #     set_primary_key [:taggable_id, :tag_id]
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#648
+  # source://sequel//lib/sequel/model/base.rb#663
   def set_primary_key(key); end
 
   # Cache of setter methods to allow by default, in order to speed up mass assignment.
   #
-  # source://sequel//lib/sequel/model/base.rb#664
+  # source://sequel//lib/sequel/model/base.rb#679
   def setter_methods; end
+
+  # Whether the model uses a shape friendly design (initializing all potentially
+  # used instance variables to nil).
+  #
+  # source://sequel//lib/sequel/model/base.rb#89
+  def shape_friendly; end
+
+  # Set whether the model should be shape friendly.
+  #
+  # source://sequel//lib/sequel/model/base.rb#684
+  def shape_friendly=(v); end
 
   # Should be the literal primary key column name if this Model's table has a simple primary key, or
   # nil if the model has a compound primary key or no primary key.
   #
-  # source://sequel//lib/sequel/model/base.rb#89
+  # source://sequel//lib/sequel/model/base.rb#93
   def simple_pk; end
 
   # Should be the literal table name if this Model's dataset is a simple table (no select, order, join, etc.),
   # or nil otherwise.  This and simple_pk are used for an optimization in Model[].
   #
-  # source://sequel//lib/sequel/model/base.rb#93
+  # source://sequel//lib/sequel/model/base.rb#97
   def simple_table; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def single_record(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def single_record!(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def single_value(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def single_value!(*args, **_arg1, &block); end
 
   # Whether mass assigning via .create/.new/#set/#update should raise an error
@@ -11653,7 +11681,7 @@ module Sequel::Model::ClassMethods
   # being a primary key field).  If set to false, silently skip
   # any key where the setter method doesn't exist or access to it is restricted.
   #
-  # source://sequel//lib/sequel/model/base.rb#100
+  # source://sequel//lib/sequel/model/base.rb#104
   def strict_param_setting; end
 
   # Whether mass assigning via .create/.new/#set/#update should raise an error
@@ -11662,10 +11690,10 @@ module Sequel::Model::ClassMethods
   # being a primary key field).  If set to false, silently skip
   # any key where the setter method doesn't exist or access to it is restricted.
   #
-  # source://sequel//lib/sequel/model/base.rb#100
+  # source://sequel//lib/sequel/model/base.rb#104
   def strict_param_setting=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def sum(*args, **_arg1, &block); end
 
   # Returns name of primary table for the dataset. If the table for the dataset
@@ -11675,16 +11703,16 @@ module Sequel::Model::ClassMethods
   #   Sequel::Model(:foo).table_name # => :foo
   #   Sequel::Model(Sequel[:foo].as(:bar)).table_name # => :bar
   #
-  # source://sequel//lib/sequel/model/base.rb#674
+  # source://sequel//lib/sequel/model/base.rb#695
   def table_name; end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def to_hash(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def to_hash_groups(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def truncate(*args, **_arg1, &block); end
 
   # Whether to typecast the empty string ('') to nil for columns that
@@ -11693,7 +11721,7 @@ module Sequel::Model::ClassMethods
   # and an empty string would not usually be typecast correctly for other
   # types, so the default is true.
   #
-  # source://sequel//lib/sequel/model/base.rb#107
+  # source://sequel//lib/sequel/model/base.rb#111
   def typecast_empty_string_to_nil; end
 
   # Whether to typecast the empty string ('') to nil for columns that
@@ -11702,39 +11730,39 @@ module Sequel::Model::ClassMethods
   # and an empty string would not usually be typecast correctly for other
   # types, so the default is true.
   #
-  # source://sequel//lib/sequel/model/base.rb#107
+  # source://sequel//lib/sequel/model/base.rb#111
   def typecast_empty_string_to_nil=(_arg0); end
 
   # Whether to typecast attribute values on assignment (default: true).
   # If set to false, no typecasting is done, so it will be left up to the
   # database to typecast the value correctly.
   #
-  # source://sequel//lib/sequel/model/base.rb#112
+  # source://sequel//lib/sequel/model/base.rb#116
   def typecast_on_assignment; end
 
   # Whether to typecast attribute values on assignment (default: true).
   # If set to false, no typecasting is done, so it will be left up to the
   # database to typecast the value correctly.
   #
-  # source://sequel//lib/sequel/model/base.rb#112
+  # source://sequel//lib/sequel/model/base.rb#116
   def typecast_on_assignment=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def unfiltered(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def ungraphed(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def ungrouped(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def union(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def unlimited(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def unordered(*args, **_arg1, &block); end
 
   # Allow the setting of the primary key(s) when using the mass assignment methods.
@@ -11744,52 +11772,52 @@ module Sequel::Model::ClassMethods
   #   Artist.unrestrict_primary_key
   #   Artist.set(id: 1) # No Error
   #
-  # source://sequel//lib/sequel/model/base.rb#684
+  # source://sequel//lib/sequel/model/base.rb#705
   def unrestrict_primary_key; end
 
   # Whether to use a transaction by default when saving/deleting records (default: true).
   # If you are sending database queries in before_* or after_* hooks, you shouldn't change
   # the default setting without a good reason.
   #
-  # source://sequel//lib/sequel/model/base.rb#117
+  # source://sequel//lib/sequel/model/base.rb#121
   def use_transactions; end
 
   # Whether to use a transaction by default when saving/deleting records (default: true).
   # If you are sending database queries in before_* or after_* hooks, you shouldn't change
   # the default setting without a good reason.
   #
-  # source://sequel//lib/sequel/model/base.rb#117
+  # source://sequel//lib/sequel/model/base.rb#121
   def use_transactions=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def where(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def where_all(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def where_each(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def where_single_value(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def with(*args, **_arg1, &block); end
 
   # Return the model instance with the primary key, or nil if there is no matching record.
   #
-  # source://sequel//lib/sequel/model/base.rb#690
+  # source://sequel//lib/sequel/model/base.rb#711
   def with_pk(pk); end
 
   # Return the model instance with the primary key, or raise NoMatchingRow if there is no matching record.
   #
-  # source://sequel//lib/sequel/model/base.rb#695
+  # source://sequel//lib/sequel/model/base.rb#716
   def with_pk!(pk); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def with_recursive(*args, **_arg1, &block); end
 
-  # source://sequel//lib/sequel/model/base.rb#700
+  # source://sequel//lib/sequel/model/base.rb#721
   def with_sql(*args, **_arg1, &block); end
 
   private
@@ -11797,62 +11825,76 @@ module Sequel::Model::ClassMethods
   # Yield to the passed block and if do_raise is false, swallow Sequel::Errors other than DatabaseConnectionError
   # and DatabaseDisconnectError.
   #
-  # source://sequel//lib/sequel/model/base.rb#706
+  # source://sequel//lib/sequel/model/base.rb#727
   def check_non_connection_error(do_raise = T.unsafe(nil)); end
 
   # Convert the given object to a Dataset that should be used as
   # this model's dataset.
   #
-  # source://sequel//lib/sequel/model/base.rb#716
+  # source://sequel//lib/sequel/model/base.rb#737
   def convert_input_dataset(ds); end
 
   # Add the module to the class's dataset_method_modules.  Extend the dataset with the
   # module if the model has a dataset.  Add dataset methods to the class for all
   # public dataset methods.
   #
-  # source://sequel//lib/sequel/model/base.rb#741
+  # source://sequel//lib/sequel/model/base.rb#762
   def dataset_extend(mod, opts = T.unsafe(nil)); end
 
   # Module that the class methods that call dataset methods are kept in.
   # This allows the methods to be overridden and call super with the
   # default behavior.
   #
-  # source://sequel//lib/sequel/model/base.rb#789
+  # source://sequel//lib/sequel/model/base.rb#810
   def dataset_methods_module; end
 
   # Create a column accessor for a column with a method name that is hard to use in ruby code.
   #
-  # source://sequel//lib/sequel/model/base.rb#751
+  # source://sequel//lib/sequel/model/base.rb#772
   def def_bad_column_accessor(column); end
 
   # Create the column accessors.  For columns that can be used as method names directly in ruby code,
   # use a string to define the method for speed.  For other columns names, use a block.
   #
-  # source://sequel//lib/sequel/model/base.rb#768
+  # source://sequel//lib/sequel/model/base.rb#789
   def def_column_accessor(*columns); end
+
+  # Defines the private _initialize_nil_instance_variables method.
+  # If shape_friendly is true, defines a method that initials the
+  # model's instance variables to nil. If shape_friendly is not
+  # true, does nothing.
+  #
+  # source://sequel//lib/sequel/model/base.rb#842
+  def def_initialize_nil_instance_variables; end
 
   # Define a model method that calls the dataset method with the same name.
   #
-  # source://sequel//lib/sequel/model/base.rb#798
+  # source://sequel//lib/sequel/model/base.rb#819
   def def_model_dataset_method(meth); end
+
+  # Yield the default model instance variables. Designed only for
+  # use by def_initialize_nil_instance_variables.
+  #
+  # source://sequel//lib/sequel/model/base.rb#874
+  def each_model_instance_variable; end
 
   # Get the schema from the database, fall back on checking the columns
   # via the database if that will return inaccurate results or if
   # it raises an error.
   #
-  # source://sequel//lib/sequel/model/base.rb#820
+  # source://sequel//lib/sequel/model/base.rb#895
   def get_db_schema(reload = T.unsafe(nil)); end
 
   # Get the array of schema information for the dataset.  Returns nil if
   # the schema information cannot be determined.
   #
-  # source://sequel//lib/sequel/model/base.rb#865
+  # source://sequel//lib/sequel/model/base.rb#940
   def get_db_schema_array(reload); end
 
   # Uncached version of setter_methods, to be overridden by plugins
   # that want to modify the methods used.
   #
-  # source://sequel//lib/sequel/model/base.rb#871
+  # source://sequel//lib/sequel/model/base.rb#946
   def get_setter_methods; end
 
   # If possible, set the dataset for the model subclass as soon as it
@@ -11865,7 +11907,7 @@ module Sequel::Model::ClassMethods
   #   class Artist < Sequel::Model # Causes schema query
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#886
+  # source://sequel//lib/sequel/model/base.rb#961
   def inherited(subclass); end
 
   # A hash of instance variables to automatically set up in subclasses.
@@ -11875,7 +11917,7 @@ module Sequel::Model::ClassMethods
   # :hash_dup :: Assign hash with same keys, but dup all the values
   # Proc :: Call with subclass to do the assignment
   #
-  # source://sequel//lib/sequel/model/base.rb#923
+  # source://sequel//lib/sequel/model/base.rb#998
   def inherited_instance_variables; end
 
   # For the given opts hash and default name or :class option, add a
@@ -11883,24 +11925,24 @@ module Sequel::Model::ClassMethods
   # of the class to use as a string.  The purpose is to allow late
   # binding to the class later using constantize.
   #
-  # source://sequel//lib/sequel/model/base.rb#953
+  # source://sequel//lib/sequel/model/base.rb#1029
   def late_binding_class_option(opts, default); end
 
   # Clear the setter_methods cache when a setter method is added.
   #
-  # source://sequel//lib/sequel/model/base.rb#972
+  # source://sequel//lib/sequel/model/base.rb#1048
   def method_added(meth); end
 
   # Module that the class includes that holds methods the class adds for column accessors and
   # associations so that the methods can be overridden with +super+.
   #
-  # source://sequel//lib/sequel/model/base.rb#979
+  # source://sequel//lib/sequel/model/base.rb#1055
   def overridable_methods_module; end
 
   # Returns the module for the specified plugin. If the module is not
   # defined, the corresponding plugin required.
   #
-  # source://sequel//lib/sequel/model/base.rb#989
+  # source://sequel//lib/sequel/model/base.rb#1065
   def plugin_module(plugin); end
 
   # Find the row in the dataset that matches the primary key.  Uses
@@ -11910,59 +11952,59 @@ module Sequel::Model::ClassMethods
   # it is overridden by plugins which assume that the passed argument
   # is valid.
   #
-  # source://sequel//lib/sequel/model/base.rb#1003
+  # source://sequel//lib/sequel/model/base.rb#1079
   def primary_key_lookup(pk); end
 
   # Whether to reload the database schema by default, ignoring any cached value.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1016
+  # source://sequel//lib/sequel/model/base.rb#1092
   def reload_db_schema?; end
 
   # Reset the cached fast primary lookup SQL if a simple table and primary key
   # are used, or set it to nil if not used.
   #
-  # source://sequel//lib/sequel/model/base.rb#1022
+  # source://sequel//lib/sequel/model/base.rb#1098
   def reset_fast_pk_lookup_sql; end
 
   # Reset the instance dataset to a modified copy of the current dataset,
   # should be used whenever the model's dataset is modified.
   #
-  # source://sequel//lib/sequel/model/base.rb#1033
+  # source://sequel//lib/sequel/model/base.rb#1109
   def reset_instance_dataset; end
 
   # Set the columns for this model and create accessor methods for each column.
   #
-  # source://sequel//lib/sequel/model/base.rb#1038
+  # source://sequel//lib/sequel/model/base.rb#1114
   def set_columns(new_columns); end
 
   # Set the dataset's row_proc to the current model.
   #
-  # source://sequel//lib/sequel/model/base.rb#1045
+  # source://sequel//lib/sequel/model/base.rb#1121
   def set_dataset_row_proc(ds); end
 
   # Reset the fast primary key lookup SQL when the simple_pk value changes.
   #
-  # source://sequel//lib/sequel/model/base.rb#1050
+  # source://sequel//lib/sequel/model/base.rb#1126
   def simple_pk=(pk); end
 
   # Reset the fast primary key lookup SQL when the simple_table value changes.
   #
-  # source://sequel//lib/sequel/model/base.rb#1056
+  # source://sequel//lib/sequel/model/base.rb#1132
   def simple_table=(t); end
 end
 
 # DatasetMethods contains methods that all model datasets have.
 #
-# source://sequel//lib/sequel/model/base.rb#2181
+# source://sequel//lib/sequel/model/base.rb#2267
 module Sequel::Model::DatasetMethods
   # Assume if a single integer is given that it is a lookup by primary
   # key, and call with_pk with the argument.
   #
   #   Artist.dataset[1] # SELECT * FROM artists WHERE (id = 1) LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2193
+  # source://sequel//lib/sequel/model/base.rb#2279
   def [](*args); end
 
   # This allows you to call +as_hash+ without any arguments, which will
@@ -11974,7 +12016,7 @@ module Sequel::Model::DatasetMethods
   #   #     2=>#<Artist {:id=>2, ...}>,
   #   #     ...}
   #
-  # source://sequel//lib/sequel/model/base.rb#2253
+  # source://sequel//lib/sequel/model/base.rb#2339
   def as_hash(key_column = T.unsafe(nil), value_column = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Destroy each row in the dataset by instantiating it and then calling
@@ -11987,7 +12029,7 @@ module Sequel::Model::DatasetMethods
   #   # DELETE FROM artists WHERE (id = 2)
   #   # ...
   #
-  # source://sequel//lib/sequel/model/base.rb#2210
+  # source://sequel//lib/sequel/model/base.rb#2296
   def destroy; end
 
   # If there is no order already defined on this dataset, order it by
@@ -11996,14 +12038,14 @@ module Sequel::Model::DatasetMethods
   #   Album.last
   #   # SELECT * FROM albums ORDER BY id DESC LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2221
+  # source://sequel//lib/sequel/model/base.rb#2307
   def last(*a, &block); end
 
   # The model class associated with this dataset
   #
   #   Artist.dataset.model # => Artist
   #
-  # source://sequel//lib/sequel/model/base.rb#2185
+  # source://sequel//lib/sequel/model/base.rb#2271
   def model; end
 
   # If there is no order already defined on this dataset, order it by
@@ -12015,12 +12057,12 @@ module Sequel::Model::DatasetMethods
   #   # SELECT * FROM albums ORDER BY id LIMIT 1000 OFFSET 2000
   #   # ...
   #
-  # source://sequel//lib/sequel/model/base.rb#2237
+  # source://sequel//lib/sequel/model/base.rb#2323
   def paged_each(*a, &block); end
 
   # Alias of as_hash for backwards compatibility.
   #
-  # source://sequel//lib/sequel/model/base.rb#2263
+  # source://sequel//lib/sequel/model/base.rb#2349
   def to_hash(*a); end
 
   # Given a primary key value, return the first record in the dataset with that primary key
@@ -12034,13 +12076,13 @@ module Sequel::Model::DatasetMethods
   #   Artist.dataset.with_pk([1, 2])
   #   # SELECT * FROM artists WHERE ((artists.id1 = 1) AND (artists.id2 = 2)) LIMIT 1
   #
-  # source://sequel//lib/sequel/model/base.rb#2277
+  # source://sequel//lib/sequel/model/base.rb#2363
   def with_pk(pk); end
 
   # Same as with_pk, but raises NoMatchingRow instead of returning nil if no
   # row matches.
   #
-  # source://sequel//lib/sequel/model/base.rb#2287
+  # source://sequel//lib/sequel/model/base.rb#2373
   def with_pk!(pk); end
 
   private
@@ -12048,28 +12090,28 @@ module Sequel::Model::DatasetMethods
   # Return the dataset ordered by the model's primary key.  This should not
   # be used if the model does not have a primary key.
   #
-  # source://sequel//lib/sequel/model/base.rb#2295
+  # source://sequel//lib/sequel/model/base.rb#2381
   def _force_primary_key_order; end
 
   # If the dataset is not already ordered, and the model has a primary key,
   # return a clone ordered by the primary key.
   #
-  # source://sequel//lib/sequel/model/base.rb#2301
+  # source://sequel//lib/sequel/model/base.rb#2387
   def _primary_key_order; end
 
   # A cached placeholder literalizer, if one exists for the current dataset.
   #
-  # source://sequel//lib/sequel/model/base.rb#2308
+  # source://sequel//lib/sequel/model/base.rb#2394
   def _with_pk_loader; end
 
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2333
+  # source://sequel//lib/sequel/model/base.rb#2419
   def non_sql_option?(key); end
 
   # The primary key for the dataset's model, qualified if the dataset is joined.
   #
-  # source://sequel//lib/sequel/model/base.rb#2325
+  # source://sequel//lib/sequel/model/base.rb#2411
   def unambiguous_primary_key; end
 end
 
@@ -12190,7 +12232,7 @@ Sequel::Model::HOOKS = T.let(T.unsafe(nil), Array)
 #   instance, and the getter methods will check for an instance setting, then
 #   try the class setting if no instance setting has been set.
 #
-# source://sequel//lib/sequel/model/base.rb#1082
+# source://sequel//lib/sequel/model/base.rb#1158
 module Sequel::Model::InstanceMethods
   # Creates new instance and passes the given values to set.
   # If a block is given, yield the instance to the block.
@@ -12207,12 +12249,12 @@ module Sequel::Model::InstanceMethods
   # @yield [_self]
   # @yieldparam _self [Sequel::Model::InstanceMethods] the object that the method was called on
   #
-  # source://sequel//lib/sequel/model/base.rb#1136
+  # source://sequel//lib/sequel/model/base.rb#1212
   def initialize(values = T.unsafe(nil)); end
 
   # Alias of eql?
   #
-  # source://sequel//lib/sequel/model/base.rb#1173
+  # source://sequel//lib/sequel/model/base.rb#1259
   def ==(obj); end
 
   # Case equality.  By default, checks equality of the primary key value, see
@@ -12222,14 +12264,14 @@ module Sequel::Model::InstanceMethods
   #   Artist.new === Artist.new # => false
   #   Artist[1].set(name: 'Bob') === Artist[1] # => true
   #
-  # source://sequel//lib/sequel/model/base.rb#1183
+  # source://sequel//lib/sequel/model/base.rb#1269
   def ===(obj); end
 
   # Returns value of the column's attribute.
   #
   #   Artist[1][:id] #=> 1
   #
-  # source://sequel//lib/sequel/model/base.rb#1148
+  # source://sequel//lib/sequel/model/base.rb#1234
   def [](column); end
 
   # Sets the value for the given column.  If typecasting is enabled for
@@ -12241,59 +12283,59 @@ module Sequel::Model::InstanceMethods
   #   a[:name] = 'Bob'
   #   a.values #=> {:name=>'Bob'}
   #
-  # source://sequel//lib/sequel/model/base.rb#1160
+  # source://sequel//lib/sequel/model/base.rb#1246
   def []=(column, value); end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def after_create; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def after_destroy; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def after_save; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def after_update; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def after_validation; end
 
-  # source://sequel//lib/sequel/model/base.rb#1084
+  # source://sequel//lib/sequel/model/base.rb#1160
   def around_create; end
 
-  # source://sequel//lib/sequel/model/base.rb#1084
+  # source://sequel//lib/sequel/model/base.rb#1160
   def around_destroy; end
 
-  # source://sequel//lib/sequel/model/base.rb#1084
+  # source://sequel//lib/sequel/model/base.rb#1160
   def around_save; end
 
-  # source://sequel//lib/sequel/model/base.rb#1084
+  # source://sequel//lib/sequel/model/base.rb#1160
   def around_update; end
 
-  # source://sequel//lib/sequel/model/base.rb#1084
+  # source://sequel//lib/sequel/model/base.rb#1160
   def around_validation; end
 
   # The autoincrementing primary key for this model object. Should be
   # overridden if you have a composite primary key with one part of it
   # being autoincrementing.
   #
-  # source://sequel//lib/sequel/model/base.rb#1215
+  # source://sequel//lib/sequel/model/base.rb#1301
   def autoincrementing_primary_key; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def before_create; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def before_destroy; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def before_save; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def before_update; end
 
-  # source://sequel//lib/sequel/model/base.rb#1083
+  # source://sequel//lib/sequel/model/base.rb#1159
   def before_validation; end
 
   # Cancel the current action.  Should be called in before hooks to halt
@@ -12301,7 +12343,7 @@ module Sequel::Model::InstanceMethods
   # the model instance is configured to raise exceptions on failure,
   # sets the message to use for the raised HookFailed exception.
   #
-  # source://sequel//lib/sequel/model/base.rb#1223
+  # source://sequel//lib/sequel/model/base.rb#1309
   def cancel_action(msg = T.unsafe(nil)); end
 
   # The columns that have been updated.  This isn't completely accurate,
@@ -12312,16 +12354,16 @@ module Sequel::Model::InstanceMethods
   #   a.name = 'Bob'
   #   a.changed_columns # => [:name]
   #
-  # source://sequel//lib/sequel/model/base.rb#1234
+  # source://sequel//lib/sequel/model/base.rb#1320
   def changed_columns; end
 
-  # source://sequel//lib/sequel/model/base.rb#1090
+  # source://sequel//lib/sequel/model/base.rb#1166
   def columns; end
 
-  # source://sequel//lib/sequel/model/base.rb#1090
+  # source://sequel//lib/sequel/model/base.rb#1166
   def db; end
 
-  # source://sequel//lib/sequel/model/base.rb#1090
+  # source://sequel//lib/sequel/model/base.rb#1166
   def db_schema; end
 
   # Deletes and returns +self+.  Does not run destroy hooks.
@@ -12332,7 +12374,7 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1243
+  # source://sequel//lib/sequel/model/base.rb#1329
   def delete; end
 
   # Like delete but runs hooks before and after delete.
@@ -12344,7 +12386,7 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1255
+  # source://sequel//lib/sequel/model/base.rb#1341
   def destroy(opts = T.unsafe(nil)); end
 
   # Iterates through all of the current values using each.
@@ -12353,7 +12395,7 @@ module Sequel::Model::InstanceMethods
   #  # id => 1
   #  # name => 'Bob'
   #
-  # source://sequel//lib/sequel/model/base.rb#1265
+  # source://sequel//lib/sequel/model/base.rb#1351
   def each(&block); end
 
   # Compares model instances by values.
@@ -12364,13 +12406,13 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1274
+  # source://sequel//lib/sequel/model/base.rb#1360
   def eql?(obj); end
 
   # Returns the validation errors associated with this object.
   # See +Errors+.
   #
-  # source://sequel//lib/sequel/model/base.rb#1280
+  # source://sequel//lib/sequel/model/base.rb#1366
   def errors; end
 
   # Returns true when current instance exists, false otherwise.
@@ -12386,20 +12428,20 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1297
+  # source://sequel//lib/sequel/model/base.rb#1383
   def exists?; end
 
   # Ignore the model's setter method cache when this instances extends a module, as the
   # module may contain setter methods.
   #
-  # source://sequel//lib/sequel/model/base.rb#1303
+  # source://sequel//lib/sequel/model/base.rb#1389
   def extend(mod); end
 
   # Freeze the object in such a way that it is still usable but not modifiable.
   # Once an object is frozen, you cannot modify it's values, changed_columns,
   # errors, or dataset.
   #
-  # source://sequel//lib/sequel/model/base.rb#1311
+  # source://sequel//lib/sequel/model/base.rb#1397
   def freeze; end
 
   # Get the value of the column.  Takes a single symbol or string argument.
@@ -12407,7 +12449,7 @@ module Sequel::Model::InstanceMethods
   # be overridden if you have columns that conflict with existing
   # method names.
   #
-  # source://sequel//lib/sequel/model/base.rb#1115
+  # source://sequel//lib/sequel/model/base.rb#1191
   def get_column_value(*_arg0); end
 
   # Value that should be unique for objects with the same class and pk (if pk is not nil), or
@@ -12418,7 +12460,7 @@ module Sequel::Model::InstanceMethods
   #   Artist.new.hash == Artist.new.hash # true
   #   Artist.new(name: 'Bob').hash == Artist.new.hash # false
   #
-  # source://sequel//lib/sequel/model/base.rb#1329
+  # source://sequel//lib/sequel/model/base.rb#1415
   def hash; end
 
   # Returns value for the :id attribute, even if the primary key is
@@ -12426,13 +12468,19 @@ module Sequel::Model::InstanceMethods
   #
   #   Artist[1].id # => 1
   #
-  # source://sequel//lib/sequel/model/base.rb#1344
+  # source://sequel//lib/sequel/model/base.rb#1430
   def id; end
+
+  # Initialize a new record using values retrieved from a database.
+  # This should not be called directly, only via Model.call.
+  #
+  # source://sequel//lib/sequel/model/base.rb#1224
+  def initialize_from_db(values); end
 
   # Returns a string representation of the model instance including
   # the class name and values.
   #
-  # source://sequel//lib/sequel/model/base.rb#1350
+  # source://sequel//lib/sequel/model/base.rb#1436
   def inspect; end
 
   # Returns the keys in +values+.  May not include all column names.
@@ -12441,7 +12489,7 @@ module Sequel::Model::InstanceMethods
   #   Artist.new(name: 'Bob').keys # => [:name]
   #   Artist[1].keys # => [:id, :name]
   #
-  # source://sequel//lib/sequel/model/base.rb#1359
+  # source://sequel//lib/sequel/model/base.rb#1445
   def keys; end
 
   # Refresh this record using +:update+ lock style (by default, or the specified style when given),
@@ -12467,7 +12515,7 @@ module Sequel::Model::InstanceMethods
   #     a.update(name: 'B')
   #   end
   #
-  # source://sequel//lib/sequel/model/base.rb#1385
+  # source://sequel//lib/sequel/model/base.rb#1471
   def lock!(style = T.unsafe(nil)); end
 
   # Remove elements of the model object that make marshalling fail. Returns self.
@@ -12476,7 +12524,7 @@ module Sequel::Model::InstanceMethods
   #   a.marshallable!
   #   Marshal.dump(a)
   #
-  # source://sequel//lib/sequel/model/base.rb#1395
+  # source://sequel//lib/sequel/model/base.rb#1481
   def marshallable!; end
 
   # class is defined in Object, but it is also a keyword,
@@ -12486,7 +12534,7 @@ module Sequel::Model::InstanceMethods
   #
   #   Artist.new.model # => Artist
   #
-  # source://sequel//lib/sequel/model/base.rb#1210
+  # source://sequel//lib/sequel/model/base.rb#1296
   def model; end
 
   # Explicitly mark the object as modified, so +save_changes+/+update+ will
@@ -12505,7 +12553,7 @@ module Sequel::Model::InstanceMethods
   #   a.modified!(:name)
   #   a.name.gsub!(/[aeou]/, 'i')
   #
-  # source://sequel//lib/sequel/model/base.rb#1415
+  # source://sequel//lib/sequel/model/base.rb#1501
   def modified!(column = T.unsafe(nil)); end
 
   # Whether this object has been modified since last saved, used by
@@ -12526,7 +12574,7 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1435
+  # source://sequel//lib/sequel/model/base.rb#1521
   def modified?(column = T.unsafe(nil)); end
 
   # Returns true if the current instance represents a new record.
@@ -12536,7 +12584,7 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1447
+  # source://sequel//lib/sequel/model/base.rb#1533
   def new?; end
 
   # Returns the primary key value identifying the model instance.
@@ -12548,7 +12596,7 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1457
+  # source://sequel//lib/sequel/model/base.rb#1543
   def pk; end
 
   # Case equality.  By default, checks equality of the primary key value, see
@@ -12566,7 +12614,7 @@ module Sequel::Model::InstanceMethods
   #   Artist.new.pk_equal?(Artist.new) # => false
   #   Artist[1].set(name: 'Bob').pk_equal?(Artist[1]) # => true
   #
-  # source://sequel//lib/sequel/model/base.rb#1202
+  # source://sequel//lib/sequel/model/base.rb#1288
   def pk_equal?(obj); end
 
   # Returns a hash mapping the receivers primary key column(s) to their values.
@@ -12574,10 +12622,10 @@ module Sequel::Model::InstanceMethods
   #   Artist[1].pk_hash # => {:id=>1}
   #   Artist[[1, 2]].pk_hash # => {:id1=>1, :id2=>2}
   #
-  # source://sequel//lib/sequel/model/base.rb#1471
+  # source://sequel//lib/sequel/model/base.rb#1557
   def pk_hash; end
 
-  # source://sequel//lib/sequel/model/base.rb#1090
+  # source://sequel//lib/sequel/model/base.rb#1166
   def primary_key; end
 
   # Returns a hash mapping the receivers qualified primary key column(s) to their values.
@@ -12587,19 +12635,19 @@ module Sequel::Model::InstanceMethods
   #   Artist[[1, 2]].qualified_pk_hash
   #   # => {Sequel[:artists][:id1]=>1, Sequel[:artists][:id2]=>2}
   #
-  # source://sequel//lib/sequel/model/base.rb#1481
+  # source://sequel//lib/sequel/model/base.rb#1567
   def qualified_pk_hash(qualifier = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def raise_on_save_failure; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def raise_on_save_failure=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def raise_on_typecast_failure; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def raise_on_typecast_failure=(_arg0); end
 
   # Reloads attributes from database and returns self. Also clears all
@@ -12613,12 +12661,12 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1493
+  # source://sequel//lib/sequel/model/base.rb#1579
   def refresh; end
 
   # Alias of refresh, but not aliased directly to make overriding in a plugin easier.
   #
-  # source://sequel//lib/sequel/model/base.rb#1500
+  # source://sequel//lib/sequel/model/base.rb#1586
   def reload; end
 
   # Remove a key from the instances values, and return the value
@@ -12632,13 +12680,13 @@ module Sequel::Model::InstanceMethods
   #   a.values
   #   # => {id: 1}
   #
-  # source://sequel//lib/sequel/model/base.rb#1514
+  # source://sequel//lib/sequel/model/base.rb#1600
   def remove_key!(key); end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def require_modification; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def require_modification=(_arg0); end
 
   # Creates or updates the record, after making sure the record
@@ -12669,7 +12717,7 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Sequel::Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1543
+  # source://sequel//lib/sequel/model/base.rb#1629
   def save(opts = T.unsafe(nil)); end
 
   # Saves only changed columns if the object has been modified.
@@ -12682,7 +12730,7 @@ module Sequel::Model::InstanceMethods
   #   a.save_changes # UPDATE artists SET name = 'Bob' WHERE (id = 1)
   #   # => #<Artist {:id=>1, :name=>'Jim', ...}
   #
-  # source://sequel//lib/sequel/model/base.rb#1562
+  # source://sequel//lib/sequel/model/base.rb#1648
   def save_changes(opts = T.unsafe(nil)); end
 
   # Updates the instance with the supplied values with support for virtual
@@ -12693,7 +12741,7 @@ module Sequel::Model::InstanceMethods
   #   artist.set(name: 'Jim')
   #   artist.name # => 'Jim'
   #
-  # source://sequel//lib/sequel/model/base.rb#1573
+  # source://sequel//lib/sequel/model/base.rb#1659
   def set(hash); end
 
   # Set the value of the column.  Takes two arguments.  The first is a
@@ -12703,7 +12751,7 @@ module Sequel::Model::InstanceMethods
   # columns that conflict with existing method names (unlikely for setter
   # methods, but possible).
   #
-  # source://sequel//lib/sequel/model/base.rb#1123
+  # source://sequel//lib/sequel/model/base.rb#1199
   def set_column_value(*_arg0); end
 
   # For each of the fields in the given array +fields+, call the setter
@@ -12733,17 +12781,17 @@ module Sequel::Model::InstanceMethods
   #   artist.set_fields({}, [:name], missing: :raise)
   #   # Sequel::Error raised
   #
-  # source://sequel//lib/sequel/model/base.rb#1603
+  # source://sequel//lib/sequel/model/base.rb#1689
   def set_fields(hash, fields, opts = T.unsafe(nil)); end
 
   # Set the shard that this object is tied to.  Returns self.
   #
-  # source://sequel//lib/sequel/model/base.rb#1629
+  # source://sequel//lib/sequel/model/base.rb#1715
   def set_server(s); end
 
   # Clear the setter_methods cache when a method is added
   #
-  # source://sequel//lib/sequel/model/base.rb#1636
+  # source://sequel//lib/sequel/model/base.rb#1722
   def singleton_method_added(meth); end
 
   # Skip all validation of the object on the next call to #save,
@@ -12752,13 +12800,13 @@ module Sequel::Model::InstanceMethods
   # saving and the <tt>validate: false</tt> option cannot be passed to
   # #save.
   #
-  # source://sequel//lib/sequel/model/base.rb#1646
+  # source://sequel//lib/sequel/model/base.rb#1732
   def skip_validation_on_next_save!; end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def strict_param_setting; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def strict_param_setting=(_arg0); end
 
   # Returns naked dataset that should return only the row related to this instance.
@@ -12768,7 +12816,7 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/model/base.rb#1654
+  # source://sequel//lib/sequel/model/base.rb#1740
   def this; end
 
   # The hash of attribute values.  Keys are symbols with the names of the
@@ -12779,26 +12827,26 @@ module Sequel::Model::InstanceMethods
   #   Artist.new(name: 'Bob').values # => {:name=>'Bob'}
   #   Artist[1].values # => {:id=>1, :name=>'Jim', ...}
   #
-  # source://sequel//lib/sequel/model/base.rb#1109
+  # source://sequel//lib/sequel/model/base.rb#1185
   def to_hash; end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def typecast_empty_string_to_nil; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def typecast_empty_string_to_nil=(_arg0); end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def typecast_on_assignment; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def typecast_on_assignment=(_arg0); end
 
   # Runs #set with the passed hash and then runs save_changes.
   #
   #   artist.update(name: 'Jim') # UPDATE artists SET name = 'Jim' WHERE (id = 1)
   #
-  # source://sequel//lib/sequel/model/base.rb#1663
+  # source://sequel//lib/sequel/model/base.rb#1749
   def update(hash); end
 
   # Update the instance's values by calling set_fields with the arguments, then
@@ -12810,13 +12858,13 @@ module Sequel::Model::InstanceMethods
   #   artist.update_fields({hometown: 'LA'}, [:name])
   #   # UPDATE artists SET name = NULL WHERE (id = 1)
   #
-  # source://sequel//lib/sequel/model/base.rb#1675
+  # source://sequel//lib/sequel/model/base.rb#1761
   def update_fields(hash, fields, opts = T.unsafe(nil)); end
 
-  # source://sequel//lib/sequel/model/base.rb#1097
+  # source://sequel//lib/sequel/model/base.rb#1173
   def use_transactions; end
 
-  # source://sequel//lib/sequel/model/base.rb#1098
+  # source://sequel//lib/sequel/model/base.rb#1174
   def use_transactions=(_arg0); end
 
   # Validates the object and returns true if no errors are reported.
@@ -12827,7 +12875,7 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1694
+  # source://sequel//lib/sequel/model/base.rb#1780
   def valid?(opts = T.unsafe(nil)); end
 
   # Validates the object.  If the object is invalid, errors should be added
@@ -12837,7 +12885,7 @@ module Sequel::Model::InstanceMethods
   # user code, call <tt>valid?</tt> instead to check if an object
   # is valid.
   #
-  # source://sequel//lib/sequel/model/base.rb#1686
+  # source://sequel//lib/sequel/model/base.rb#1772
   def validate; end
 
   # The hash of attribute values.  Keys are symbols with the names of the
@@ -12848,26 +12896,26 @@ module Sequel::Model::InstanceMethods
   #   Artist.new(name: 'Bob').values # => {:name=>'Bob'}
   #   Artist[1].values # => {:id=>1, :name=>'Jim', ...}
   #
-  # source://sequel//lib/sequel/model/base.rb#1108
+  # source://sequel//lib/sequel/model/base.rb#1184
   def values; end
 
   private
 
   # Add a column as a changed column.
   #
-  # source://sequel//lib/sequel/model/base.rb#1703
+  # source://sequel//lib/sequel/model/base.rb#1789
   def _add_changed_column(column); end
 
   # Internal changed_columns method that just returns stored array.
   #
-  # source://sequel//lib/sequel/model/base.rb#1709
+  # source://sequel//lib/sequel/model/base.rb#1795
   def _changed_columns; end
 
   # Clear the changed columns. Reason is the reason for clearing
   # the columns, and should be one of: :initialize, :refresh, :create
   # or :update.
   #
-  # source://sequel//lib/sequel/model/base.rb#1716
+  # source://sequel//lib/sequel/model/base.rb#1802
   def _clear_changed_columns(_reason); end
 
   # Do the deletion of the object's dataset, and check that the row
@@ -12875,54 +12923,54 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [NoExistingObject]
   #
-  # source://sequel//lib/sequel/model/base.rb#1722
+  # source://sequel//lib/sequel/model/base.rb#1808
   def _delete; end
 
   # The dataset to use when deleting the object.  The same as the object's
   # dataset by default.
   #
-  # source://sequel//lib/sequel/model/base.rb#1730
+  # source://sequel//lib/sequel/model/base.rb#1816
   def _delete_dataset; end
 
   # Actually do the deletion of the object's dataset.  Return the
   # number of rows modified.
   #
-  # source://sequel//lib/sequel/model/base.rb#1736
+  # source://sequel//lib/sequel/model/base.rb#1822
   def _delete_without_checking; end
 
   # Internal destroy method, separted from destroy to
   # allow running inside a transaction
   #
-  # source://sequel//lib/sequel/model/base.rb#1749
+  # source://sequel//lib/sequel/model/base.rb#1835
   def _destroy(opts); end
 
   # Internal delete method to call when destroying an object,
   # separated from delete to allow you to override destroy's version
   # without affecting delete.
   #
-  # source://sequel//lib/sequel/model/base.rb#1764
+  # source://sequel//lib/sequel/model/base.rb#1850
   def _destroy_delete; end
 
   # Insert the record into the database, returning the primary key if
   # the record should be refreshed from the database.
   #
-  # source://sequel//lib/sequel/model/base.rb#1770
+  # source://sequel//lib/sequel/model/base.rb#1856
   def _insert; end
 
   # The dataset to use when inserting a new object.   The same as the model's
   # dataset by default.
   #
-  # source://sequel//lib/sequel/model/base.rb#1788
+  # source://sequel//lib/sequel/model/base.rb#1874
   def _insert_dataset; end
 
   # Insert into the given dataset and return the primary key created (if any).
   #
-  # source://sequel//lib/sequel/model/base.rb#1793
+  # source://sequel//lib/sequel/model/base.rb#1879
   def _insert_raw(ds); end
 
   # Insert into the given dataset and return the hash of column values.
   #
-  # source://sequel//lib/sequel/model/base.rb#1798
+  # source://sequel//lib/sequel/model/base.rb#1884
   def _insert_select_raw(ds); end
 
   # The hash of attribute values.  Keys are symbols with the names of the
@@ -12934,42 +12982,42 @@ module Sequel::Model::InstanceMethods
   #   Artist[1].values # => {:id=>1, :name=>'Jim', ...}
   # The values hash to use when inserting a new record.
   #
-  # source://sequel//lib/sequel/model/base.rb#1803
+  # source://sequel//lib/sequel/model/base.rb#1889
   def _insert_values; end
 
   # Refresh using a particular dataset, used inside save to make sure the same server
   # is used for reading newly inserted values from the database
   #
-  # source://sequel//lib/sequel/model/base.rb#1808
+  # source://sequel//lib/sequel/model/base.rb#1894
   def _refresh(dataset); end
 
   # Get the row of column data from the database.
   #
-  # source://sequel//lib/sequel/model/base.rb#1814
+  # source://sequel//lib/sequel/model/base.rb#1900
   def _refresh_get(dataset); end
 
   # Set the values to the given hash after refreshing.
   #
-  # source://sequel//lib/sequel/model/base.rb#1826
+  # source://sequel//lib/sequel/model/base.rb#1912
   def _refresh_set_values(h); end
 
   # Internal version of save, split from save to allow running inside
   # it's own transaction.
   #
-  # source://sequel//lib/sequel/model/base.rb#1832
+  # source://sequel//lib/sequel/model/base.rb#1918
   def _save(opts); end
 
   # Refresh the object after saving it, used to get
   # default values of all columns.  Separated from _save so it
   # can be overridden to avoid the refresh.
   #
-  # source://sequel//lib/sequel/model/base.rb#1888
+  # source://sequel//lib/sequel/model/base.rb#1974
   def _save_refresh; end
 
   # Set values to the provided hash.  Called after a create,
   # to set the full values from the database in the model instance.
   #
-  # source://sequel//lib/sequel/model/base.rb#1895
+  # source://sequel//lib/sequel/model/base.rb#1981
   def _save_set_values(h); end
 
   # Return a hash of values used when saving all columns of an
@@ -12979,14 +13027,14 @@ module Sequel::Model::InstanceMethods
   # databases don't like you setting primary key values even
   # to their existing values.
   #
-  # source://sequel//lib/sequel/model/base.rb#1905
+  # source://sequel//lib/sequel/model/base.rb#1991
   def _save_update_all_columns_hash; end
 
   # Return a hash of values used when saving changed columns of an
   # existing object.  Defaults to all of the objects current values
   # that are recorded as modified.
   #
-  # source://sequel//lib/sequel/model/base.rb#1915
+  # source://sequel//lib/sequel/model/base.rb#2001
   def _save_update_changed_colums_hash; end
 
   # Validate the object if validating on save. Skips validation
@@ -12996,7 +13044,7 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1924
+  # source://sequel//lib/sequel/model/base.rb#2010
   def _save_valid?(opts); end
 
   # Update this instance's dataset with the supplied column hash,
@@ -13004,99 +13052,99 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [NoExistingObject]
   #
-  # source://sequel//lib/sequel/model/base.rb#1942
+  # source://sequel//lib/sequel/model/base.rb#2028
   def _update(columns); end
 
   # Call _update with the given columns, if any are present.
   # Plugins can override this method in order to update with
   # additional columns, even when the column hash is initially empty.
   #
-  # source://sequel//lib/sequel/model/base.rb#1936
+  # source://sequel//lib/sequel/model/base.rb#2022
   def _update_columns(columns); end
 
   # The dataset to use when updating an object.  The same as the object's
   # dataset by default.
   #
-  # source://sequel//lib/sequel/model/base.rb#1950
+  # source://sequel//lib/sequel/model/base.rb#2036
   def _update_dataset; end
 
   # Update this instances dataset with the supplied column hash.
   #
-  # source://sequel//lib/sequel/model/base.rb#1955
+  # source://sequel//lib/sequel/model/base.rb#2041
   def _update_without_checking(columns); end
 
   # Whether to use insert_select when inserting a new row.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1960
+  # source://sequel//lib/sequel/model/base.rb#2046
   def _use_insert_select?(ds); end
 
   # Internal validation method, running validation hooks.
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#1965
+  # source://sequel//lib/sequel/model/base.rb#2051
   def _valid?(opts); end
 
   # Change the value of the column to given value, recording the change.
   #
-  # source://sequel//lib/sequel/model/base.rb#2008
+  # source://sequel//lib/sequel/model/base.rb#2094
   def change_column_value(column, value); end
 
   # If not raising on failure, check for HookFailed
   # being raised by yielding and swallow it.
   #
-  # source://sequel//lib/sequel/model/base.rb#1988
+  # source://sequel//lib/sequel/model/base.rb#2074
   def checked_save_failure(opts); end
 
   # If transactions should be used, wrap the yield in a transaction block.
   #
-  # source://sequel//lib/sequel/model/base.rb#2001
+  # source://sequel//lib/sequel/model/base.rb#2087
   def checked_transaction(opts = T.unsafe(nil), &block); end
 
   # Default error class used for errors.
   #
-  # source://sequel//lib/sequel/model/base.rb#2014
+  # source://sequel//lib/sequel/model/base.rb#2100
   def errors_class; end
 
   # A HookFailed exception for the given message tied to the current instance.
   #
-  # source://sequel//lib/sequel/model/base.rb#2019
+  # source://sequel//lib/sequel/model/base.rb#2105
   def hook_failed_error(msg); end
 
   # Clone constructor -- freeze internal data structures if the original's
   # are frozen.
   #
-  # source://sequel//lib/sequel/model/base.rb#2025
+  # source://sequel//lib/sequel/model/base.rb#2111
   def initialize_clone(other); end
 
   # Copy constructor -- Duplicate internal data structures.
   #
-  # source://sequel//lib/sequel/model/base.rb#2032
+  # source://sequel//lib/sequel/model/base.rb#2118
   def initialize_copy(other); end
 
   # Set the columns with the given hash.  By default, the same as +set+, but
   # exists so it can be overridden.  This is called only for new records, before
   # changed_columns is cleared.
   #
-  # source://sequel//lib/sequel/model/base.rb#2043
+  # source://sequel//lib/sequel/model/base.rb#2129
   def initialize_set(h); end
 
   # Default inspect output for the inspect, by default, just showing the class.
   #
-  # source://sequel//lib/sequel/model/base.rb#2048
+  # source://sequel//lib/sequel/model/base.rb#2134
   def inspect_prefix; end
 
   # Default inspect output for the values hash, overwrite to change what #inspect displays.
   #
-  # source://sequel//lib/sequel/model/base.rb#2053
+  # source://sequel//lib/sequel/model/base.rb#2139
   def inspect_values; end
 
   # Raise an error appropriate to the hook type. May be swallowed by
   # checked_save_failure depending on the raise_on_failure? setting.
   #
-  # source://sequel//lib/sequel/model/base.rb#2067
+  # source://sequel//lib/sequel/model/base.rb#2153
   def raise_hook_failure(type = T.unsafe(nil)); end
 
   # Whether to raise or return false if this action fails. If the
@@ -13106,18 +13154,18 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2061
+  # source://sequel//lib/sequel/model/base.rb#2147
   def raise_on_failure?(opts); end
 
   # Get the ruby class or classes related to the given column's type.
   #
-  # source://sequel//lib/sequel/model/base.rb#2081
+  # source://sequel//lib/sequel/model/base.rb#2167
   def schema_type_class(column); end
 
   # Call setter methods based on keys in hash, with the appropriate values.
   # Restrict which methods can be called based on the provided type.
   #
-  # source://sequel//lib/sequel/model/base.rb#2089
+  # source://sequel//lib/sequel/model/base.rb#2175
   def set_restricted(hash, type); end
 
   # Returns all methods that can be used for attribute assignment (those that end with =),
@@ -13127,13 +13175,13 @@ module Sequel::Model::InstanceMethods
   # :all :: Allow setting all setters, except those specifically restricted (such as ==).
   # Array :: Only allow setting of columns in the given array.
   #
-  # source://sequel//lib/sequel/model/base.rb#2120
+  # source://sequel//lib/sequel/model/base.rb#2206
   def setter_methods(type); end
 
   # The server/shard that the model object's dataset uses, or :default if the
   # model object's dataset does not have an associated shard.
   #
-  # source://sequel//lib/sequel/model/base.rb#2132
+  # source://sequel//lib/sequel/model/base.rb#2218
   def this_server; end
 
   # Typecast the value to the column's type if typecasting.  Calls the database's
@@ -13142,17 +13190,17 @@ module Sequel::Model::InstanceMethods
   #
   # @raise [InvalidValue]
   #
-  # source://sequel//lib/sequel/model/base.rb#2145
+  # source://sequel//lib/sequel/model/base.rb#2231
   def typecast_value(column, value); end
 
   # Set the columns, filtered by the only and except arrays.
   #
-  # source://sequel//lib/sequel/model/base.rb#2157
+  # source://sequel//lib/sequel/model/base.rb#2243
   def update_restricted(hash, type); end
 
   # Set the given dataset to use the current object's shard.
   #
-  # source://sequel//lib/sequel/model/base.rb#2163
+  # source://sequel//lib/sequel/model/base.rb#2249
   def use_server(ds); end
 
   # Whether to use a transaction for this action.  If the :transaction
@@ -13161,16 +13209,16 @@ module Sequel::Model::InstanceMethods
   #
   # @return [Boolean]
   #
-  # source://sequel//lib/sequel/model/base.rb#2170
+  # source://sequel//lib/sequel/model/base.rb#2256
   def use_transaction?(opts = T.unsafe(nil)); end
 
   # An ValidationFailed exception instance to raise for this instance.
   #
-  # source://sequel//lib/sequel/model/base.rb#2175
+  # source://sequel//lib/sequel/model/base.rb#2261
   def validation_failed_error; end
 end
 
-# source://sequel//lib/sequel/model/base.rb#1284
+# source://sequel//lib/sequel/model/base.rb#1370
 Sequel::Model::InstanceMethods::EXISTS_SELECT_ = T.let(T.unsafe(nil), Sequel::SQL::AliasedExpression)
 
 # source://sequel//lib/sequel/model.rb#21
@@ -13179,7 +13227,7 @@ Sequel::Model::OPTS = T.let(T.unsafe(nil), Hash)
 # The setter methods (methods ending with =) that are never allowed
 # to be called automatically via +set+/+update+/+new+/etc.
 #
-# source://sequel//lib/sequel/model.rb#83
+# source://sequel//lib/sequel/model.rb#84
 Sequel::Model::RESTRICTED_SETTER_METHODS = T.let(T.unsafe(nil), Array)
 
 class Sequel::NoExistingObject < ::Sequel::Error; end
@@ -13241,7 +13289,7 @@ module Sequel::Plugins
   class << self
     # Add method to +mod+ that overrides set_dataset to call the method afterward.
     #
-    # source://sequel//lib/sequel/model/plugins.rb#50
+    # source://sequel//lib/sequel/model/plugins.rb#61
     def after_set_dataset(mod, meth); end
 
     # In the given module +mod+, define methods that are call the same method
@@ -13270,14 +13318,21 @@ module Sequel::Plugins
     #
     # Blocks with required keyword arguments are not supported by this method.
     #
-    # source://sequel//lib/sequel/model/plugins.rb#81
+    # source://sequel//lib/sequel/model/plugins.rb#92
     def def_sequel_method(model, meth, expected_arity, &block); end
 
     # Add method to +mod+ that overrides inherited_instance_variables to include the
-    # values in this hash.
+    # values in this hash. These affects how class instance variables will be treated
+    # during subclassing.
     #
-    # source://sequel//lib/sequel/model/plugins.rb#42
+    # source://sequel//lib/sequel/model/plugins.rb#43
     def inherited_instance_variables(mod, hash); end
+
+    # Sets the model instance variables used by the plugin. These instance variables
+    # will be initialized to nil for created model objects.
+    #
+    # source://sequel//lib/sequel/model/plugins.rb#52
+    def model_instance_variables(mod, *ivs); end
 
     private
 
@@ -13286,14 +13341,14 @@ module Sequel::Plugins
     # and whether the callable accepts keyword arguments (true, false
     # or :required).
     #
-    # source://sequel//lib/sequel/model/plugins.rb#133
+    # source://sequel//lib/sequel/model/plugins.rb#144
     def _define_sequel_method_arg_numbers(callable); end
   end
 end
 
 # Return a unique method name symbol for the given suffix.
 #
-# source://sequel//lib/sequel/model/plugins.rb#62
+# source://sequel//lib/sequel/model/plugins.rb#73
 Sequel::Plugins::SEQUEL_METHOD_NAME = T.let(T.unsafe(nil), Proc)
 
 class Sequel::PoolTimeout < ::Sequel::Error; end
@@ -14048,7 +14103,7 @@ Sequel::SQL::ComplexExpression::BOOLEAN_OPERATOR_METHODS = T.let(T.unsafe(nil), 
 
 # A hash of the opposite for each constant, used for inverting constants.
 #
-# source://sequel//lib/sequel/sql.rb#1338
+# source://sequel//lib/sequel/sql.rb#1339
 Sequel::SQL::ComplexExpression::CONSTANT_INVERSIONS = T.let(T.unsafe(nil), Hash)
 
 # Custom expressions that may have different syntax on different databases
@@ -14183,58 +14238,61 @@ end
 module Sequel::SQL::Constants; end
 
 # source://sequel//lib/sequel/sql.rb#1326
-Sequel::SQL::Constants::CURRENT_DATE = T.let(T.unsafe(nil), Sequel::SQL::Constant)
+Sequel::SQL::Constants::ALL = T.let(T.unsafe(nil), Sequel::SQL::Constant)
 
 # source://sequel//lib/sequel/sql.rb#1327
-Sequel::SQL::Constants::CURRENT_TIME = T.let(T.unsafe(nil), Sequel::SQL::Constant)
+Sequel::SQL::Constants::CURRENT_DATE = T.let(T.unsafe(nil), Sequel::SQL::Constant)
 
 # source://sequel//lib/sequel/sql.rb#1328
-Sequel::SQL::Constants::CURRENT_TIMESTAMP = T.let(T.unsafe(nil), Sequel::SQL::Constant)
+Sequel::SQL::Constants::CURRENT_TIME = T.let(T.unsafe(nil), Sequel::SQL::Constant)
 
 # source://sequel//lib/sequel/sql.rb#1329
+Sequel::SQL::Constants::CURRENT_TIMESTAMP = T.let(T.unsafe(nil), Sequel::SQL::Constant)
+
+# source://sequel//lib/sequel/sql.rb#1330
 Sequel::SQL::Constants::DEFAULT = T.let(T.unsafe(nil), Sequel::SQL::Constant)
 
-# source://sequel//lib/sequel/sql.rb#1331
+# source://sequel//lib/sequel/sql.rb#1332
 Sequel::SQL::Constants::FALSE = T.let(T.unsafe(nil), Sequel::SQL::BooleanConstant)
 
-# source://sequel//lib/sequel/sql.rb#2056
+# source://sequel//lib/sequel/sql.rb#2059
 Sequel::SQL::Constants::NEW = T.let(T.unsafe(nil), Sequel::SQL::Identifier)
 
-# source://sequel//lib/sequel/sql.rb#1333
+# source://sequel//lib/sequel/sql.rb#1334
 Sequel::SQL::Constants::NOTNULL = T.let(T.unsafe(nil), Sequel::SQL::NegativeBooleanConstant)
 
-# source://sequel//lib/sequel/sql.rb#1332
+# source://sequel//lib/sequel/sql.rb#1333
 Sequel::SQL::Constants::NULL = T.let(T.unsafe(nil), Sequel::SQL::BooleanConstant)
 
-# source://sequel//lib/sequel/sql.rb#2055
+# source://sequel//lib/sequel/sql.rb#2058
 Sequel::SQL::Constants::OLD = T.let(T.unsafe(nil), Sequel::SQL::Identifier)
 
-# source://sequel//lib/sequel/sql.rb#1331
+# source://sequel//lib/sequel/sql.rb#1332
 Sequel::SQL::Constants::SQLFALSE = T.let(T.unsafe(nil), Sequel::SQL::BooleanConstant)
 
-# source://sequel//lib/sequel/sql.rb#1330
+# source://sequel//lib/sequel/sql.rb#1331
 Sequel::SQL::Constants::SQLTRUE = T.let(T.unsafe(nil), Sequel::SQL::BooleanConstant)
 
-# source://sequel//lib/sequel/sql.rb#1330
+# source://sequel//lib/sequel/sql.rb#1331
 Sequel::SQL::Constants::TRUE = T.let(T.unsafe(nil), Sequel::SQL::BooleanConstant)
 
 # Represents a delayed evaluation, encapsulating a callable
 # object which returns the value to use when called.
 #
-# source://sequel//lib/sequel/sql.rb#1344
+# source://sequel//lib/sequel/sql.rb#1345
 class Sequel::SQL::DelayedEvaluation < ::Sequel::SQL::GenericExpression
   # Set the callable object
   #
   # @return [DelayedEvaluation] a new instance of DelayedEvaluation
   #
-  # source://sequel//lib/sequel/sql.rb#1350
+  # source://sequel//lib/sequel/sql.rb#1351
   def initialize(callable); end
 
   # Call the underlying callable and return the result.  If the
   # underlying callable only accepts a single argument, call it
   # with the given dataset.
   #
-  # source://sequel//lib/sequel/sql.rb#1358
+  # source://sequel//lib/sequel/sql.rb#1359
   def call(ds); end
 
   # A callable object that returns the value of the evaluation
@@ -14322,20 +14380,20 @@ end
 
 # Represents an SQL function call.
 #
-# source://sequel//lib/sequel/sql.rb#1370
+# source://sequel//lib/sequel/sql.rb#1371
 class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   # Set the name and args for the function
   #
   # @return [Function] a new instance of Function
   #
-  # source://sequel//lib/sequel/sql.rb#1385
+  # source://sequel//lib/sequel/sql.rb#1386
   def initialize(name, *args); end
 
   # If no arguments are given, return a new function with the wildcard prepended to the arguments.
   #
   #   Sequel.function(:count).*  # count(*)
   #
-  # source://sequel//lib/sequel/sql.rb#1397
+  # source://sequel//lib/sequel/sql.rb#1398
   def *(ce = T.unsafe(nil)); end
 
   # The array of arguments to pass to the function (may be blank)
@@ -14347,7 +14405,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel.function(:count, :col).distinct # count(DISTINCT col)
   #
-  # source://sequel//lib/sequel/sql.rb#1409
+  # source://sequel//lib/sequel/sql.rb#1410
   def distinct; end
 
   # Return a new function with FILTER added to it, for filtered
@@ -14355,14 +14413,14 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel.function(:foo, :col).filter(a: 1) # foo(col) FILTER (WHERE (a = 1))
   #
-  # source://sequel//lib/sequel/sql.rb#1417
+  # source://sequel//lib/sequel/sql.rb#1418
   def filter(*args, &block); end
 
   # Return a function which will use LATERAL when literalized:
   #
   #   Sequel.function(:foo, :col).lateral # LATERAL foo(col)
   #
-  # source://sequel//lib/sequel/sql.rb#1430
+  # source://sequel//lib/sequel/sql.rb#1431
   def lateral; end
 
   # The SQL function to call
@@ -14380,7 +14438,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel.function(:foo, :a).order(:a, Sequel.desc(:b)) # foo(a ORDER BY a, b DESC)
   #
-  # source://sequel//lib/sequel/sql.rb#1438
+  # source://sequel//lib/sequel/sql.rb#1439
   def order(*args); end
 
   # Return a new function with an OVER clause (making it a window function).
@@ -14390,7 +14448,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   # @raise [Error]
   #
-  # source://sequel//lib/sequel/sql.rb#1446
+  # source://sequel//lib/sequel/sql.rb#1447
   def over(window = T.unsafe(nil)); end
 
   # Return a new function where the function name will be quoted if the database supports
@@ -14398,7 +14456,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel.function(:foo).quoted # "foo"()
   #
-  # source://sequel//lib/sequel/sql.rb#1456
+  # source://sequel//lib/sequel/sql.rb#1457
   def quoted; end
 
   # source://sequel//lib/sequel/sql.rb#112
@@ -14409,7 +14467,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel[:foo][:bar].function.unquoted # foo.bar()
   #
-  # source://sequel//lib/sequel/sql.rb#1464
+  # source://sequel//lib/sequel/sql.rb#1465
   def unquoted; end
 
   # Return a new function that will use WITH ORDINALITY to also return
@@ -14417,7 +14475,7 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #
   #   Sequel.function(:foo).with_ordinality # foo() WITH ORDINALITY
   #
-  # source://sequel//lib/sequel/sql.rb#1472
+  # source://sequel//lib/sequel/sql.rb#1473
   def with_ordinality; end
 
   # Return a new function that uses WITHIN GROUP ordered by the given expression,
@@ -14426,36 +14484,36 @@ class Sequel::SQL::Function < ::Sequel::SQL::GenericExpression
   #   Sequel.function(:rank, :a).within_group(:b, :c)
   #   # rank(a) WITHIN GROUP (ORDER BY b, c)
   #
-  # source://sequel//lib/sequel/sql.rb#1481
+  # source://sequel//lib/sequel/sql.rb#1482
   def within_group(*expressions); end
 
   private
 
   # Set name, args, and opts
   #
-  # source://sequel//lib/sequel/sql.rb#1490
+  # source://sequel//lib/sequel/sql.rb#1491
   def _initialize(name, args, opts); end
 
   # Return a new function call with the given opts merged into the current opts.
   #
-  # source://sequel//lib/sequel/sql.rb#1498
+  # source://sequel//lib/sequel/sql.rb#1499
   def with_opts(opts); end
 
   class << self
     # Set the name, args, and options, for internal use only.
     #
-    # source://sequel//lib/sequel/sql.rb#1390
+    # source://sequel//lib/sequel/sql.rb#1391
     def new!(name, args, opts); end
   end
 end
 
-# source://sequel//lib/sequel/sql.rb#1373
+# source://sequel//lib/sequel/sql.rb#1374
 Sequel::SQL::Function::COMMA_ARRAY = T.let(T.unsafe(nil), Array)
 
-# source://sequel//lib/sequel/sql.rb#1372
+# source://sequel//lib/sequel/sql.rb#1373
 Sequel::SQL::Function::DISTINCT = T.let(T.unsafe(nil), Array)
 
-# source://sequel//lib/sequel/sql.rb#1371
+# source://sequel//lib/sequel/sql.rb#1372
 Sequel::SQL::Function::WILDCARD = T.let(T.unsafe(nil), Sequel::LiteralString)
 
 # The base class for expressions that can be used in multiple places in
@@ -14477,7 +14535,7 @@ end
 
 # Represents an identifier (column, table, schema, etc.).
 #
-# source://sequel//lib/sequel/sql.rb#1517
+# source://sequel//lib/sequel/sql.rb#1518
 class Sequel::SQL::Identifier < ::Sequel::SQL::GenericExpression
   include ::Sequel::SQL::QualifyingMethods
 
@@ -14485,13 +14543,13 @@ class Sequel::SQL::Identifier < ::Sequel::SQL::GenericExpression
   #
   # @return [Identifier] a new instance of Identifier
   #
-  # source://sequel//lib/sequel/sql.rb#1524
+  # source://sequel//lib/sequel/sql.rb#1525
   def initialize(value); end
 
   # Create a Function using this identifier as the functions name, with
   # the given args.
   #
-  # source://sequel//lib/sequel/sql.rb#1531
+  # source://sequel//lib/sequel/sql.rb#1532
   def function(*args); end
 
   # source://sequel//lib/sequel/sql.rb#112
@@ -14528,19 +14586,19 @@ end
 
 # Represents an SQL JOIN clause, used for joining tables.
 #
-# source://sequel//lib/sequel/sql.rb#1539
+# source://sequel//lib/sequel/sql.rb#1540
 class Sequel::SQL::JoinClause < ::Sequel::SQL::Expression
   # Create an object with the given join_type and table expression.
   #
   # @return [JoinClause] a new instance of JoinClause
   #
-  # source://sequel//lib/sequel/sql.rb#1548
+  # source://sequel//lib/sequel/sql.rb#1549
   def initialize(join_type, table_expr); end
 
   # The column aliases to use for the JOIN , or nil if the
   # JOIN does not use a derived column list.
   #
-  # source://sequel//lib/sequel/sql.rb#1573
+  # source://sequel//lib/sequel/sql.rb#1574
   def column_aliases; end
 
   # The type of join to do
@@ -14550,13 +14608,13 @@ class Sequel::SQL::JoinClause < ::Sequel::SQL::Expression
 
   # The table/set related to the JOIN, without any alias.
   #
-  # source://sequel//lib/sequel/sql.rb#1555
+  # source://sequel//lib/sequel/sql.rb#1556
   def table; end
 
   # The table alias to use for the JOIN , or nil if the
   # JOIN does not alias the table.
   #
-  # source://sequel//lib/sequel/sql.rb#1565
+  # source://sequel//lib/sequel/sql.rb#1566
   def table_alias; end
 
   # The expression representing the table/set related to the JOIN.
@@ -14571,14 +14629,14 @@ end
 
 # Represents an SQL JOIN clause with ON conditions.
 #
-# source://sequel//lib/sequel/sql.rb#1583
+# source://sequel//lib/sequel/sql.rb#1584
 class Sequel::SQL::JoinOnClause < ::Sequel::SQL::JoinClause
   # Create an object with the ON conditions and call super with the
   # remaining args.
   #
   # @return [JoinOnClause] a new instance of JoinOnClause
   #
-  # source://sequel//lib/sequel/sql.rb#1589
+  # source://sequel//lib/sequel/sql.rb#1590
   def initialize(on, *args); end
 
   # The conditions for the join
@@ -14592,14 +14650,14 @@ end
 
 # Represents an SQL JOIN clause with USING conditions.
 #
-# source://sequel//lib/sequel/sql.rb#1598
+# source://sequel//lib/sequel/sql.rb#1599
 class Sequel::SQL::JoinUsingClause < ::Sequel::SQL::JoinClause
   # Create an object with the given USING conditions and call super
   # with the remaining args.
   #
   # @return [JoinUsingClause] a new instance of JoinUsingClause
   #
-  # source://sequel//lib/sequel/sql.rb#1605
+  # source://sequel//lib/sequel/sql.rb#1606
   def initialize(cols, *args); end
 
   # source://sequel//lib/sequel/sql.rb#112
@@ -14624,7 +14682,7 @@ end
 # Subclass of +ComplexExpression+ where the expression results
 # in a numeric value in SQL.
 #
-# source://sequel//lib/sequel/sql.rb#1649
+# source://sequel//lib/sequel/sql.rb#1650
 class Sequel::SQL::NumericExpression < ::Sequel::SQL::ComplexExpression
   include ::Sequel::SQL::BitwiseMethods
   include ::Sequel::SQL::NumericMethods
@@ -14632,12 +14690,12 @@ class Sequel::SQL::NumericExpression < ::Sequel::SQL::ComplexExpression
 
   # Always use + for + operator for NumericExpressions.
   #
-  # source://sequel//lib/sequel/sql.rb#1655
+  # source://sequel//lib/sequel/sql.rb#1656
   def +(ce); end
 
   # Return self instead of creating a new object to save on memory.
   #
-  # source://sequel//lib/sequel/sql.rb#1660
+  # source://sequel//lib/sequel/sql.rb#1661
   def sql_number; end
 end
 
@@ -14760,7 +14818,7 @@ end
 
 # Represents a column/expression to order the result set by.
 #
-# source://sequel//lib/sequel/sql.rb#1666
+# source://sequel//lib/sequel/sql.rb#1667
 class Sequel::SQL::OrderedExpression < ::Sequel::SQL::Expression
   # Set the expression and descending attributes to the given values.
   # Options:
@@ -14769,17 +14827,17 @@ class Sequel::SQL::OrderedExpression < ::Sequel::SQL::Expression
   #
   # @return [OrderedExpression] a new instance of OrderedExpression
   #
-  # source://sequel//lib/sequel/sql.rb#1682
+  # source://sequel//lib/sequel/sql.rb#1683
   def initialize(expression, descending = T.unsafe(nil), opts = T.unsafe(nil)); end
 
   # Return a copy that is ordered ASC
   #
-  # source://sequel//lib/sequel/sql.rb#1690
+  # source://sequel//lib/sequel/sql.rb#1691
   def asc; end
 
   # Return a copy that is ordered DESC
   #
-  # source://sequel//lib/sequel/sql.rb#1695
+  # source://sequel//lib/sequel/sql.rb#1696
   def desc; end
 
   # Whether the expression should order the result set in a descending manner
@@ -14794,7 +14852,7 @@ class Sequel::SQL::OrderedExpression < ::Sequel::SQL::Expression
 
   # Return an inverted expression, changing ASC to DESC and NULLS FIRST to NULLS LAST.
   #
-  # source://sequel//lib/sequel/sql.rb#1700
+  # source://sequel//lib/sequel/sql.rb#1701
   def invert; end
 
   # Whether to sort NULLS FIRST/LAST
@@ -14806,7 +14864,7 @@ class Sequel::SQL::OrderedExpression < ::Sequel::SQL::Expression
   def to_s_append(ds, sql); end
 end
 
-# source://sequel//lib/sequel/sql.rb#1667
+# source://sequel//lib/sequel/sql.rb#1668
 Sequel::SQL::OrderedExpression::INVERT_NULLS = T.let(T.unsafe(nil), Hash)
 
 # This module includes methods for overriding the =~ method for SQL equality,
@@ -14843,13 +14901,13 @@ end
 # required for the prepared statement support and for database-specific
 # literalization.
 #
-# source://sequel//lib/sequel/sql.rb#1617
+# source://sequel//lib/sequel/sql.rb#1618
 class Sequel::SQL::PlaceholderLiteralString < ::Sequel::SQL::GenericExpression
   # Create an object with the given string, placeholder arguments, and parens flag.
   #
   # @return [PlaceholderLiteralString] a new instance of PlaceholderLiteralString
   #
-  # source://sequel//lib/sequel/sql.rb#1632
+  # source://sequel//lib/sequel/sql.rb#1633
   def initialize(str, args, parens = T.unsafe(nil)); end
 
   # The arguments that will be subsituted into the placeholders.
@@ -14876,13 +14934,13 @@ class Sequel::SQL::PlaceholderLiteralString < ::Sequel::SQL::GenericExpression
 
   # Return a copy of the that will be surrounded by parantheses.
   #
-  # source://sequel//lib/sequel/sql.rb#1640
+  # source://sequel//lib/sequel/sql.rb#1641
   def with_parens; end
 end
 
 # Represents a qualified identifier (column with table or table with schema).
 #
-# source://sequel//lib/sequel/sql.rb#1708
+# source://sequel//lib/sequel/sql.rb#1709
 class Sequel::SQL::QualifiedIdentifier < ::Sequel::SQL::GenericExpression
   include ::Sequel::SQL::QualifyingMethods
 
@@ -14890,7 +14948,7 @@ class Sequel::SQL::QualifiedIdentifier < ::Sequel::SQL::GenericExpression
   #
   # @return [QualifiedIdentifier] a new instance of QualifiedIdentifier
   #
-  # source://sequel//lib/sequel/sql.rb#1718
+  # source://sequel//lib/sequel/sql.rb#1719
   def initialize(table, column); end
 
   # The column/table referenced
@@ -14901,7 +14959,7 @@ class Sequel::SQL::QualifiedIdentifier < ::Sequel::SQL::GenericExpression
   # Create a Function using this identifier as the functions name, with
   # the given args.
   #
-  # source://sequel//lib/sequel/sql.rb#1726
+  # source://sequel//lib/sequel/sql.rb#1727
   def function(*args); end
 
   # The table/schema qualifying the reference
@@ -14916,7 +14974,7 @@ class Sequel::SQL::QualifiedIdentifier < ::Sequel::SQL::GenericExpression
 
   # Automatically convert SQL::Identifiers to strings
   #
-  # source://sequel//lib/sequel/sql.rb#1735
+  # source://sequel//lib/sequel/sql.rb#1736
   def convert_identifier(identifier); end
 end
 
@@ -14969,7 +15027,7 @@ end
 # Subclass of +ComplexExpression+ where the expression results
 # in a text/string/varchar value in SQL.
 #
-# source://sequel//lib/sequel/sql.rb#1746
+# source://sequel//lib/sequel/sql.rb#1747
 class Sequel::SQL::StringExpression < ::Sequel::SQL::ComplexExpression
   include ::Sequel::SQL::StringMethods
   include ::Sequel::SQL::StringConcatenationMethods
@@ -14977,7 +15035,7 @@ class Sequel::SQL::StringExpression < ::Sequel::SQL::ComplexExpression
 
   # Return self instead of creating a new object to save on memory.
   #
-  # source://sequel//lib/sequel/sql.rb#1801
+  # source://sequel//lib/sequel/sql.rb#1802
   def sql_string; end
 
   class << self
@@ -15004,7 +15062,7 @@ class Sequel::SQL::StringExpression < ::Sequel::SQL::ComplexExpression
     #   StringExpression.like(:a, 'a%', case_insensitive: true) # ("a" ILIKE 'a%' ESCAPE '\')
     #   StringExpression.like(:a, 'a%', /^a/i) # (("a" LIKE 'a%' ESCAPE '\') OR ("a" ~* '^a'))
     #
-    # source://sequel//lib/sequel/sql.rb#1777
+    # source://sequel//lib/sequel/sql.rb#1778
     def like(l, *ces); end
 
     private
@@ -15014,14 +15072,14 @@ class Sequel::SQL::StringExpression < ::Sequel::SQL::ComplexExpression
     # * Whether it is a regular expression
     # * Whether it is case insensitive
     #
-    # source://sequel//lib/sequel/sql.rb#1791
+    # source://sequel//lib/sequel/sql.rb#1792
     def like_element(re); end
   end
 end
 
 # Map of [regexp, case_insenstive] to +ComplexExpression+ operator symbol
 #
-# source://sequel//lib/sequel/sql.rb#1752
+# source://sequel//lib/sequel/sql.rb#1753
 Sequel::SQL::StringExpression::LIKE_MAP = T.let(T.unsafe(nil), Hash)
 
 # This module includes the +like+ and +ilike+ methods used for pattern matching that are defined on objects that can be
@@ -15048,13 +15106,13 @@ end
 
 # Represents an SQL array access, with multiple possible arguments.
 #
-# source://sequel//lib/sequel/sql.rb#1807
+# source://sequel//lib/sequel/sql.rb#1808
 class Sequel::SQL::Subscript < ::Sequel::SQL::GenericExpression
   # Set the array column and subscripts to the given arguments
   #
   # @return [Subscript] a new instance of Subscript
   #
-  # source://sequel//lib/sequel/sql.rb#1816
+  # source://sequel//lib/sequel/sql.rb#1817
   def initialize(expression, sub); end
 
   # Create a new +Subscript+ by accessing a subarray of a multidimensional
@@ -15063,7 +15121,7 @@ class Sequel::SQL::Subscript < ::Sequel::SQL::GenericExpression
   #   Sequel[:a].sql_subscript(2) # a[2]
   #   Sequel[:a].sql_subscript(2)[1] # a[2][1]
   #
-  # source://sequel//lib/sequel/sql.rb#1836
+  # source://sequel//lib/sequel/sql.rb#1837
   def [](sub); end
 
   # The SQL array column
@@ -15073,7 +15131,7 @@ class Sequel::SQL::Subscript < ::Sequel::SQL::GenericExpression
 
   # The SQL array column
   #
-  # source://sequel//lib/sequel/sql.rb#1810
+  # source://sequel//lib/sequel/sql.rb#1811
   def f; end
 
   # The array of subscripts to use (should be an array of numbers)
@@ -15090,7 +15148,7 @@ class Sequel::SQL::Subscript < ::Sequel::SQL::GenericExpression
   #   Sequel[:a].sql_subscript(2) # a[2]
   #   Sequel[:a].sql_subscript(2) | 1 # a[2, 1]
   #
-  # source://sequel//lib/sequel/sql.rb#1827
+  # source://sequel//lib/sequel/sql.rb#1828
   def |(sub); end
 end
 
@@ -15115,11 +15173,11 @@ end
 # ruby array of two element arrays as an SQL value list instead of an ordered
 # hash-like conditions specifier.
 #
-# source://sequel//lib/sequel/sql.rb#1846
+# source://sequel//lib/sequel/sql.rb#1847
 class Sequel::SQL::ValueList < ::Array
   # Show that this is a value list and not just an array
   #
-  # source://sequel//lib/sequel/sql.rb#1848
+  # source://sequel//lib/sequel/sql.rb#1849
   def inspect; end
 end
 
@@ -15178,25 +15236,25 @@ end
 #
 # For a more detailed explanation, see the {Virtual Rows guide}[rdoc-ref:doc/virtual_rows.rdoc].
 #
-# source://sequel//lib/sequel/sql.rb#1907
+# source://sequel//lib/sequel/sql.rb#1908
 class Sequel::SQL::VirtualRow < ::Sequel::BasicObject
   include ::Sequel::SQL::OperatorBuilders
 
   # @return [VirtualRow] a new instance of VirtualRow
   #
-  # source://sequel//lib/sequel/sql.rb#1918
+  # source://sequel//lib/sequel/sql.rb#1919
   def initialize; end
 
-  # source://sequel//lib/sequel/sql.rb#1911
+  # source://sequel//lib/sequel/sql.rb#1912
   def <(*args); end
 
-  # source://sequel//lib/sequel/sql.rb#1911
+  # source://sequel//lib/sequel/sql.rb#1912
   def <=(*args); end
 
-  # source://sequel//lib/sequel/sql.rb#1911
+  # source://sequel//lib/sequel/sql.rb#1912
   def >(*args); end
 
-  # source://sequel//lib/sequel/sql.rb#1911
+  # source://sequel//lib/sequel/sql.rb#1912
   def >=(*args); end
 end
 
@@ -15232,13 +15290,13 @@ Sequel::SQL::VirtualRow::Sequel = Sequel
 #   Sequel::SQL::Window.new(window: :named_window) # you can create a named window with Dataset#window
 #   # (named_window)
 #
-# source://sequel//lib/sequel/sql.rb#1974
+# source://sequel//lib/sequel/sql.rb#1975
 class Sequel::SQL::Window < ::Sequel::SQL::Expression
   # Set the options to the options given
   #
   # @return [Window] a new instance of Window
   #
-  # source://sequel//lib/sequel/sql.rb#2001
+  # source://sequel//lib/sequel/sql.rb#2004
   def initialize(opts = T.unsafe(nil)); end
 
   # The options for this window.  Options currently supported:
@@ -15261,6 +15319,8 @@ class Sequel::SQL::Window < ::Sequel::SQL::Expression
   #                           for rows following
   #                   :exclude :: Which rows to exclude.  Possible values are :current, :ties, :group
   #                               :no_others.
+  # :ignore_nulls :: Can be set to :ignore for IGNORE NULLS (supported on PostgreSQL 19+ for
+  #                  a subset of default window functions)
   # :order :: order on the column(s) given
   # :partition :: partition/group on the column(s) given
   # :window :: base results on a previously specified named window
@@ -15275,13 +15335,13 @@ end
 # A +Wrapper+ is a simple way to wrap an existing object so that it supports
 # the Sequel DSL.
 #
-# source://sequel//lib/sequel/sql.rb#2011
+# source://sequel//lib/sequel/sql.rb#2014
 class Sequel::SQL::Wrapper < ::Sequel::SQL::GenericExpression
   # Set the value wrapped by the object.
   #
   # @return [Wrapper] a new instance of Wrapper
   #
-  # source://sequel//lib/sequel/sql.rb#2016
+  # source://sequel//lib/sequel/sql.rb#2019
   def initialize(value); end
 
   # source://sequel//lib/sequel/sql.rb#112
@@ -16732,7 +16792,7 @@ Sequel::VERSION = T.let(T.unsafe(nil), String)
 # source://sequel//lib/sequel/version.rb#19
 Sequel::VERSION_NUMBER = T.let(T.unsafe(nil), Integer)
 
-# source://sequel//lib/sequel/sql.rb#1942
+# source://sequel//lib/sequel/sql.rb#1943
 Sequel::VIRTUAL_ROW = T.let(T.unsafe(nil), Sequel::SQL::VirtualRow)
 
 # Exception class raised when +raise_on_save_failure+ is set and validation fails

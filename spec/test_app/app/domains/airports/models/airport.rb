@@ -11,7 +11,7 @@
 #  longitude           :double precision    not null
 #
 
-module Aviation
+module Airports
   module Models
     class Airport < T::Struct
       extend T::Sig
