@@ -8,6 +8,9 @@ module Kirei
       extend T::Sig
 
       NOT_FOUND = T.let([404, {}, ["Not Found"]], RackResponseType) # rubocop:disable Style/MutableConstant
+      # Oj raises EncodingError for malformed input in the modes Kirei uses, and
+      # Oj::ParseError for other parse failures.
+      JSON_PARSE_ERRORS = T.let([Oj::ParseError, EncodingError].freeze, T::Array[T.class_of(StandardError)])
 
       sig { params(params: T::Hash[String, T.untyped]).void }
       def initialize(params: {})
@@ -28,7 +31,7 @@ module Kirei
         status = 500 # we use it in the "ensure" block, so we need to define early (Sorbet doesn't like `status ||= 418`)
 
         http_verb = Verb.deserialize(env.fetch("REQUEST_METHOD"))
-        req_path = T.cast(env.fetch("REQUEST_PATH"), String)
+        req_path = request_path(env)
         #
         # TODO: reject requests from unexpected hosts -> allow configuring allowed hosts in a `cors.rb` file
         #   ( offer a scaffold for this file )
@@ -112,6 +115,13 @@ module Kirei
           headers,
           response_body,
         ]
+      rescue RequestRejected => e
+        status = e.status
+        error = Errors::JsonApiError.new(code: e.code, detail: e.message)
+        body = Oj.dump({ "errors" => [error.serialize] }, Kirei::OJ_OPTIONS)
+        response_body = [body]
+
+        [status, { "Content-Type" => "application/json; charset=utf-8" }, response_body]
       rescue StandardError => e
         status = 500
 
@@ -152,8 +162,19 @@ module Kirei
 
         # reset global variables after the request has been served
         # and after all "after" hooks have run to avoid leaking
+        router.current_env = nil
         Thread.current[:enduser_id] = nil
         Thread.current[:request_id] = nil
+      end
+
+      # `PATH_INFO` is the Rack-specified key. `REQUEST_PATH` is a Puma
+      # extension that Falcon does not set.
+      sig { params(env: RackEnvType).returns(String) }
+      private def request_path(env)
+        path = T.cast(env.fetch("PATH_INFO", nil), T.nilable(String))
+        return path unless path.nil? || path.empty?
+
+        T.cast(env.fetch("REQUEST_PATH"), String)
       end
 
       #
@@ -314,6 +335,9 @@ module Kirei
       #   - application/json: JSON object
       #   - anything else: JSON first, URL-encoded form data as fallback
       #
+      # `rack.input` is only required to respond to `read`; Puma passes an IO or
+      # StringIO, Falcon passes a Protocol::Rack::Input.
+      #
       sig { params(env: RackEnvType).returns(T::Hash[String, T.untyped]) }
       private def parse_request_body(env)
         content_type = T.cast(env.fetch("CONTENT_TYPE", ""), String)
@@ -322,21 +346,48 @@ module Kirei
 
         return wrap_uploaded_files(Rack::Request.new(env).params) if content_type.include?("multipart/form-data")
 
-        body = T.cast(body, T.any(IO, StringIO))
-        raw = body.read
-        body.rewind
-        return {} if raw.nil? || raw.empty?
+        raw = read_bounded_body(body)
+        return {} if raw.empty?
 
-        if content_type.include?("application/json")
-          return T.cast(Oj.load(raw, Kirei::OJ_OPTIONS),
-                        T::Hash[String, T.untyped])
-        end
+        return parse_json_object(raw) if content_type.include?("application/json")
 
         begin
-          T.cast(Oj.load(raw, Kirei::OJ_OPTIONS), T::Hash[String, T.untyped])
-        rescue Oj::ParseError
-          T.cast(Rack::Request.new(env).params, T::Hash[String, T.untyped])
+          parsed = Oj.load(raw, Kirei::OJ_OPTIONS)
+          return parsed if parsed.is_a?(Hash)
+        rescue *JSON_PARSE_ERRORS
+          # fall through to form data
         end
+
+        T.cast(Rack::Request.new(env).params, T::Hash[String, T.untyped])
+      end
+
+      sig { params(body: T.untyped).returns(String) }
+      private def read_bounded_body(body)
+        limit = App.config.max_request_body_bytes
+        raw = limit.nil? ? body.read : body.read(limit + 1)
+        body.rewind if body.respond_to?(:rewind)
+        raw = T.cast(raw || "", String)
+        if !limit.nil? && raw.bytesize > limit
+          raise RequestRejected.new(
+            status: 413,
+            code: "payload_too_large",
+            detail: "Request body exceeds #{limit} bytes",
+          )
+        end
+
+        raw
+      end
+
+      sig { params(raw: String).returns(T::Hash[String, T.untyped]) }
+      private def parse_json_object(raw)
+        parsed = Oj.load(raw, Kirei::OJ_OPTIONS)
+        unless parsed.is_a?(Hash)
+          raise RequestRejected.new(status: 400, code: "invalid_json_body", detail: "JSON body must be an object")
+        end
+
+        parsed
+      rescue *JSON_PARSE_ERRORS => e
+        raise RequestRejected.new(status: 400, code: "malformed_json", detail: e.message)
       end
 
       # Rack's multipart parser yields a Hash (symbol keys) per uploaded file; wrap it in a typed object.
