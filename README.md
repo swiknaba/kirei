@@ -354,6 +354,29 @@ Request timing and service execution timing are tracked automatically.
 
 To build a custom backend (e.g. Prometheus, OpenTelemetry), subclass `Kirei::Metrics::Backend` and implement `increment`, `measure`, and `gauge`.
 
+### Database connection
+
+`Kirei::App.raw_db_connection` opens one Sequel database per process. Configure it in your app:
+
+```ruby
+class MyApp < Kirei::App
+  # Global extensions change Sequel itself and are loaded via `Sequel.extension`
+  # before the connection exists. Use `:fiber_concurrency` with Async/Falcon.
+  config.db_global_extensions = [:fiber_concurrency]
+
+  # Database extensions are loaded on the connection via `Sequel::Database#extension`.
+  config.db_extensions += [:pgvector]
+
+  # Pool bounds and per-connection session setup; `nil` keeps the Sequel default.
+  config.db_max_connections = Integer(ENV.fetch("DB_POOL_SIZE", "5"))
+  config.db_pool_timeout = Float(ENV.fetch("DB_POOL_TIMEOUT", "2"))
+  config.db_connect_timeout = 5
+  config.db_connect_sqls = ["SET statement_timeout = '10s'"]
+end
+```
+
+A global extension passed to `db_extensions` is silently ignored by Sequel, so keep the two lists apart.
+
 ### Goes well with these gems
 
 * [pagy](https://github.com/ddnexus/pagy) for pagination
