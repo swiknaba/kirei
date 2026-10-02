@@ -28,11 +28,29 @@ module Kirei
 
     prop :app_name, String, default: "kirei"
 
+    # Database extensions are loaded on the connection via `Sequel::Database#extension`.
+    # They add behaviour to one database object, e.g. column type parsing.
+    #
     # must use "pg_json" to parse jsonb columns to hashes
     #
     # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb
-    prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array] # add "fiber_concurrency" by default, too?
+    prop :db_extensions, T::Array[Symbol], default: %i[pg_json pg_array]
+    # Global extensions are loaded via `Sequel.extension` before the connection is created.
+    # They change Sequel itself, not a database object, e.g. `:fiber_concurrency` switches the
+    # concurrency primitive from `Thread.current` to `Fiber.current` for Async/Falcon servers.
+    # Loading one on a database object is silently ignored.
+    #
+    # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/doc/extensions.rdoc
+    prop :db_global_extensions, T::Array[Symbol], default: []
     prop :db_url, T.nilable(String)
+    # Connection pool bounds passed to `Sequel.connect`. `nil` keeps the Sequel default.
+    #
+    # Source: https://github.com/jeremyevans/sequel/blob/5.75.0/doc/opening_databases.rdoc
+    prop :db_max_connections, T.nilable(Integer)
+    prop :db_pool_timeout, T.nilable(Float)
+    prop :db_connect_timeout, T.nilable(Integer)
+    # SQL statements run on every new connection, e.g. session timeouts.
+    prop :db_connect_sqls, T::Array[String], default: []
     # Extra or unknown properties present in the Hash do not raise exceptions at runtime
     # unless the optional strict argument to from_hash is passed
     #
