@@ -6,7 +6,7 @@ module Kirei
     include Kernel # "self" is a class since we include the module in a class
     include T::Props::Serializable
 
-    sig { returns(T.any(String, Integer)) }
+    sig { returns(String) }
     def id; end
 
     module ClassMethods
