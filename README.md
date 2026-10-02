@@ -55,7 +55,7 @@ Find a test app in the [spec/test_app](spec/test_app) directory. It is a fully f
 
 #### Models
 
-All models must inherit from `T::Struct` and include `Kirei::Model`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be of type `T.any(String, Integer)`.
+All models must inherit from `T::Struct` and include `Kirei::Model`. They must implement `id` which must hold the primary key of the table. The primary key must be named `id` and be a `String`. Kirei generates it on `create` with `generate_human_id` (for example `user_K7mQ2xRtB9vN`) unless the caller passes one; database sequences are not supported. Override `human_id_length` or `human_id_prefix` per model to change the format.
 
 Kirei models are immutable by convention - all properties are defined using `const` and updating a record returns a new instance rather than mutating the original. This immutability, combined with strict typing, makes them naturally suitable for both traditional data-centric applications and domain-driven design approaches.
 
@@ -66,7 +66,7 @@ class User < T::Struct
   extend T::Sig
   include Kirei::Model
 
-  const :id, T.any(String, Integer)
+  const :id, String
   const :name, String
 end
 
@@ -114,11 +114,11 @@ Kirei provides support for Domain-Driven Design patterns through `Kirei::Domain:
 class Flight < T::Struct
   include Kirei::Domain::Entity
 
-  const :id, Integer
+  const :id, String
 
   const :flight_number, String
-  const :departure_airport_id, Integer
-  const :arrival_airport_id, Integer
+  const :departure_airport_id, String
+  const :arrival_airport_id, String
   const :scheduled_departure_at, Time
   const :status, String
 

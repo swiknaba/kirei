@@ -104,7 +104,7 @@ When using Kirei, follow these conventions:
 When building applications with Kirei:
 - Models should inherit from `T::Struct` and include `Kirei::Model`
 - Use type signatures (`sig`) in controllers and services
-- Define model primary keys as `id` of type `T.any(String, Integer)`
+- Define model primary keys as `id` of type `String`; `create` fills a missing id with `generate_human_id`
 
 ### Database Usage
 When working with the database:

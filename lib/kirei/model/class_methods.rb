@@ -54,20 +54,19 @@ module Kirei
         resolve(query.all)
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-      # default values defined in the model are used, if omitted in the hash
+      # Default values defined in the model are used if omitted in the hash.
+      # A missing `id` is filled with `generate_human_id`; primary keys are
+      # always application-generated strings, never database sequences.
       sig do
         override.params(
           hash: T::Hash[Symbol, T.untyped],
         ).returns(T.attached_class)
       end
-      def create(hash)
+      def create(hash) # rubocop:disable Metrics/AbcSize
+        attributes = hash.key?(:id) ? hash : hash.merge(id: generate_human_id)
         # instantiate a new object to ensure we use default values defined in the model
-        without_id = !hash.key?(:id)
-        hash[:id] = "kirei-fake-id" if without_id
-        new_record = from_hash(Helpers.deep_stringify_keys(hash))
+        new_record = from_hash(Helpers.deep_stringify_keys(attributes))
         all_attributes = T.let(new_record.serialize, T::Hash[String, T.untyped])
-        all_attributes.delete("id") if without_id && all_attributes["id"] == "kirei-fake-id"
 
         wrap_jsonb_non_primivitives!(all_attributes)
 
@@ -78,11 +77,10 @@ module Kirei
           all_attributes["updated_at"] = Time.now.utc
         end
 
-        pkey = T.let(query.insert(all_attributes), String)
+        query.insert(all_attributes)
 
-        T.must(find_by({ id: pkey }))
+        T.must(find_by({ id: new_record.id }))
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
       sig { override.params(attributes: T::Hash[T.any(Symbol, String), T.untyped]).void }
       def wrap_jsonb_non_primivitives!(attributes) # rubocop:disable Metrics/AbcSize
@@ -180,9 +178,10 @@ module Kirei
         resolve(query.limit(1), strict_loading).first
       end
 
-      # defaults to 6
+      # 12 characters from a 55-character alphabet; collisions are negligible
+      # even for large tables. Override per model for shorter, hand-typed ids.
       sig { override.returns(Integer) }
-      def human_id_length = 6
+      def human_id_length = 12
 
       # defaults to "model_name" (table_name without the trailing "s")
       sig { override.returns(String) }
