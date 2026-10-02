@@ -52,17 +52,7 @@ module Kirei
                      [k, v]
                    end
                  when Verb::POST, Verb::PUT, Verb::PATCH
-                   # TODO: based on content-type, parse the body differently
-                   #       built-in support for JSON & XML
-                   body = env.fetch("rack.input")
-                   if body.nil? || !body.respond_to?(:read) || (body.respond_to?(:empty?) && body.empty?)
-                     {}
-                   else
-                     body = T.cast(body, T.any(IO, StringIO))
-                     res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                     body.rewind # TODO: maybe don't rewind if we don't need to?
-                     T.cast(res, T::Hash[String, T.untyped])
-                   end
+                   parse_request_body(env)
                  when Verb::HEAD, Verb::DELETE, Verb::OPTIONS
                    {}
                  else
@@ -316,6 +306,51 @@ module Kirei
         end
 
         result
+      end
+
+      #
+      # Body parsing by Content-Type:
+      #   - multipart/form-data: form fields plus uploaded files wrapped in Rack::Multipart::UploadedFile
+      #   - application/json: JSON object
+      #   - anything else: JSON first, URL-encoded form data as fallback
+      #
+      sig { params(env: RackEnvType).returns(T::Hash[String, T.untyped]) }
+      private def parse_request_body(env)
+        content_type = T.cast(env.fetch("CONTENT_TYPE", ""), String)
+        body = env["rack.input"]
+        return {} if body.nil? || !body.respond_to?(:read)
+
+        return wrap_uploaded_files(Rack::Request.new(env).params) if content_type.include?("multipart/form-data")
+
+        body = T.cast(body, T.any(IO, StringIO))
+        raw = body.read
+        body.rewind
+        return {} if raw.nil? || raw.empty?
+
+        if content_type.include?("application/json")
+          return T.cast(Oj.load(raw, Kirei::OJ_OPTIONS),
+                        T::Hash[String, T.untyped])
+        end
+
+        begin
+          T.cast(Oj.load(raw, Kirei::OJ_OPTIONS), T::Hash[String, T.untyped])
+        rescue Oj::ParseError
+          T.cast(Rack::Request.new(env).params, T::Hash[String, T.untyped])
+        end
+      end
+
+      # Rack's multipart parser yields a Hash (symbol keys) per uploaded file; wrap it in a typed object.
+      sig { params(params: T::Hash[String, T.untyped]).returns(T::Hash[String, T.untyped]) }
+      private def wrap_uploaded_files(params)
+        params.transform_values do |value|
+          next value unless value.is_a?(Hash) && value.key?(:tempfile)
+
+          Rack::Multipart::UploadedFile.new(
+            io: value.fetch(:tempfile),
+            content_type: value.fetch(:type, "application/octet-stream"),
+            filename: value.fetch(:filename),
+          )
+        end
       end
     end
   end
