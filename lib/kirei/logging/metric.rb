@@ -14,13 +14,11 @@ module Kirei
         ).void
       end
       def self.call(metric_name, value = 1, tags: {})
-        return if ENV["NO_METRICS"] == "true"
-
         inject_defaults(tags)
 
         # Do not `compact_blank` tags, since one might want to track empty strings/"false"/NULLs.
         # NOT having any tag doesn't tell the user if the tag was empty or not set at all.
-        StatsD.increment(metric_name, value, tags: tags)
+        App.config.metrics_backend.increment(metric_name, value, tags: tags)
       end
 
       sig { params(tags: T::Hash[String, T.untyped]).returns(T::Hash[String, T.untyped]) }

@@ -73,19 +73,34 @@ module Kirei
         @raw_db_connection = T.let(@raw_db_connection, T.nilable(Sequel::Database))
         return @raw_db_connection unless @raw_db_connection.nil?
 
-        # calling "Sequel.connect" creates a new connection
-        @raw_db_connection = Sequel.connect(App.config.db_url || default_db_url)
+        config.db_global_extensions.each { |ext| Sequel.extension(ext) }
 
-        config.db_extensions.each do |ext|
-          T.cast(@raw_db_connection, Sequel::Database).extension(ext)
-        end
+        # calling "Sequel.connect" creates a new connection
+        database = Sequel.connect(App.config.db_url || default_db_url, db_connect_options)
+        @raw_db_connection = apply_db_extensions(database)
+      end
+
+      sig { params(database: Sequel::Database).returns(Sequel::Database) }
+      private def apply_db_extensions(database)
+        config.db_extensions.each { |ext| database.extension(ext) }
 
         if config.db_extensions.include?(:pg_json)
           # https://github.com/jeremyevans/sequel/blob/5.75.0/lib/sequel/extensions/pg_json.rb#L8
-          @raw_db_connection.wrap_json_primitives = true
+          database.wrap_json_primitives = true
         end
 
-        @raw_db_connection
+        database
+      end
+
+      sig { returns(T::Hash[Symbol, T.any(Integer, Float, T::Array[String])]) }
+      private def db_connect_options
+        connect_sqls = config.db_connect_sqls
+        {
+          max_connections: config.db_max_connections,
+          pool_timeout: config.db_pool_timeout,
+          connect_timeout: config.db_connect_timeout,
+          connect_sqls: connect_sqls.empty? ? nil : connect_sqls,
+        }.compact
       end
     end
   end

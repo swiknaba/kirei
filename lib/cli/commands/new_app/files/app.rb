@@ -44,7 +44,10 @@ module Cli
 
               # Fifth: load configs
               Dir[File.join(__dir__, "config", "**", "*.rb")].each do |cnf|
-                require(cnf) unless cnf.split("/").include?("initializers")
+                next if cnf.split("/").include?("initializers")
+                next if cnf.end_with?("puma.rb") # Puma config uses DSL only available when loaded by Puma
+
+                require(cnf)
               end
 
               class #{app_name} < Kirei::App

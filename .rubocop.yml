@@ -1,49 +1,28 @@
-inherit_gem:
-  rubocop-dbl:
-    - config/dbl.yml
+plugins:
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-sorbet
+
+inherit_from:
+  - cops/layout.yml
+  - cops/lint.yml
+  - cops/metrics.yml
+  - cops/naming.yml
+  - cops/rspec.yml
+  - cops/style.yml
+  - cops/types.yml
 
 AllCops:
   TargetRubyVersion: 3
+  UseCache: true
+  NewCops: enable
   Exclude:
-    - 'vendor/**/*'
-    - 'sorbet/**/*'
-    - 'spec/test_app/**/*'
-    - 'lib/cli/**/*'
-    - 'bin/kirei' # for now
-
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/AccessModifierDeclarations:
-  EnforcedStyle: inline
-
-Layout/LineLength:
-  Max: 120
-
-Metrics/MethodLength:
-  Max: 30
-  CountAsOne:
-    - 'array'
-    - 'heredoc'
-    - 'method_call'
-
-Metrics/ModuleLength:
-  Max: 150
-  CountAsOne:
-    - 'array'
-    - 'heredoc'
-    - 'method_call'
-
-RSpec/MultipleExpectations:
-  Enabled: false
-
-RSpec/ExampleLength:
-  Max: 20
+    - "vendor/**/*"
+    - "sorbet/**/*"
+    - "spec/test_app/**/*"
+    - "lib/cli/**/*"
+    - "bin/kirei" # for now
+    - "**/tmp/**/*"
+    - "**/node_modules/**/*"
+    - "bin/**/*"

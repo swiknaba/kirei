@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
     # do not include RBIs for gems, because users might use different versions
     "sorbet/rbi/dsl/**/*.rbi",
     "sorbet/rbi/shims/**/*.rbi",
+    "cops/**/*",
     "LICENSE",
     "README.md",
   ]
@@ -46,7 +47,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "logger", "~> 1.5" # for Ruby 3.5+
   spec.add_dependency "oj", "~> 3.0"
   spec.add_dependency "sorbet-runtime", "~> 0.5"
-  spec.add_dependency "statsd-instrument", "~> 3.0"
   spec.add_dependency "tzinfo-data", "~> 1.0" # for containerized environments, e.g. on AWS ECS
   spec.add_dependency "zeitwerk", "~> 2.5"
 

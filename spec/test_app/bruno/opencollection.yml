@@ -1,0 +1,33 @@
+opencollection: 1.0.0
+
+info:
+  name: kirei_test_app
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  headers:
+    - name: Accept-Encoding
+      value: application/json
+  variables:
+    - name: base_url
+      value: http://0.0.0.0:9292
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    presets:
+      request:
+        type: http
+        url: http://0.0.0.0:9292

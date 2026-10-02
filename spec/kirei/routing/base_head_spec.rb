@@ -1,32 +1,22 @@
 # typed: false
 
 require "spec_helper"
-module Dummy
-  class HealthController < Kirei::Controller
-    sig { returns(T.anything) }
-    def livez
-      render(Oj.dump({ "ok" => true }))
-    end
-  end
-end
-
-router = Kirei::Routing::Router.instance
-original_routes = router.routes.dup
-router.routes.clear
-router.routes["GET /livez"] = Kirei::Routing::Route.new(
-  verb: Kirei::Routing::Verb::GET,
-  path: "/livez",
-  controller: Dummy::HealthController,
-  action: "livez",
-)
-
-class DummyApp < Kirei::App; end
 
 RSpec.describe Kirei::Routing::Base do
-  after do
+  let(:router) { Kirei::Routing::Router.instance }
+  let(:original_routes) { router.routes.dup }
+
+  before do
     router.routes.clear
-    original_routes.each { |k, v| router.routes[k] = v }
+    router.routes["GET /livez"] = Kirei::Routing::Route.new(
+      verb: Kirei::Routing::Verb::GET,
+      path: "/livez",
+      controller: Dummy::HealthController,
+      action: "livez",
+    )
   end
+
+  after { router.routes.replace(original_routes) }
 
   it "handles HEAD without invoking the controller", :aggregate_failures do
     app = DummyApp.new

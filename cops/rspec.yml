@@ -1,0 +1,13 @@
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - if
+    - and
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 20

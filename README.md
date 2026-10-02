@@ -2,9 +2,11 @@
 
 Kirei is a strictly typed Ruby micro/REST-framework for building scalable and performant APIs. It is built from the ground up to be clean and easy to use. Kirei is based on [Sequel](https://github.com/jeremyevans/sequel) as an ORM, [Sorbet](https://github.com/sorbet/sorbet) for typing, and [Rack](https://github.com/rack/rack) as web server interface. It strives to have zero magic and to be as explicit as possible.
 
-Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and build-in high-performance logging and metric-tracking toolkits. It is opiniated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
+Kirei's main advantages over other frameworks are its strict typing, low memory footprint, and built-in high-performance logging and pluggable metric-tracking toolkit. It is opinionated in terms of tooling, allowing you to focus on your core-business. It is a great choice for building APIs that need to scale.
 
 > Kirei (きれい) is a Japanese adjective that primarily means "beautiful" or "pretty." It can also be used to describe something that is "clean" or "neat."
+
+👉 AI-generated wiki available on [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/swiknaba/kirei)
 
 ## Why another Ruby framework?
 
@@ -225,6 +227,12 @@ module Kirei::Routing
         controller: Controllers::Airports,
         action: "index",
       ),
+      Route.new(
+        verb: Verb::GET,
+        path: "/airports/:iata",
+        controller: Controllers::Airports,
+        action: "show",
+      ),
     ],
   )
 end
@@ -232,7 +240,24 @@ end
 
 #### Controllers
 
-Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory:
+Controllers can be defined anywhere; by convention, they are defined in the `app/controllers` directory.
+
+Three render helpers are available:
+
+| Method | Use case |
+|---|---|
+| `render(body, status:, headers:)` | Raw string responses (plain text, pre-serialized data) |
+| `render_json(data, status:, headers:)` | JSON responses with automatic serialization |
+| `render_error(errors, status:, headers:)` | JSON:API-compliant error responses |
+
+`render_json` accepts multiple data types:
+
+| `data` type | Behavior |
+|---|---|
+| `String` | Pass-through (assumed to be pre-serialized JSON) |
+| `Hash` / `Array` | Serialized via `Oj.dump` |
+| Object responding to `#serialize` (e.g. `T::Struct`) | Calls `.serialize`, then `Oj.dump` if the result is not a String |
+| Anything else | Raises `ArgumentError` |
 
 ```ruby
 module Controllers
@@ -243,14 +268,24 @@ module Controllers
     def index
       search = T.let(params.fetch("q", nil), T.nilable(String))
 
-      airports = Kirei::Services::Runner.call("Airports::Filter") do
-        Airports::Filter.call(search) # T::Array[Airport]
+      service = Kirei::Services::Runner.call("Airports::Filter") do
+        Airports::Filter.call(search)
       end
+      return render_error(service.errors, status: 400) if service.failed?
 
-      # or use a serializer
-      data = Oj.dump(airports.map(&:serialize))
+      render_json(service.result.map(&:serialize))
+    end
 
-      render(status: 200, body: data)
+    sig { returns(T.anything) }
+    def show
+      iata = T.must(params.fetch("iata", nil)) # named param from dynamic route
+
+      airport = Kirei::Services::Runner.call("Airports::Find") do
+        Airports::Find.call(iata) # T.nilable(Airport)
+      end
+      return render(status: 204) if airport.nil?
+
+      render_json(airport) # T::Struct — calls .serialize automatically
     end
   end
 end
@@ -285,11 +320,69 @@ module Airports
 end
 ```
 
+#### Metrics
+
+Kirei ships with a pluggable metrics interface via `Kirei::Metrics::Backend`. Three backends are included:
+
+| Backend | Description |
+|---|---|
+| `LoggingBackend` | **Default.** Prints metrics to stdout via `puts` — great for local development and small MVPs. |
+| `StatsdBackend` | Wraps [`statsd-instrument`](https://github.com/Shopify/statsd-instrument). Add `gem 'statsd-instrument'` to your Gemfile. |
+| `NullBackend` | No-op — silently discards all metrics. |
+
+The backend exposes three methods: `increment`, `measure`, and `gauge`.
+
+Configure the backend in your app:
+
+```ruby
+class MyApp < Kirei::App
+  # Use StatsD (requires `gem 'statsd-instrument'` in Gemfile)
+  config.metrics_backend = Kirei::Metrics::StatsdBackend.new
+
+  # Or disable metrics entirely
+  config.metrics_backend = Kirei::Metrics::NullBackend.new
+end
+```
+
+Emit custom metrics anywhere via `Kirei::Logging::Metric`:
+
+```ruby
+Kirei::Logging::Metric.call("airports_search_term", 1, tags: { "query" => search })
+```
+
+Request timing and service execution timing are tracked automatically.
+
+To build a custom backend (e.g. Prometheus, OpenTelemetry), subclass `Kirei::Metrics::Backend` and implement `increment`, `measure`, and `gauge`.
+
+### Database connection
+
+`Kirei::App.raw_db_connection` opens one Sequel database per process. Configure it in your app:
+
+```ruby
+class MyApp < Kirei::App
+  # Global extensions change Sequel itself and are loaded via `Sequel.extension`
+  # before the connection exists. Use `:fiber_concurrency` with Async/Falcon.
+  config.db_global_extensions = [:fiber_concurrency]
+
+  # Database extensions are loaded on the connection via `Sequel::Database#extension`.
+  config.db_extensions += [:pgvector]
+
+  # Pool bounds and per-connection session setup; `nil` keeps the Sequel default.
+  config.db_max_connections = Integer(ENV.fetch("DB_POOL_SIZE", "5"))
+  config.db_pool_timeout = Float(ENV.fetch("DB_POOL_TIMEOUT", "2"))
+  config.db_connect_timeout = 5
+  config.db_connect_sqls = ["SET statement_timeout = '10s'"]
+end
+```
+
+A global extension passed to `db_extensions` is silently ignored by Sequel, so keep the two lists apart.
+
 ### Goes well with these gems
 
 * [pagy](https://github.com/ddnexus/pagy) for pagination
 * [argon2](https://github.com/technion/ruby-argon2) for password hashing
 * [rack-session](https://github.com/rack/rack-session) for session management
+* [pgvector](https://github.com/pgvector/pgvector-ruby) for vector columns — add `:pgvector` to `App.config.db_extensions`
 
 ### Middlewares
 

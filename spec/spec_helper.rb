@@ -5,6 +5,8 @@ APP_ROOT = File.expand_path("..", __dir__)
 require "kirei"
 require "byebug"
 require "json"
+require "kirei/dummy_app"
+Dir[File.join(__dir__, "kirei/dummy/**/*.rb")].each { require(_1) }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -17,7 +17,8 @@ module Cli
               require "rake"
               require_relative "app"
 
-              Dir.glob("#{Kirei::GEM_ROOT}/lib/tasks/**/*.rake").each { import(_1) }
+              kirei_gem_path = Gem::Specification.find_by_name("kirei").gem_dir
+              Dir.glob("\#{kirei_gem_path}/lib/tasks/**/*.rake").each { import(_1) }
 
               Dir.glob("lib/tasks/**/*.rake").each { import(_1) }
 

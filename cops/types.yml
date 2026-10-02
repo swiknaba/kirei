@@ -1,0 +1,12 @@
+Sorbet/HasSigil:
+  MinimumStrictness: strict
+  SuggestedStrictness: strict
+  Exclude:
+    - "spec/**/*"
+    - "test/**/*"
+
+Sorbet/StrictSigil:
+  Enabled: true
+  Exclude:
+    - "spec/**/*"
+    - "lib/tasks/**/*"

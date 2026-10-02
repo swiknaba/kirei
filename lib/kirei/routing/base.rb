@@ -1,8 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/all
-
+# rubocop:disable Metrics
 module Kirei
   module Routing
     class Base
@@ -24,6 +23,7 @@ module Kirei
 
       sig { params(env: RackEnvType).returns(RackResponseType) }
       def call(env)
+        statsd_timing_tags = T.let({}, T::Hash[String, T.untyped])
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
         status = 500 # we use it in the "ensure" block, so we need to define early (Sorbet doesn't like `status ||= 418`)
 
@@ -36,8 +36,10 @@ module Kirei
         #
 
         lookup_verb = http_verb == Verb::HEAD ? Verb::GET : http_verb
-        route = router.get(lookup_verb, req_path)
-        return NOT_FOUND if route.nil?
+        result = router.resolve(lookup_verb, req_path)
+        return NOT_FOUND if result.nil?
+
+        route, path_params = result
 
         router.current_env = env # expose the env to the controller
 
@@ -50,34 +52,14 @@ module Kirei
                      [k, v]
                    end
                  when Verb::POST, Verb::PUT, Verb::PATCH
-                   content_type = T.cast(env.fetch("CONTENT_TYPE", ""), String)
-
-                   if content_type.include?("multipart/form-data")
-                     rack_request = Rack::Request.new(env)
-                     process_multipart_params(rack_request.params.fetch("file"))
-                   elsif content_type.include?("application/json")
-                     body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-                     res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                     body.rewind # TODO: maybe don't rewind if we don't need to?
-                     T.cast(res, T::Hash[String, T.untyped])
-                   else
-                     body = T.cast(env.fetch("rack.input"), T.any(IO, StringIO))
-                     begin
-                       res = Oj.load(body.read, Kirei::OJ_OPTIONS)
-                       body.rewind
-                       T.cast(res, T::Hash[String, T.untyped])
-                     rescue Oj::ParseError
-                       # If JSON parsing fails, use form data parsing
-                       body.rewind
-                       rack_request = Rack::Request.new(env)
-                       T.cast(rack_request.params, T::Hash[String, T.untyped])
-                     end
-                   end
-                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
+                   parse_request_body(env)
+                 when Verb::HEAD, Verb::DELETE, Verb::OPTIONS
                    {}
                  else
                    T.absurd(http_verb)
         end
+
+        params.merge!(path_params)
 
         req_id = T.cast(env["HTTP_X_REQUEST_ID"], T.nilable(String))
         req_id ||= "req_#{App.environment}_#{SecureRandom.uuid}"
@@ -99,14 +81,11 @@ module Kirei
           },
         )
 
-        statsd_timing_tags = {
-          "controller" => controller.name,
-          "route" => route.action,
-        }
-        Logging::Metric.inject_defaults(statsd_timing_tags)
+        statsd_timing_tags["controller"] = controller.name
+        statsd_timing_tags["route"] = route.action
 
         status, headers, response_body = case http_verb
-                                         when Verb::HEAD, Verb::OPTIONS, Verb::TRACE, Verb::CONNECT
+                                         when Verb::HEAD, Verb::OPTIONS
                                            [200, {}, []]
                                          when Verb::GET, Verb::POST, Verb::PUT, Verb::PATCH, Verb::DELETE
                                            T.cast(
@@ -133,11 +112,36 @@ module Kirei
           headers,
           response_body,
         ]
+      rescue StandardError => e
+        status = 500
+
+        Kirei::Logging::Logger.call(
+          level: Kirei::Logging::Level::ERROR,
+          label: "Unhandled Exception",
+          meta: {
+            "error.class" => e.class.name,
+            "error.message" => e.message,
+            "error.backtrace" => e.backtrace&.first(10)&.join("\n"),
+          },
+        )
+
+        detail = if Kirei::App.environment == "development"
+          "#{e.class}: #{e.message}\n#{e.backtrace&.first(10)&.join("\n")}"
+        else
+          "An unexpected error occurred"
+        end
+
+        error = Errors::JsonApiError.new(code: "internal_server_error", detail: detail)
+        body = Oj.dump({ "errors" => [error.serialize] }, Kirei::OJ_OPTIONS)
+        response_body = [body]
+
+        [status, { "Content-Type" => "application/json; charset=utf-8" }, response_body]
       ensure
         stop = Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
-        if start # early return for 404
+        if start && statsd_timing_tags # early return for 404
           latency_in_ms = stop - start
-          ::StatsD.measure("request", latency_in_ms, tags: statsd_timing_tags)
+          Logging::Metric.inject_defaults(statsd_timing_tags)
+          App.config.metrics_backend.measure("request", latency_in_ms, tags: statsd_timing_tags)
 
           Kirei::Logging::Logger.call(
             level: status >= 500 ? Kirei::Logging::Level::ERROR : Kirei::Logging::Level::INFO,
@@ -169,6 +173,77 @@ module Kirei
           headers,
           [body],
         ]
+      end
+
+      #
+      # Renders a JSON response. Accepts:
+      #   - String: treated as pre-serialized JSON (pass-through)
+      #   - Hash / Array: serialized via Oj.dump
+      #   - Object responding to #serialize (e.g. T::Struct): calls #serialize,
+      #     then Oj.dump if the result is not already a String
+      #   - Anything else: raises ArgumentError
+      #
+      sig do
+        params(
+          data: T.untyped,
+          status: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_json(data, status: 200, headers: {})
+        body = case data
+               when String
+                 data
+               when Hash, Array
+                 Oj.dump(data, Kirei::OJ_OPTIONS)
+               else
+                 unless data.respond_to?(:serialize)
+                   raise ArgumentError,
+                         "render_json expects a String, Hash, Array, or an object responding to #serialize, " \
+                         "got #{data.class}"
+                 end
+
+                 result = data.serialize
+                 result.is_a?(String) ? result : Oj.dump(result, Kirei::OJ_OPTIONS)
+        end
+
+        render(body, status: status, headers: headers)
+      end
+
+      #
+      # Renders a JSON:API-compliant error response.
+      # Wraps an array of JsonApiError structs into { "errors": [...] }.
+      #
+      sig do
+        params(
+          errors: T::Array[Errors::JsonApiError],
+          status: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_error(errors, status: 422, headers: {})
+        render_json({ "errors" => errors.map(&:serialize) }, status: status, headers: headers)
+      end
+
+      #
+      # Renders a response from a Services::Result.
+      # On success, delegates to render_json with the result's value.
+      # On failure, delegates to render_error with the result's errors.
+      #
+      sig do
+        params(
+          result: Services::Result[T.untyped],
+          status_success: Integer,
+          status_failure: Integer,
+          headers: T::Hash[String, String],
+        ).returns(RackResponseType)
+      end
+      def render_result(result, status_success: 200, status_failure: 400, headers: {})
+        if result.success?
+          render_json(result.result, status: status_success, headers: headers)
+        else
+          render_error(result.errors, status: status_failure, headers: headers)
+        end
       end
 
       sig { returns(T::Hash[String, String]) }
@@ -233,20 +308,51 @@ module Kirei
         result
       end
 
-      sig { params(params: T::Hash[Symbol, T.untyped]).returns(T::Hash[String, T.untyped]) }
-      private def process_multipart_params(params)
-        raise "Unexpected params format" unless params.key?(:tempfile)
+      #
+      # Body parsing by Content-Type:
+      #   - multipart/form-data: form fields plus uploaded files wrapped in Rack::Multipart::UploadedFile
+      #   - application/json: JSON object
+      #   - anything else: JSON first, URL-encoded form data as fallback
+      #
+      sig { params(env: RackEnvType).returns(T::Hash[String, T.untyped]) }
+      private def parse_request_body(env)
+        content_type = T.cast(env.fetch("CONTENT_TYPE", ""), String)
+        body = env["rack.input"]
+        return {} if body.nil? || !body.respond_to?(:read)
 
-        file = Rack::Multipart::UploadedFile.new(
-          io: params.fetch(:tempfile),
-          content_type: params.fetch(:type, "application/octet-stream"),
-          filename: params.fetch(:filename),
-        )
+        return wrap_uploaded_files(Rack::Request.new(env).params) if content_type.include?("multipart/form-data")
 
-        { "file" => file }
+        body = T.cast(body, T.any(IO, StringIO))
+        raw = body.read
+        body.rewind
+        return {} if raw.nil? || raw.empty?
+
+        if content_type.include?("application/json")
+          return T.cast(Oj.load(raw, Kirei::OJ_OPTIONS),
+                        T::Hash[String, T.untyped])
+        end
+
+        begin
+          T.cast(Oj.load(raw, Kirei::OJ_OPTIONS), T::Hash[String, T.untyped])
+        rescue Oj::ParseError
+          T.cast(Rack::Request.new(env).params, T::Hash[String, T.untyped])
+        end
+      end
+
+      # Rack's multipart parser yields a Hash (symbol keys) per uploaded file; wrap it in a typed object.
+      sig { params(params: T::Hash[String, T.untyped]).returns(T::Hash[String, T.untyped]) }
+      private def wrap_uploaded_files(params)
+        params.transform_values do |value|
+          next value unless value.is_a?(Hash) && value.key?(:tempfile)
+
+          Rack::Multipart::UploadedFile.new(
+            io: value.fetch(:tempfile),
+            content_type: value.fetch(:type, "application/octet-stream"),
+            filename: value.fetch(:filename),
+          )
+        end
       end
     end
   end
 end
-
-# rubocop:enable Metrics/all
+# rubocop:enable Metrics

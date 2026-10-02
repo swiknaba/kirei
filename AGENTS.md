@@ -153,10 +153,10 @@ The test app in `spec/test_app/` serves as a complete reference implementation a
 #### Structure
 - `spec/test_app/app.rb`: Application setup and configuration
 - `spec/test_app/config.ru`: Rack configuration and middleware setup
-- `spec/test_app/app/controllers/`: Example controllers
-- `spec/test_app/app/models/`: Example models
+- `spec/test_app/app/controllers/`: Shared controller infrastructure (`Controllers::Base`)
+- `spec/test_app/app/domains/`: Example DDD bounded contexts (`Airports`, `Flights`, `Utils`), each owning its own entities, models, services, and controllers
 - `spec/test_app/config/routes.rb`: Route definitions
-- `spec/test_app/db/migrations/`: Database migrations
+- `spec/test_app/db/migrate/`: Database migrations
 - `spec/test_app/spec/`: Test examples
 
 #### Development Workflow
