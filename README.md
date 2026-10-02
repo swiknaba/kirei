@@ -354,6 +354,20 @@ Request timing and service execution timing are tracked automatically.
 
 To build a custom backend (e.g. Prometheus, OpenTelemetry), subclass `Kirei::Metrics::Backend` and implement `increment`, `measure`, and `gauge`.
 
+### Web servers and request bodies
+
+Kirei runs on any Rack server. It routes by `PATH_INFO`, accepts any readable `rack.input`, and keeps the request env fiber-local, so both thread-based servers (Puma) and fiber-based servers (Falcon) work. With Falcon, also set `config.db_global_extensions = [:fiber_concurrency]` (see below).
+
+JSON and form bodies are buffered in memory. Bound them per app:
+
+```ruby
+class MyApp < Kirei::App
+  config.max_request_body_bytes = 65_536 # nil (default) means unlimited
+end
+```
+
+A larger body gets a `413` JSON:API error with code `payload_too_large`. Multipart uploads stream to tempfiles through Rack and are not limited by this setting. Malformed JSON returns `400` with code `malformed_json`, and a JSON body that is not an object returns `400` with code `invalid_json_body`.
+
 ### Database connection
 
 `Kirei::App.raw_db_connection` opens one Sequel database per process. Configure it in your app:

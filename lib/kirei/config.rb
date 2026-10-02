@@ -58,5 +58,10 @@ module Kirei
     prop :db_strict_type_resolving, T.nilable(T::Boolean), default: nil
 
     prop :allowed_origins, T::Array[String], default: []
+
+    # Upper bound for JSON and form request bodies, which Kirei buffers in memory.
+    # Requests above it get a 413 JSON:API error. `nil` means no limit.
+    # Multipart uploads stream to tempfiles via Rack and are not subject to it.
+    prop :max_request_body_bytes, T.nilable(Integer), default: nil
   end
 end

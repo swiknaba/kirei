@@ -31,8 +31,18 @@ module Kirei
         T.nilable([Route, T::Hash[String, String]])
       end
 
-      sig { returns(T.nilable(T::Hash[String, T.untyped])) }
-      attr_accessor :current_env
+      # The router is a process-wide singleton, but a request env must be
+      # scoped to the request. `Thread.current[]` is fiber-local, so this is
+      # safe for both thread-based (Puma) and fiber-based (Falcon) servers.
+      sig { returns(T.nilable(RackEnvType)) }
+      def current_env
+        Thread.current[:kirei_current_env]
+      end
+
+      sig { params(env: T.nilable(RackEnvType)).returns(T.nilable(RackEnvType)) }
+      def current_env=(env)
+        Thread.current[:kirei_current_env] = env
+      end
 
       sig { void }
       def initialize
